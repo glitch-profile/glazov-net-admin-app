@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp
+package com.example.glazovnetadminapp.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
