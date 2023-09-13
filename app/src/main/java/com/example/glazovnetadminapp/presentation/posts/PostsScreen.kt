@@ -44,8 +44,10 @@ fun PostsScreen(
                 modifier = Modifier
                     .align(CenterHorizontally)
                     .padding(16.dp)
-                    .fillMaxSize(0.9f)
             )
+            Column(
+                modifier = Modifier.fillMaxSize(0.9f)
+            ) {}
         } else {
             postsViewModel.state.errorMessage?.let {
                 Text(
