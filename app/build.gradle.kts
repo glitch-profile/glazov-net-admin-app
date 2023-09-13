@@ -78,4 +78,8 @@ dependencies {
     //dagger-hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    //compose view model
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 }

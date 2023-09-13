@@ -10,7 +10,7 @@ data class PostModelDto(
     @field:Json(name = "creationDate")
     val creationDate: String,
     @field:Json(name = "shortDescription")
-    val shortDescription: String = "",
+    val shortDescription: String? = null,
     @field:Json(name = "fullDescription")
     val fullDescription: String,
     @field:Json(name = "postType")

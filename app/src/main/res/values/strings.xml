@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">glazovNetAdminApp</string>
+    <string name="app_name" translatable="false">glazovNetAdminApp</string>
+    <string name="posts_source_text">Source</string>
 </resources>
