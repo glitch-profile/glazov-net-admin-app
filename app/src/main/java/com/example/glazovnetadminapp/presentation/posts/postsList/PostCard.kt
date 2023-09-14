@@ -1,5 +1,7 @@
 package com.example.glazovnetadminapp.presentation.posts.postsList
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +15,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,10 +41,18 @@ fun PostCard(
     modifier: Modifier = Modifier
 ) {
     postModel?.let {post ->
+        var isExpanded by remember{
+            mutableStateOf(false)
+        }
+        val descriptionMaxLines = if (post.imageUrl == null) 10
+        else 2
         Card(
+
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .padding(8.dp)
+                .clickable { isExpanded = !isExpanded }
+                .fillMaxWidth()
 
         ) {
             Column(
@@ -65,14 +79,14 @@ fun PostCard(
                         .fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                val descriptionMaxLines = if (post.imageUrl == null) 15
-                else 5
                 Text(
+                    modifier = Modifier
+                        .animateContentSize(),
                     text = post.shortDescription ?: post.fullDescription,
                     style = MaterialTheme.typography.bodyMedium,
                     softWrap = true,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = descriptionMaxLines
+                    maxLines = if (isExpanded) Int.MAX_VALUE else descriptionMaxLines
                 )
                 if (post.imageUrl != null) {
                     Spacer(modifier = Modifier.height(10.dp))

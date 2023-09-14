@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.presentation.posts.postsList
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -12,7 +13,8 @@ fun PostsScrollableList(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth(),
         content = {
         items(state.posts) {
             PostCard(

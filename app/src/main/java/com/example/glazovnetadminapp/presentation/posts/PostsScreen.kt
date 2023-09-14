@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,16 +31,6 @@ fun PostsScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Text(
-            text = "Api.Posts",
-            style = MaterialTheme.typography.displayMedium,
-            modifier = modifier
-                .padding(8.dp)
-        )
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-        )
         if (postsViewModel.state.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier
@@ -48,7 +39,14 @@ fun PostsScreen(
             )
             Column(
                 modifier = Modifier.fillMaxSize(0.9f)
-            ) {}
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = "Loading",
+                    textAlign = TextAlign.Center
+                )
+            }
         } else {
             postsViewModel.state.errorMessage?.let {
                 Text(
@@ -59,20 +57,21 @@ fun PostsScreen(
                         .padding(16.dp)
                 )
             }
-            PostsScrollableList(
-                state = postsViewModel.state,
-                modifier = Modifier.fillMaxSize(0.9f)
-            )
-        }
-        Button(
-            enabled = !postsViewModel.state.isLoading,
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            onClick = { postsViewModel.getAllPosts() }) {
-            Text(
-                text = "Update Posts!"
-            )
+            Button(
+                enabled = !postsViewModel.state.isLoading,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                onClick = { postsViewModel.getAllPosts() }) {
+                Text(
+                    text = "Update Posts!"
+                )
+            }
+//            PostsScrollableList(
+//                state = postsViewModel.state,
+//                modifier = Modifier.fillMaxSize()
+//            )
+            AddPostScreen()
         }
     }
 }
