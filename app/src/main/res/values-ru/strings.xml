@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">glazovNetAdminApp</string>
     <string name="posts_source_text">Источник</string>
+    <string name="add_post_screen_title">Заголовок</string>
+    <string name="add_post_screen_short_description">Короткое описание записи</string>
+    <string name="add_post_screen_full_description">Текст записи</string>
+    <string name="add_post_screen_post_type">Выберите тип записи</string>
+    <string name="add_post_screen_image_url">Ссылка на изображение</string>
+    <string name="add_post_screen_video_url">Ссылка на видео</string>
+    <string name="add_post_screen_screen_name">Создать запись</string>
+    <string name="app_text_field_required">*Обязательное поле</string>
 </resources>

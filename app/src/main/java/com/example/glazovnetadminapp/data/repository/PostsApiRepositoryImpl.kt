@@ -3,22 +3,20 @@ package com.example.glazovnetadminapp.data.repository
 import com.example.glazovnetadminapp.data.mappers.toPostModel
 import com.example.glazovnetadminapp.data.remote.GlazovNetPostsApi
 import com.example.glazovnetadminapp.domain.posts.PostModel
-import com.example.glazovnetadminapp.domain.repository.PostsRepository
+import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.entity.PostModelDto
-import com.example.glazovnetadminapp.entity.PostsResponceDto
 import javax.inject.Inject
 
-class PostsRepositoryImpl @Inject constructor(
+class PostsApiRepositoryImpl @Inject constructor(
     private val api: GlazovNetPostsApi
-): PostsRepository {
+): PostsApiRepository {
     override suspend fun getAllPosts(): Resource<List<PostModel?>> {
         return try {
             val result = api.getAllPosts()
             if (result.status) {
-                val data = result.data.map { it?.toPostModel() }
                 Resource.Success(
-                    data = data,
+                    data = result.data.map { it?.toPostModel() },
                     message = result.message
                 )
             } else {
@@ -37,9 +35,8 @@ class PostsRepositoryImpl @Inject constructor(
         return try {
             val result = api.getPostsList(limit = limit, startIndex = startIndex)
             if (result.status) {
-                val data = result.data.map { it?.toPostModel() }
                 Resource.Success(
-                    data = data,
+                    data = result.data.map { it?.toPostModel() },
                     message = result.message
                 )
             } else {
@@ -58,9 +55,8 @@ class PostsRepositoryImpl @Inject constructor(
         return try {
             val result = api.getPostById(postId = postId)
             if (result.status) {
-                val data = result.data[0]?.toPostModel()
                 Resource.Success(
-                    data = data,
+                    data = result.data[0]?.toPostModel(),
                     message = result.message
                 )
             } else {

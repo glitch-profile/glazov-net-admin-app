@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.glazovnetadminapp.domain.repository.PostsRepository
+import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostsScreenViewModel @Inject constructor(
-    private val postsRepository: PostsRepository
+    private val postsApiRepository: PostsApiRepository
 ): ViewModel() {
 
     var state by mutableStateOf(PostsScreenState())
@@ -31,7 +31,7 @@ class PostsScreenViewModel @Inject constructor(
                 errorMessage = null
             )
             Log.i("TAG", "getAllPosts: now loading")
-            when (val result = postsRepository.getAllPosts()) {
+            when (val result = postsApiRepository.getAllPosts()) {
                 is Resource.Success -> {
                     if (result.data !== null) {
                         state = state.copy(

@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name" translatable="false">glazovNetAdminApp</string>
     <string name="posts_source_text">Source</string>
+    <string name="add_post_screen_title">Title</string>
+    <string name="add_post_screen_short_description">Short description</string>
+    <string name="add_post_screen_full_description">Post text</string>
+    <string name="add_post_screen_post_type">Select a post type</string>
+    <string name="add_post_screen_image_url">Image Url</string>
+    <string name="add_post_screen_video_url">Video Url</string>
+    <string name="add_post_screen_screen_name">Add new post</string>
+    <string name="app_text_field_required">*Required</string>
 </resources>

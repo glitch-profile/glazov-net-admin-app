@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.presentation.posts
+package com.example.glazovnetadminapp.presentation.posts.postsList
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,11 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.posts.PostModel
 import com.example.glazovnetadminapp.domain.posts.PostType

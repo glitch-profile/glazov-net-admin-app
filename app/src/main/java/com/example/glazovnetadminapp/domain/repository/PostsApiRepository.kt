@@ -4,7 +4,7 @@ import com.example.glazovnetadminapp.domain.posts.PostModel
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.entity.PostModelDto
 
-interface PostsRepository {
+interface PostsApiRepository {
 
     suspend fun getAllPosts(): Resource<List<PostModel?>>
 
