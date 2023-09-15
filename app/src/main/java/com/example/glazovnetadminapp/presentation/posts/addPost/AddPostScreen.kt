@@ -1,8 +1,6 @@
-package com.example.glazovnetadminapp.presentation.posts
+package com.example.glazovnetadminapp.presentation.posts.addPost
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -23,14 +20,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -64,8 +60,8 @@ fun AddPostScreen(
     var isDropdownExpanded by remember{
         mutableStateOf(false)
     }
-    var selectedPostType by remember{
-        mutableStateOf(PostType.News.description)
+    var selectedPostTypeCode by remember{
+        mutableIntStateOf(0)
     }
     val icon = if (isDropdownExpanded) {
         Icons.Filled.KeyboardArrowUp
@@ -125,8 +121,8 @@ fun AddPostScreen(
         )
         Spacer(modifier = Modifier.height(4.dp))
         OutlinedTextField(
-            value = selectedPostType,
-            onValueChange = {selectedPostType = it},
+            value = stringResource(id = PostType.fromPostTypeCode(selectedPostTypeCode).stringResourceId),
+            onValueChange = {},
             readOnly = true,
             supportingText = {
                 Text(
@@ -142,7 +138,7 @@ fun AddPostScreen(
 
             label = {
                 Text(
-                    text = "Select Post Type"
+                    text = stringResource(id = R.string.add_post_screen_select_post_type)
                 )
             },
             trailingIcon = {
@@ -161,42 +157,19 @@ fun AddPostScreen(
             modifier = Modifier
                 .width(with(LocalDensity.current){ textFiledSize.width.toDp() })
             ) {
-            DropdownMenuItem(
-                text = {
-                       Text(text = PostType.News.description)
-                },
-                onClick = {
-                    selectedPostType = PostType.News.description
-                    isDropdownExpanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = {
-                    Text(text = PostType.Announcement.description)
-                },
-                onClick = {
-                    selectedPostType = PostType.Announcement.description
-                    isDropdownExpanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = {
-                    Text(text = PostType.Greeting.description)
-                },
-                onClick = {
-                    selectedPostType = PostType.Greeting.description
-                    isDropdownExpanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = {
-                    Text(text = PostType.Advertisement.description)
-                },
-                onClick = {
-                    selectedPostType = PostType.Advertisement.description
-                    isDropdownExpanded = false
-                }
-            )
+            for (index in 0..3) {
+                DropdownMenuItem(
+                    text = {
+                           Text(
+                               text = stringResource(id = PostType.fromPostTypeCode(index).stringResourceId)
+                           )
+                    },
+                    onClick = {
+                        selectedPostTypeCode = index
+                        isDropdownExpanded = false
+                    }
+                )
+            }
         }
         Spacer(modifier = Modifier.height(4.dp))
         OutlinedTextField(
@@ -246,19 +219,19 @@ fun AddPostScreen(
                     title = titleText,
                     shortDescription = shortDescription,
                     fullDescription = fullDescription,
-                    postType = selectedPostType,
+                    postType = selectedPostTypeCode,
                     imageUrl = imageUrl,
                     videoUrl = videoUrl
                 )
             }
         ) {
-            Text(text = "Submit Post")
+            Text(text = stringResource(id = R.string.add_post_screen_confirm_button))
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun previewAddPostScreen() {
+fun PreviewAddPostScreen() {
     AddPostScreen()
 }

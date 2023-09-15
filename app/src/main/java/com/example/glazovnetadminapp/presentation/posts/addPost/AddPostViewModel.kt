@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.presentation.posts
+package com.example.glazovnetadminapp.presentation.posts.addPost
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -9,6 +9,7 @@ import com.example.glazovnetadminapp.domain.useCases.PostsEditUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,7 +20,7 @@ class AddPostViewModel @Inject constructor(
         title: String,
         shortDescription: String,
         fullDescription: String,
-        postType: String,
+        postType: Int,
         imageUrl: String,
         videoUrl: String
     ) {
@@ -28,10 +29,10 @@ class AddPostViewModel @Inject constructor(
                 PostModel(
                     postId = "",
                     title = title,
-                    creationDate = OffsetDateTime.now(),
+                    creationDate = OffsetDateTime.now(ZoneId.systemDefault()),
                     shortDescription = shortDescription.ifBlank { null },
                     fullDescription = fullDescription,
-                    postType = PostType.fromPostTypeCode(1), //TODO("Add String Converter")
+                    postType = PostType.fromPostTypeCode(postType),
                     imageUrl = imageUrl.ifBlank { null },
                     videoUrl = videoUrl.ifBlank { null }
                 )
