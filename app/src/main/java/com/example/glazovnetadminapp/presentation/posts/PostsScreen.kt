@@ -38,7 +38,7 @@ fun PostsScreen(
                     .padding(16.dp)
             )
             Column(
-                modifier = Modifier.fillMaxSize(0.9f)
+                modifier = Modifier.fillMaxSize()
             ) {
                 Text(
                     modifier = Modifier

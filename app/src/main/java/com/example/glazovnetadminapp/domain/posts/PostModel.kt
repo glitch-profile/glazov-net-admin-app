@@ -6,9 +6,9 @@ data class PostModel(
     val postId: String,
     val title: String,
     val creationDate: OffsetDateTime,
-    val shortDescription: String?,
+    val shortDescription: String? = null,
     val fullDescription: String,
     val postType: PostType,
-    val imageUrl: String?,
-    val videoUrl: String?
+    val imageUrl: String? = null,
+    val videoUrl: String? = null
 )

@@ -13,7 +13,7 @@ data class PostModelDto(
     val shortDescription: String? = null,
     @field:Json(name = "fullDescription")
     val fullDescription: String,
-    @field:Json(name = "postType")
+    @field:Json(name = "postTypeCode")
     val postTypeCode: Int,
     @field:Json(name = "imageUrl")
     val imageUrl: String? = null,

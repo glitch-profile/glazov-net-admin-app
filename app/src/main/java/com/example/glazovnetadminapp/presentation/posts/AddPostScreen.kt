@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -29,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -36,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.posts.PostType
 
@@ -72,6 +75,7 @@ fun AddPostScreen(
     var textFiledSize by remember {
         mutableStateOf(Size.Zero)
     }
+    val viewModel: AddPostViewModel = viewModel()
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
@@ -135,6 +139,7 @@ fun AddPostScreen(
                 .onGloballyPositioned { coordinates ->
                     textFiledSize = coordinates.size.toSize()
                 },
+
             label = {
                 Text(
                     text = "Select Post Type"
@@ -144,7 +149,7 @@ fun AddPostScreen(
                 Icon(
                     icon,
                     "",
-                    Modifier.clickable { isDropdownExpanded = !isDropdownExpanded }
+                    modifier = Modifier.clickable { isDropdownExpanded = !isDropdownExpanded }
                 )
             }
         )
@@ -234,6 +239,21 @@ fun AddPostScreen(
         )
         //image preview
         //video preview
+        Spacer(modifier = Modifier.height(4.dp))
+        Button(
+            onClick = {
+                viewModel.submitPost(
+                    title = titleText,
+                    shortDescription = shortDescription,
+                    fullDescription = fullDescription,
+                    postType = selectedPostType,
+                    imageUrl = imageUrl,
+                    videoUrl = videoUrl
+                )
+            }
+        ) {
+            Text(text = "Submit Post")
+        }
     }
 }
 
