@@ -17,8 +17,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.glazovnetadminapp.domain.posts.PostModel
+import com.example.glazovnetadminapp.domain.posts.PostType
 import com.example.glazovnetadminapp.presentation.posts.addPost.AddPostScreen
+import com.example.glazovnetadminapp.presentation.posts.postDetails.PostDetailScreen
 import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScrollableList
+import java.time.OffsetDateTime
+import java.time.ZoneId
 
 @Composable
 fun PostsScreen(
@@ -71,7 +76,17 @@ fun PostsScreen(
 //                state = postsViewModel.state,
 //                modifier = Modifier.fillMaxSize()
 //            )
-            AddPostScreen()
+//            AddPostScreen()
+            PostDetailScreen(
+                post = PostModel(
+                    postId = "6506ba8452052d5e6b16023b",
+                    title = "Example post with some title",
+                    creationDate = OffsetDateTime.now(ZoneId.systemDefault()),
+                    fullDescription = "Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas sit amet magna nec nulla tempor pellentesque non et nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Etiam id vehicula ipsum. Duis leo eros, pharetra nec justo ac, malesuada bibendum nunc. Vivamus blandit maximus pulvinar. Mauris maximus arcu sit amet dui dapibus, sollicitudin mattis dolor commodo. Nullam auctor consequat bibendum. Integer massa dolor, accumsan et molestie in, ultrices ac nunc. Curabitur vestibulum quis ante at tristique. Maecenas vel leo at sem posuere tempor in ac tellus. Duis sollicitudin non urna quis pellentesque. Nunc tristique, nulla at accumsan tincidunt, enim mauris rhoncus ex, quis mattis arcu magna sed nulla.",
+                    postType = PostType.News,
+                    imageUrl = "http://example.resorce.com/example-image-001.png"
+                )
+            )
         }
     }
 }

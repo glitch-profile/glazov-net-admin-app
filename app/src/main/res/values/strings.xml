@@ -18,4 +18,7 @@
     <string name="post_type_advertisement">Advertisement</string>
 
     <string name="app_text_field_required">*Required</string>
+
+    <string name="app_datetime_today_text">Today</string>
+    <string name="app_datetime_yesterday_text">Yesterday</string>
 </resources>

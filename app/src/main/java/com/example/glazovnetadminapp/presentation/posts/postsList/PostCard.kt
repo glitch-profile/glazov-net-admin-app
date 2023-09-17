@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.posts.PostModel
 import com.example.glazovnetadminapp.domain.posts.PostType
+import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -41,9 +42,6 @@ fun PostCard(
     modifier: Modifier = Modifier
 ) {
     postModel?.let {post ->
-        var isExpanded by remember{
-            mutableStateOf(false)
-        }
         val descriptionMaxLines = if (post.imageUrl == null) 10
         else 2
         Card(
@@ -51,7 +49,7 @@ fun PostCard(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .padding(8.dp)
-                .clickable { isExpanded = !isExpanded }
+                .clickable { }
                 .fillMaxWidth()
 
         ) {
@@ -70,7 +68,7 @@ fun PostCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "${convertDateTimeToString(post.creationDate)}, ID: ${post.postId}", //Конвертируем к локальному времени
+                    text = "${post.creationDate.convertDaysOffsetToString()}, ID: ${post.postId}", //Конвертируем к локальному времени
                     style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -86,7 +84,7 @@ fun PostCard(
                     style = MaterialTheme.typography.bodyMedium,
                     softWrap = true,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = if (isExpanded) Int.MAX_VALUE else descriptionMaxLines
+                    maxLines = descriptionMaxLines
                 )
                 if (post.imageUrl != null) {
                     Spacer(modifier = Modifier.height(10.dp))
@@ -114,23 +112,6 @@ fun PostCard(
     }
 }
 
-fun convertDateTimeToString(dateTime: OffsetDateTime): String {
-    val zoneCorrectlyDateTime = dateTime.atZoneSameInstant(ZoneId.systemDefault())
-    val localDateTime = zoneCorrectlyDateTime.toLocalDateTime()
-    val localDate = localDateTime.toLocalDate()
-    val date =  when (LocalDate.now()) {
-        localDate -> "Today"
-        localDate.plusDays(1L) -> "Yesterday"
-        else -> localDate.format(
-            DateTimeFormatter.ofPattern("dd.MM.yy")
-        )
-    }
-    val time = localDateTime.format(
-        DateTimeFormatter.ofPattern("HH:mm")
-    )
-    return "$date - $time"
-}
-
 @Preview(showBackground = true)
 @Composable
 fun PostCardPreview() {
@@ -139,7 +120,7 @@ fun PostCardPreview() {
             postId = "131414124",
             title = "Example Post",
             creationDate = OffsetDateTime.parse(
-                "2023-09-11T17:15:00+05:00",
+                "2023-09-17T17:15:00+05:00",
                 DateTimeFormatter.ISO_DATE_TIME
             ),
             fullDescription = "This post is testing querys from server database",

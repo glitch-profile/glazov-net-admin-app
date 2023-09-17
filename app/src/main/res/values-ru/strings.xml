@@ -15,4 +15,6 @@
     <string name="post_type_advertisement">Реклама</string>
     <string name="add_post_screen_confirm_button">Сохранить</string>
     <string name="add_post_screen_select_post_type">Выберите тип поста</string>
+    <string name="app_datetime_today_text">Сегодня</string>
+    <string name="app_datetime_yesterday_text">Вчера</string>
 </resources>
