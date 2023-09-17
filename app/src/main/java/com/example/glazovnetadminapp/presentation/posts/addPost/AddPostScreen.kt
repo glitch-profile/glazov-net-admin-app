@@ -223,7 +223,8 @@ fun AddPostScreen(
                     imageUrl = imageUrl,
                     videoUrl = videoUrl
                 )
-            }
+            },
+            enabled = (titleText.isNotBlank() && fullDescription.isNotBlank())
         ) {
             Text(text = stringResource(id = R.string.add_post_screen_confirm_button))
         }
