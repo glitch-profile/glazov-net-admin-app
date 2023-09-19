@@ -3,9 +3,7 @@ package com.example.glazovnetadminapp.data.mappers
 import com.example.glazovnetadminapp.domain.posts.PostModel
 import com.example.glazovnetadminapp.domain.posts.PostType
 import com.example.glazovnetadminapp.entity.PostModelDto
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 fun PostModelDto.toPostModel(): PostModel {

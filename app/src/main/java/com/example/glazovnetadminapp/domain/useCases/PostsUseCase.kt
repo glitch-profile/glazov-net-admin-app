@@ -4,22 +4,28 @@ import com.example.glazovnetadminapp.data.mappers.toPostModelDto
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.posts.PostModel
 import com.example.glazovnetadminapp.domain.util.Resource
-import java.net.ConnectException
 import javax.inject.Inject
 
 const val API_KEY = "J3gHkW9iLp7vQzXrE5NtFmAsCfYbDqUo"
 
-class PostsEditUseCase @Inject constructor(
+class PostsUseCase @Inject constructor(
     private val postsApiRepositoryImpl: PostsApiRepositoryImpl
 ) {
 
+    suspend fun getAllPosts(): Resource<List<PostModel?>> {
+        return postsApiRepositoryImpl.getAllPosts()
+    }
+
     suspend fun addPost(postModel: PostModel): Resource<Boolean> {
         val postModelDto = postModel.toPostModelDto()
-        println(postModelDto)
         return postsApiRepositoryImpl.addPost(
-                apiKey = API_KEY,
-                postModel = postModelDto
-            )
+            apiKey = API_KEY,
+            postModel = postModelDto
+        )
+    }
+
+    suspend fun getPostById(postId: String): Resource<PostModel?> {
+        return postsApiRepositoryImpl.getPostById(postId)
     }
 
 }

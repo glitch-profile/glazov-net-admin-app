@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.presentation.posts
+package com.example.glazovnetadminapp.presentation.posts.postDetails
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -6,52 +6,49 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.presentation.posts.PostsScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PostsScreenViewModel @Inject constructor(
+class PostDetailViewModel @Inject constructor(
     private val postsUseCase: PostsUseCase
 ): ViewModel() {
 
     var state by mutableStateOf(PostsScreenState())
         private set
 
-    init {
-        getAllPosts()
-    }
 
-    fun getAllPosts() {
+    fun getPostById(postId: String) {
         viewModelScope.launch {
             state = state.copy(
                 isLoading = true,
                 errorMessage = null
             )
-            Log.i("TAG", "getAllPosts: now loading")
-            when (val result = postsUseCase.getAllPosts()) {
-                is Resource.Success -> {
-                    state = if (result.data !== null) {
-                        state.copy(
-                            posts = result.data,
-                            isLoading = false
-                        )
-                    } else {
-                        state.copy(
-                            isLoading = false,
-                            errorMessage = result.message
-                        )
-                    }
-                }
+            Log.i("TAG", "getPostById: now loading!")
+            val result = postsUseCase.getPostById(postId)
+            when (result) {
                 is Resource.Error -> {
-                    Log.i("TAG", "getAllPosts: loading failed!!")
                     state = state.copy(
                         isLoading = false,
                         errorMessage = result.message
                     )
+                }
+                is Resource.Success -> {
+                    state = if (result.data == null) {
+                        state.copy(
+                            isLoading = false,
+                            errorMessage = "No data"
+                        )
+                    } else {
+                        state.copy(
+                            isLoading = false,
+                            posts = listOf(result.data)
+                        )
+                    }
                 }
             }
         }

@@ -1,13 +1,15 @@
 package com.example.glazovnetadminapp.presentation.posts
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,20 +27,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.domain.posts.PostModel
-import com.example.glazovnetadminapp.domain.posts.PostType
-import com.example.glazovnetadminapp.presentation.posts.addPost.AddPostScreen
-import com.example.glazovnetadminapp.presentation.posts.postDetails.PostDetailScreen
-import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScrollableList
+import com.example.glazovnetadminapp.presentation.posts.postsList.PostCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.time.OffsetDateTime
-import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -69,15 +63,26 @@ fun PostsScreen(
                         )
                     }
                 },
+                actions = {
+                          IconButton(
+                              onClick = { postsViewModel.getAllPosts() }
+                          ) {
+                              Icon(
+                                  imageVector = Icons.Default.Refresh,
+                                  contentDescription = "Refresh posts"
+                              )
+                          }
+                },
                 scrollBehavior = scrollBehavior
             )
         }
     ) { values ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(values)
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
         ) {
             if (postsViewModel.state.isLoading) {
                 CircularProgressIndicator(
@@ -85,16 +90,12 @@ fun PostsScreen(
                         .align(CenterHorizontally)
                         .padding(16.dp)
                 )
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        text = "Loading",
-                        textAlign = TextAlign.Center
-                    )
-                }
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = "Loading",
+                    textAlign = TextAlign.Center
+                )
             } else {
                 postsViewModel.state.errorMessage?.let {
                     Text(
@@ -115,9 +116,16 @@ fun PostsScreen(
                         )
                     }
                 }
-                PostsScrollableList(
-                    state = postsViewModel.state,
-                    modifier = Modifier.fillMaxSize()
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    content = {
+                        items(postsViewModel.state.posts) {
+                            PostCard(
+                                postModel = it
+                            )
+                        }
+                    }
                 )
 //            AddPostScreen()
 //            PostDetailScreen(

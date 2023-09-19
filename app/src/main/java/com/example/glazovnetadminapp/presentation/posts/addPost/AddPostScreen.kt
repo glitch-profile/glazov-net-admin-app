@@ -11,15 +11,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -35,12 +41,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.posts.PostType
-import com.example.glazovnetadminapp.presentation.destinations.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@OptIn(ExperimentalMaterial3Api::class)
 @com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun AddPostScreen(
@@ -76,164 +81,184 @@ fun AddPostScreen(
     var textFiledSize by remember {
         mutableStateOf(Size.Zero)
     }
-
-    Column(
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    Scaffold(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
             .fillMaxSize()
-            .padding(4.dp)
-    ) {
-        Text(
-            style = MaterialTheme.typography.titleLarge,
-            text = stringResource(id = R.string.app_add_post_screen_name),
-            maxLines = 2
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
-            value = titleText,
-            onValueChange = {titleText = it},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            label = {
-                Text(
-                    text = stringResource(id = R.string.add_post_screen_title)
-                )
-            },
-            supportingText = {
-                Text(
-                    text = stringResource(id = R.string.app_text_field_required)
-                )
-            }
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        OutlinedTextField(
-            value = fullDescription,
-            onValueChange = {fullDescription = it},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            label = {
-                Text(
-                    text = stringResource(id = R.string.add_post_screen_full_description)
-                )
-            },
-            supportingText = {
-                Text(
-                    text = stringResource(id = R.string.app_text_field_required)
-                )
-            }
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        OutlinedTextField(
-            value = stringResource(id = PostType.fromPostTypeCode(selectedPostTypeCode).stringResourceId),
-            onValueChange = {},
-            readOnly = true,
-            supportingText = {
-                Text(
-                    text = stringResource(id = R.string.app_text_field_required)
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp)
-                .onGloballyPositioned { coordinates ->
-                    textFiledSize = coordinates.size.toSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(id = R.string.app_add_post_screen_name))
                 },
-
-            label = {
-                Text(
-                    text = stringResource(id = R.string.add_post_screen_select_post_type)
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    icon,
-                    "",
-                    modifier = Modifier.clickable { isDropdownExpanded = !isDropdownExpanded }
-                )
-            }
-        )
-        DropdownMenu( //TODO("Rework the dropdown menu")
-            expanded = isDropdownExpanded,
-            onDismissRequest = {
-                isDropdownExpanded = false
-            },
-            modifier = Modifier
-                .width(with(LocalDensity.current){ textFiledSize.width.toDp() })
-            ) {
-            for (index in 0..3) {
-                DropdownMenuItem(
-                    text = {
-                           Text(
-                               text = stringResource(id = PostType.fromPostTypeCode(index).stringResourceId)
-                           )
-                    },
-                    onClick = {
-                        selectedPostTypeCode = index
-                        isDropdownExpanded = false
+                navigationIcon = {
+                    IconButton(
+                        onClick = { navigator.popBackStack() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
-                )
-            }
+                },
+                scrollBehavior = scrollBehavior
+            )
         }
-        Spacer(modifier = Modifier.height(4.dp))
-        OutlinedTextField(
-            value = shortDescription,
-            onValueChange = {shortDescription = it},
+    ) { values ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            label = {
-                Text(
-                    text = stringResource(id = R.string.add_post_screen_short_description)
-                )
-            }
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        OutlinedTextField(
-            value = imageUrl,
-            onValueChange = {imageUrl = it},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            label = {
-                Text(
-                    text = stringResource(id = R.string.add_post_screen_image_url)
-                )
-            }
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        OutlinedTextField(
-            value = videoUrl,
-            onValueChange = {videoUrl = it},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            label = {
-                Text(
-                    text = stringResource(id = R.string.add_post_screen_video_url)
-                )
-            }
-        )
-        //image preview
-        //video preview
-        Spacer(modifier = Modifier.height(4.dp))
-        Button(
-            onClick = {
-                viewModel.submitPost(
-                    title = titleText,
-                    shortDescription = shortDescription,
-                    fullDescription = fullDescription,
-                    postType = selectedPostTypeCode,
-                    imageUrl = imageUrl,
-                    videoUrl = videoUrl
-                )
-            },
-            enabled = (titleText.isNotBlank() && fullDescription.isNotBlank())
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .padding(values)
+                .padding(horizontal = 16.dp)
         ) {
-            Text(text = stringResource(id = R.string.add_post_screen_confirm_button))
+            OutlinedTextField(
+                value = titleText,
+                onValueChange = {titleText = it},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.add_post_screen_title)
+                    )
+                },
+                supportingText = {
+                    Text(
+                        text = stringResource(id = R.string.app_text_field_required)
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            OutlinedTextField(
+                value = fullDescription,
+                onValueChange = {fullDescription = it},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.add_post_screen_full_description)
+                    )
+                },
+                supportingText = {
+                    Text(
+                        text = stringResource(id = R.string.app_text_field_required)
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            OutlinedTextField(
+                value = stringResource(id = PostType.fromPostTypeCode(selectedPostTypeCode).stringResourceId),
+                onValueChange = {},
+                readOnly = true,
+                supportingText = {
+                    Text(
+                        text = stringResource(id = R.string.app_text_field_required)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp)
+                    .onGloballyPositioned { coordinates ->
+                        textFiledSize = coordinates.size.toSize()
+                    },
+
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.add_post_screen_select_post_type)
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        icon,
+                        "",
+                        modifier = Modifier.clickable { isDropdownExpanded = !isDropdownExpanded }
+                    )
+                }
+            )
+            DropdownMenu( //TODO("Rework the dropdown menu")
+                expanded = isDropdownExpanded,
+                onDismissRequest = {
+                    isDropdownExpanded = false
+                },
+                modifier = Modifier
+                    .width(with(LocalDensity.current){ textFiledSize.width.toDp() })
+            ) {
+                for (index in 0..3) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = stringResource(id = PostType.fromPostTypeCode(index).stringResourceId)
+                            )
+                        },
+                        onClick = {
+                            selectedPostTypeCode = index
+                            isDropdownExpanded = false
+                        }
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            OutlinedTextField(
+                value = shortDescription,
+                onValueChange = {shortDescription = it},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.add_post_screen_short_description)
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            OutlinedTextField(
+                value = imageUrl,
+                onValueChange = {imageUrl = it},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.add_post_screen_image_url)
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            OutlinedTextField(
+                value = videoUrl,
+                onValueChange = {videoUrl = it},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.add_post_screen_video_url)
+                    )
+                }
+            )
+            //image preview
+            //video preview
+            Spacer(modifier = Modifier.height(4.dp))
+            Button(
+                onClick = {
+                    viewModel.submitPost(
+                        title = titleText,
+                        shortDescription = shortDescription,
+                        fullDescription = fullDescription,
+                        postType = selectedPostTypeCode,
+                        imageUrl = imageUrl,
+                        videoUrl = videoUrl
+                    )
+                },
+                enabled = (titleText.isNotBlank() && fullDescription.isNotBlank())
+            ) {
+                Text(text = stringResource(id = R.string.add_post_screen_confirm_button))
+            }
         }
     }
+
 }
 
 @Preview(showBackground = true)

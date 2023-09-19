@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.posts.PostModel
 import com.example.glazovnetadminapp.domain.posts.PostType
-import com.example.glazovnetadminapp.domain.useCases.PostsEditUseCase
+import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddPostViewModel @Inject constructor(
-    private val postsEditUseCase: PostsEditUseCase
+    private val postsUseCase: PostsUseCase
 ): ViewModel() {
     fun submitPost(
         title: String,
@@ -25,7 +25,7 @@ class AddPostViewModel @Inject constructor(
         videoUrl: String
     ) {
         viewModelScope.launch {
-            val status = postsEditUseCase.addPost(
+            val status = postsUseCase.addPost(
                 PostModel(
                     postId = "",
                     title = title,

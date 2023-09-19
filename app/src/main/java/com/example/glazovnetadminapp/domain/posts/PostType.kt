@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.domain.posts
 
-import androidx.compose.ui.res.stringResource
 import com.example.glazovnetadminapp.R
 
 sealed class PostType(

@@ -1,7 +1,7 @@
 package com.example.glazovnetadminapp.di
 
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
-import com.example.glazovnetadminapp.domain.useCases.PostsEditUseCase
+import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,8 +16,8 @@ object UseCasesAppModule {
     @Singleton
     fun providePostsEditUseCase(
         postsApiRepository: PostsApiRepositoryImpl
-    ): PostsEditUseCase {
-        return PostsEditUseCase(postsApiRepository)
+    ): PostsUseCase {
+        return PostsUseCase(postsApiRepository)
     }
 
 }
