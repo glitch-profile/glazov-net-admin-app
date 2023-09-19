@@ -7,7 +7,6 @@
     <string name="add_post_screen_post_type">Выберите тип записи</string>
     <string name="add_post_screen_image_url">Ссылка на изображение</string>
     <string name="add_post_screen_video_url">Ссылка на видео</string>
-    <string name="add_post_screen_screen_name">Создать запись</string>
     <string name="app_text_field_required">*Обязательное поле</string>
     <string name="post_type_news">Новости</string>
     <string name="post_type_announcement">Объявление</string>
@@ -17,4 +16,6 @@
     <string name="add_post_screen_select_post_type">Выберите тип поста</string>
     <string name="app_datetime_today_text">Сегодня</string>
     <string name="app_datetime_yesterday_text">Вчера</string>
+    <string name="app_posts_screen_name">Новости</string>
+    <string name="app_add_post_screen_name">Создать запись</string>
 </resources>

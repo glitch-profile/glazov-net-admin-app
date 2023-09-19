@@ -47,11 +47,11 @@ import java.time.ZoneId
 fun PostDetailScreen(
     post: PostModel
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior() //Поведение TopAppBar при прокрутке
+//    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior() //Поведение TopAppBar при прокрутке
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection), //Связываем информацию о прокрутке со Scaffold
+            .fillMaxSize(),
+//            .nestedScroll(scrollBehavior.nestedScrollConnection), //Связываем информацию о прокрутке со Scaffold
         topBar = {
             TopAppBar(
                 title = {
@@ -79,7 +79,7 @@ fun PostDetailScreen(
                         )
                     }
                 },
-                scrollBehavior = scrollBehavior
+//                scrollBehavior = scrollBehavior
             )
         }
     ) { values ->

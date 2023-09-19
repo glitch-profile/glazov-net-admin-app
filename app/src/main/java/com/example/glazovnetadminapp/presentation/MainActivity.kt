@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.glazovnetadminapp.presentation.posts.PostsScreen
 import com.example.glazovnetadminapp.ui.theme.GlazovNetAdminAppTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,8 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    PostsScreen()
-                    HomeScreen()
+                    DestinationsNavHost(navGraph = NavGraphs.root)
                 }
             }
         }

@@ -15,13 +15,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.glazovnetadminapp.presentation.destinations.AddPostScreenDestination
+import com.example.glazovnetadminapp.presentation.destinations.PostsScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@RootNavGraph(start = true)
+@Destination
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    navigator: DestinationsNavigator
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .padding(16.dp)
             .fillMaxSize()
     ) {
@@ -46,7 +53,9 @@ fun HomeScreen(
                 .fillMaxWidth()
         ) {
             OutlinedButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navigator.navigate(PostsScreenDestination, onlyIfResumed = true)
+                },
                 modifier = Modifier
                     .padding(5.dp)
                     .fillMaxWidth()
@@ -56,7 +65,9 @@ fun HomeScreen(
                 )
             }
             OutlinedButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navigator.navigate(AddPostScreenDestination, onlyIfResumed = true)
+                },
                 modifier = Modifier
                     .padding(5.dp)
                     .fillMaxWidth()
@@ -72,5 +83,5 @@ fun HomeScreen(
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
-    HomeScreen()
+//    HomeScreen()
 }

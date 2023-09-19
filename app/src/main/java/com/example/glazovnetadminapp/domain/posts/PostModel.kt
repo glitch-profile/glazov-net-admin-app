@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.domain.posts
 
+import android.os.Parcelable
 import java.time.OffsetDateTime
 
 data class PostModel(

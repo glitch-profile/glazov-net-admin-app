@@ -34,13 +34,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.posts.PostType
+import com.example.glazovnetadminapp.presentation.destinations.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun AddPostScreen(
-    modifier: Modifier = Modifier
+    navigator: DestinationsNavigator,
+    viewModel: AddPostViewModel = hiltViewModel()
 ) {
     var titleText by remember{
         mutableStateOf("")
@@ -71,16 +76,16 @@ fun AddPostScreen(
     var textFiledSize by remember {
         mutableStateOf(Size.Zero)
     }
-    val viewModel: AddPostViewModel = viewModel()
+
     Column(
-        modifier = modifier
+        modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .padding(4.dp)
     ) {
         Text(
             style = MaterialTheme.typography.titleLarge,
-            text = stringResource(id = R.string.add_post_screen_screen_name),
+            text = stringResource(id = R.string.app_add_post_screen_name),
             maxLines = 2
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -149,7 +154,7 @@ fun AddPostScreen(
                 )
             }
         )
-        DropdownMenu(
+        DropdownMenu( //TODO("Rework the dropdown menu")
             expanded = isDropdownExpanded,
             onDismissRequest = {
                 isDropdownExpanded = false
@@ -234,5 +239,5 @@ fun AddPostScreen(
 @Preview(showBackground = true)
 @Composable
 fun PreviewAddPostScreen() {
-    AddPostScreen()
+//    AddPostScreen()
 }
