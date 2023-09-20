@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.presentation.posts
+package com.example.glazovnetadminapp.presentation.posts.postsList
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
@@ -30,7 +30,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.presentation.posts.postsList.PostCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -122,7 +121,8 @@ fun PostsScreen(
                     content = {
                         items(postsViewModel.state.posts) {
                             PostCard(
-                                postModel = it
+                                postModel = it,
+                                navigator = navigator
                             )
                         }
                     }
