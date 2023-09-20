@@ -83,7 +83,7 @@ fun PostDetailScreen(
                             contentDescription = "Edit"
                         )
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { viewModel.deletePost(postId) }) { /*TODO*/
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Delete"

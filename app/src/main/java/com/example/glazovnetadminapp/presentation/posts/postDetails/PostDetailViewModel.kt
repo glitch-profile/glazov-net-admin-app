@@ -23,10 +23,6 @@ class PostDetailViewModel @Inject constructor(
         private set
     var postId: String? = null
 
-//    init {
-//        getPostById(_postId = postId)
-//    }
-
     fun getPostById(newPostId: String) {
         viewModelScope.launch {
             if (newPostId == postId) {
@@ -59,6 +55,15 @@ class PostDetailViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun deletePost(postIdToDelete: String) {
+        viewModelScope.launch {
+            postsUseCase.deletePostById(postIdToDelete)
+            state = state.copy(
+                errorMessage = "This post has been deleted..."
+            )
         }
     }
 }

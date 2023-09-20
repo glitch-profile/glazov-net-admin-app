@@ -28,4 +28,7 @@ class PostsUseCase @Inject constructor(
         return postsApiRepositoryImpl.getPostById(postId)
     }
 
+    suspend fun deletePostById(postId: String): Resource<Boolean> {
+        return postsApiRepositoryImpl.deletePostById(API_KEY, postId = postId)
+    }
 }
