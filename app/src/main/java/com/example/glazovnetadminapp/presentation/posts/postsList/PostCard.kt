@@ -27,13 +27,19 @@ import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.posts.PostModel
 import com.example.glazovnetadminapp.domain.posts.PostType
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
+import com.example.glazovnetadminapp.presentation.destinations.AddPostScreenDestination
+import com.example.glazovnetadminapp.presentation.destinations.HomeScreenDestination
+import com.example.glazovnetadminapp.presentation.destinations.PostDetailScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
 fun PostCard(
     postModel: PostModel?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigator: DestinationsNavigator
 ) {
     postModel?.let {post ->
         val descriptionMaxLines = if (post.imageUrl == null) 10
@@ -43,7 +49,9 @@ fun PostCard(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .padding(8.dp)
-                .clickable { }
+                .clickable {
+                    navigator.navigate(PostDetailScreenDestination(postId = post.postId), onlyIfResumed = true)
+                }
                 .fillMaxWidth()
 
         ) {
@@ -109,19 +117,5 @@ fun PostCard(
 @Preview(showBackground = true)
 @Composable
 fun PostCardPreview() {
-    PostCard(
-        PostModel(
-            postId = "131414124",
-            title = "Example Post",
-            creationDate = OffsetDateTime.parse(
-                "2023-09-17T17:15:00+05:00",
-                DateTimeFormatter.ISO_DATE_TIME
-            ),
-            fullDescription = "This post is testing querys from server database",
-            postType = PostType.News,
-            imageUrl = "https://rubygarage.s3.amazonaws.com/uploads/article_image/file/2060/Artboard_15587.png",
-            videoUrl = null,
-            shortDescription = null
-        )
-    )
+
 }

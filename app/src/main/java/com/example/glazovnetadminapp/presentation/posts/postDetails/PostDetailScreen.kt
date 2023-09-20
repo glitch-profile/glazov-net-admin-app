@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.presentation.posts.postDetails
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,20 +42,23 @@ import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.posts.PostModel
 import com.example.glazovnetadminapp.domain.posts.PostType
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
-import com.example.glazovnetadminapp.presentation.destinations.Destination
+import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.time.OffsetDateTime
 import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
-@com.ramcosta.composedestinations.annotation.Destination
+@Destination
 @Composable
 fun PostDetailScreen(
     postId: String,
     navigator: DestinationsNavigator,
     viewModel: PostDetailViewModel = hiltViewModel()
 ) {
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior() //Поведение TopAppBar при прокрутке
+    viewModel.getPostById(postId)
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -120,7 +124,7 @@ fun PostDetailScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-                viewModel.state.posts[0]?.let { post ->
+                viewModel.state.posts.firstOrNull()?.let { post ->
                     Text(
                         text = post.title,
                         style = MaterialTheme.typography.titleLarge,

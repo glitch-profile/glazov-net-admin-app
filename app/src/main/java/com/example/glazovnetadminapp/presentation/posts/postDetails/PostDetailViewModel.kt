@@ -10,6 +10,7 @@ import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.presentation.posts.PostsScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,16 +21,23 @@ class PostDetailViewModel @Inject constructor(
 
     var state by mutableStateOf(PostsScreenState())
         private set
+    var postId: String? = null
 
+//    init {
+//        getPostById(_postId = postId)
+//    }
 
-    fun getPostById(postId: String) {
+    fun getPostById(newPostId: String) {
         viewModelScope.launch {
+            if (newPostId == postId) {
+                return@launch
+            }
+            postId = newPostId
             state = state.copy(
                 isLoading = true,
                 errorMessage = null
             )
-            Log.i("TAG", "getPostById: now loading!")
-            val result = postsUseCase.getPostById(postId)
+            val result = postsUseCase.getPostById(postId ?: newPostId)
             when (result) {
                 is Resource.Error -> {
                     state = state.copy(
