@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.presentation.posts.postDetails
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -25,9 +26,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,13 +45,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.domain.posts.PostModel
-import com.example.glazovnetadminapp.domain.posts.PostType
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.time.OffsetDateTime
-import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -56,8 +58,41 @@ fun PostDetailScreen(
     viewModel: PostDetailViewModel = hiltViewModel()
 ) {
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior() //Поведение TopAppBar при прокрутке
+    var showDeleteConfirmationDialog by remember {
+        mutableStateOf(false)
+    }
+    val scrollBehavior =
+        TopAppBarDefaults.pinnedScrollBehavior() //Поведение TopAppBar при прокрутке
     viewModel.getPostById(postId)
+
+    if (showDeleteConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmationDialog = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deletePost(postId)
+                        showDeleteConfirmationDialog = false
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.app_button_dialog_confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDeleteConfirmationDialog = false }
+                ) {
+                    Text(text = stringResource(id = R.string.app_button_dialog_cancel))
+                }
+            },
+            title = {
+                Text(text = stringResource(id = R.string.app_post_delete_dialog_title))
+            },
+            text = {
+                Text(text = stringResource(id = R.string.app_post_delete_dialog_text))
+            }
+        )
+    }
 
     Scaffold(
         modifier = Modifier
@@ -66,7 +101,7 @@ fun PostDetailScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Post Screen")
+                    Text(text = stringResource(id = R.string.app_post_detail_screen_name))
                 },
                 navigationIcon = {
                     IconButton(onClick = { navigator.popBackStack() }) {
@@ -77,17 +112,19 @@ fun PostDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit"
-                        )
-                    }
-                    IconButton(onClick = { viewModel.deletePost(postId) }) { /*TODO*/
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete"
-                        )
+                    viewModel.state.posts.firstOrNull()?.let {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit"
+                            )
+                        }
+                        IconButton(onClick = { showDeleteConfirmationDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete"
+                            )
+                        }
                     }
                 },
                 scrollBehavior = scrollBehavior
@@ -110,7 +147,7 @@ fun PostDetailScreen(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    text = "Loading",
+                    text = stringResource(id = R.string.app_text_loading),
                     textAlign = TextAlign.Center
                 )
             } else {
@@ -118,9 +155,7 @@ fun PostDetailScreen(
                     Text(
                         text = it,
                         color = Color.Red,
-                        style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier
-                            .padding(16.dp)
+                        style = MaterialTheme.typography.titleSmall
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }

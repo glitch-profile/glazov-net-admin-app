@@ -10,6 +10,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,11 +28,12 @@ class AddPostViewModel @Inject constructor(
         videoUrl: String
     ) {
         viewModelScope.launch {
+            val currentTime = OffsetDateTime.now()
             val status = postsUseCase.addPost(
                 PostModel(
                     postId = "",
                     title = title,
-                    creationDate = OffsetDateTime.now(ZoneId.systemDefault()),
+                    creationDate = currentTime,
                     shortDescription = shortDescription.ifBlank { null },
                     fullDescription = fullDescription,
                     postType = PostType.fromPostTypeCode(postType),
@@ -37,7 +41,6 @@ class AddPostViewModel @Inject constructor(
                     videoUrl = videoUrl.ifBlank { null }
                 )
             )
-            Log.i("TAG", "submitPost: ${status.message}")
         }
     }
 }
