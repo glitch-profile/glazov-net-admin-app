@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.posts.PostType
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -264,5 +265,5 @@ fun AddPostScreen(
 @Preview(showBackground = true)
 @Composable
 fun PreviewAddPostScreen() {
-//    AddPostScreen()
+//    AddPostScreen(navigator = )
 }

@@ -94,7 +94,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
     //navigation destinations
-    implementation("io.github.raamcosta.compose-destinations:core:1.9.53")
+    implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.53")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.9.53")
 
 }
