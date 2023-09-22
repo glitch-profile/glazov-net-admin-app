@@ -15,7 +15,7 @@ android {
         minSdk = 29
         targetSdk = 34
         versionCode = 1
-        versionName = "0.0.33/2"
+        versionName = "0.0.35/2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -97,4 +97,6 @@ dependencies {
     implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.53")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.9.53")
 
+    //coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }
