@@ -1,5 +1,6 @@
-package com.example.glazovnetadminapp.entity
+package com.example.glazovnetadminapp.entity.postsDto
 
+import com.example.glazovnetadminapp.entity.ImageModelDto
 import com.squareup.moshi.Json
 
 data class PostModelDto(
@@ -15,8 +16,6 @@ data class PostModelDto(
     val fullDescription: String,
     @field:Json(name = "postTypeCode")
     val postTypeCode: Int,
-    @field:Json(name = "imageUrl")
-    val imageUrl: String? = null,
-    @field:Json(name = "videoUrl")
-    val videoUrl: String? = null
+    @field:Json(name = "image")
+    val image: ImageModelDto? = null,
 )

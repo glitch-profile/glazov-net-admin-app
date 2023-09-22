@@ -13,7 +13,6 @@
     <string name="add_post_screen_full_description">Post text</string>
     <string name="add_post_screen_post_type">Select a post type</string>
     <string name="add_post_screen_image_url">Image Url</string>
-    <string name="add_post_screen_video_url">Video Url</string>
     <string name="add_post_screen_select_post_type">Select Post Type</string>
     <string name="add_post_screen_confirm_button">Submit post</string>
 

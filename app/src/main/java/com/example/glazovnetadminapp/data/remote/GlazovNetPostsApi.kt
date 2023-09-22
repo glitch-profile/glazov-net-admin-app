@@ -1,7 +1,7 @@
 package com.example.glazovnetadminapp.data.remote
 
-import com.example.glazovnetadminapp.entity.PostModelDto
-import com.example.glazovnetadminapp.entity.PostsResponceDto
+import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
+import com.example.glazovnetadminapp.entity.postsDto.PostsResponceDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

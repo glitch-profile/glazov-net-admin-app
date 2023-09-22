@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.entity
+package com.example.glazovnetadminapp.entity.postsDto
 
 import com.squareup.moshi.Json
 

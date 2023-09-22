@@ -3,6 +3,7 @@ package com.example.glazovnetadminapp.presentation.posts.postDetails
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,14 +37,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
 import com.ramcosta.composedestinations.annotation.Destination
@@ -185,20 +190,23 @@ fun PostDetailScreen(
                         softWrap = true,
                         overflow = TextOverflow.Ellipsis
                     )
-                    if (post.imageUrl != null) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    post.image?.let { image ->
+                        val imageAspectRatio = ( image.imageWidth / image.imageHeight )
                         Spacer(modifier = Modifier.height(10.dp))
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = Color.Gray
-                            ),
-                            shape = RoundedCornerShape(10.dp),
+                        AsyncImage(
+                            model = image.imageUrl,
+                            contentDescription = null,
                             modifier = Modifier
+                                .clip(RoundedCornerShape(10.dp))
                                 .fillMaxWidth()
-                                .height(200.dp)
-                        ) {}
+                                .aspectRatio(imageAspectRatio),
+                            contentScale = ContentScale.Crop,
+                            filterQuality = FilterQuality.Medium
+                        )
                         Text(
                             textAlign = TextAlign.End,
-                            text = "${stringResource(id = R.string.posts_source_text)}: ${post.imageUrl}",
+                            text = "${stringResource(id = R.string.posts_source_text)}: ${image.imageUrl}",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.bodySmall,

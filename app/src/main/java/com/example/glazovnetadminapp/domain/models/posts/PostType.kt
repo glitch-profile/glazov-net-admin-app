@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.domain.posts
+package com.example.glazovnetadminapp.domain.models.posts
 
 import com.example.glazovnetadminapp.R
 

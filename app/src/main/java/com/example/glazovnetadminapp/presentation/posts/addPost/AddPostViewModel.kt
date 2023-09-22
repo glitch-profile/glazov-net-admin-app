@@ -3,8 +3,9 @@ package com.example.glazovnetadminapp.presentation.posts.addPost
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.glazovnetadminapp.domain.posts.PostModel
-import com.example.glazovnetadminapp.domain.posts.PostType
+import com.example.glazovnetadminapp.domain.models.ImageModel
+import com.example.glazovnetadminapp.domain.models.posts.PostModel
+import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,11 +25,17 @@ class AddPostViewModel @Inject constructor(
         shortDescription: String,
         fullDescription: String,
         postType: Int,
-        imageUrl: String,
-        videoUrl: String
+        imageUrl: String
     ) {
         viewModelScope.launch {
             val currentTime = OffsetDateTime.now()
+            val imageModel = if (imageUrl.isNotBlank()) {
+                ImageModel(
+                    imageUrl = imageUrl,
+                    imageWidth = 1920f,
+                    imageHeight = 1080f
+                ) //TODO("Add dynamic ratio")
+            } else null
             val status = postsUseCase.addPost(
                 PostModel(
                     postId = "",
@@ -37,8 +44,7 @@ class AddPostViewModel @Inject constructor(
                     shortDescription = shortDescription.ifBlank { null },
                     fullDescription = fullDescription,
                     postType = PostType.fromPostTypeCode(postType),
-                    imageUrl = imageUrl.ifBlank { null },
-                    videoUrl = videoUrl.ifBlank { null }
+                    image = imageModel
                 )
             )
         }

@@ -43,7 +43,8 @@ import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.domain.posts.PostType
+import com.example.glazovnetadminapp.domain.models.ImageModel
+import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,9 +64,6 @@ fun AddPostScreen(
         mutableStateOf("")
     }
     var imageUrl by remember{
-        mutableStateOf("")
-    }
-    var videoUrl by remember{
         mutableStateOf("")
     }
     var isDropdownExpanded by remember{
@@ -226,21 +224,7 @@ fun AddPostScreen(
                     )
                 }
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = videoUrl,
-                onValueChange = {videoUrl = it},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                label = {
-                    Text(
-                        text = stringResource(id = R.string.add_post_screen_video_url)
-                    )
-                }
-            )
-            //image preview
-            //video preview
+            //TODO("image preview")
             Spacer(modifier = Modifier.height(4.dp))
             Button(
                 onClick = {
@@ -249,8 +233,7 @@ fun AddPostScreen(
                         shortDescription = shortDescription,
                         fullDescription = fullDescription,
                         postType = selectedPostTypeCode,
-                        imageUrl = imageUrl,
-                        videoUrl = videoUrl
+                        imageUrl = imageUrl
                     )
                 },
                 enabled = (titleText.isNotBlank() && fullDescription.isNotBlank())

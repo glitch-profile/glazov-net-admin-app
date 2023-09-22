@@ -1,5 +1,6 @@
-package com.example.glazovnetadminapp.domain.posts
+package com.example.glazovnetadminapp.domain.models.posts
 
+import com.example.glazovnetadminapp.domain.models.ImageModel
 import java.time.OffsetDateTime
 
 data class PostModel(
@@ -9,6 +10,5 @@ data class PostModel(
     val shortDescription: String? = null,
     val fullDescription: String,
     val postType: PostType,
-    val imageUrl: String? = null,
-    val videoUrl: String? = null
+    val image: ImageModel? = null,
 )

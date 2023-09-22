@@ -33,8 +33,8 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.domain.posts.PostModel
-import com.example.glazovnetadminapp.domain.posts.PostType
+import com.example.glazovnetadminapp.domain.models.posts.PostModel
+import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
 import com.example.glazovnetadminapp.presentation.destinations.AddPostScreenDestination
 import com.example.glazovnetadminapp.presentation.destinations.HomeScreenDestination
@@ -50,11 +50,10 @@ fun PostCard(
     modifier: Modifier = Modifier,
     navigator: DestinationsNavigator
 ) {
-    postModel?.let {post ->
-        val descriptionMaxLines = if (post.imageUrl == null) 10
+    postModel?.let { post ->
+        val descriptionMaxLines = if (post.image == null) 10
         else 2
         Card(
-
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .padding(8.dp)
@@ -65,7 +64,6 @@ fun PostCard(
                     )
                 }
                 .fillMaxWidth()
-
         ) {
             Column(
                 modifier = modifier
@@ -100,15 +98,16 @@ fun PostCard(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = descriptionMaxLines
                 )
-                if (post.imageUrl != null) {
+                post.image?.let { image ->
+                    val imageAspectRatio = ( image.imageWidth / image.imageHeight )
                     Spacer(modifier = Modifier.height(10.dp))
                     AsyncImage(
-                        model = post.imageUrl,
+                        model = image.imageUrl,
                         contentDescription = null,
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp))
                             .fillMaxWidth()
-                            .aspectRatio(1.77f), //TODO("add dynamic aspect ratio, base on image")
+                            .aspectRatio(imageAspectRatio),
                         contentScale = ContentScale.Crop,
                         filterQuality = FilterQuality.Medium
 //                        onSuccess = {
@@ -117,7 +116,7 @@ fun PostCard(
                     )
                     Text(
                         textAlign = TextAlign.End,
-                        text = "${stringResource(id = R.string.posts_source_text)}: ${post.imageUrl}",
+                        text = "${stringResource(id = R.string.posts_source_text)}: ${image.imageUrl}",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodySmall,
