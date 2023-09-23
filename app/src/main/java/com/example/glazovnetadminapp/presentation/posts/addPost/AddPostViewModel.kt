@@ -1,8 +1,22 @@
 package com.example.glazovnetadminapp.presentation.posts.addPost
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.ImageLoader
+import coil.compose.AsyncImagePainter
+import coil.request.CachePolicy
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.example.glazovnetadminapp.domain.models.ImageModel
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.models.posts.PostType
@@ -20,7 +34,12 @@ import javax.inject.Inject
 class AddPostViewModel @Inject constructor(
     private val postsUseCase: PostsUseCase
 ): ViewModel() {
+
+    var state by mutableStateOf(AddPostScreenState())
+        private set
+
     fun submitPost(
+        context: Context,
         title: String,
         shortDescription: String,
         fullDescription: String,
@@ -28,14 +47,28 @@ class AddPostViewModel @Inject constructor(
         imageUrl: String
     ) {
         viewModelScope.launch {
+            state = state.copy(
+                isLoading = true,
+                isError = false,
+                message = "getting info..."
+            )
             val currentTime = OffsetDateTime.now()
             val imageModel = if (imageUrl.isNotBlank()) {
-                ImageModel(
-                    imageUrl = imageUrl,
-                    imageWidth = 1920f,
-                    imageHeight = 1080f
-                ) //TODO("Add dynamic ratio")
+                state = state.copy(
+                    message = "getting image..."
+                )
+                val image = loadImage(context, imageUrl)
+                image?.let {
+                    ImageModel(
+                        imageUrl = imageUrl,
+                        imageWidth = it.intrinsicWidth,
+                        imageHeight = it.intrinsicHeight
+                    )
+                }
             } else null
+            state = state.copy(
+                message = "uploading..."
+            )
             val status = postsUseCase.addPost(
                 PostModel(
                     postId = "",
@@ -47,6 +80,21 @@ class AddPostViewModel @Inject constructor(
                     image = imageModel
                 )
             )
+            state = state.copy(
+                isLoading = false,
+                isError = (status.data?.not()) ?: true,
+                message = status.message
+            )
         }
+    }
+
+    private suspend fun loadImage(context: Context, url: String): Drawable? {
+        val imageLoader = ImageLoader(context)
+        val imageRequest = ImageRequest.Builder(context)
+            .data(url)
+            .diskCachePolicy(CachePolicy.DISABLED)
+            .build()
+        val imageResult = imageLoader.execute(imageRequest)
+        return imageResult.drawable
     }
 }

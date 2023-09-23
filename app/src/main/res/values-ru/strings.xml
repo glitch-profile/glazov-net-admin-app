@@ -24,4 +24,5 @@
     <string name="app_post_detail_screen_name">Подробности</string>
     <string name="app_edit_post_screen_name">Редактировать запись</string>
     <string name="app_text_loading">Загрузка...</string>
+    <string name="app_button_clear_data">Очистить данные</string>
 </resources>

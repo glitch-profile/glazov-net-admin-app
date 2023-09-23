@@ -192,7 +192,7 @@ fun PostDetailScreen(
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     post.image?.let { image ->
-                        val imageAspectRatio = ( image.imageWidth / image.imageHeight )
+                        val imageAspectRatio = image.imageWidth.toFloat() / image.imageHeight.toFloat()
                         Spacer(modifier = Modifier.height(10.dp))
                         AsyncImage(
                             model = image.imageUrl,

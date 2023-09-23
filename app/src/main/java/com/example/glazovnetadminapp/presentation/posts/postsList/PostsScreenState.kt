@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.presentation.posts
+package com.example.glazovnetadminapp.presentation.posts.postsList
 
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 

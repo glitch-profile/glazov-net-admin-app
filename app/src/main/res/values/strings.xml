@@ -27,6 +27,7 @@
     <string name="app_button_dialog_confirm">Confirm</string>
     <string name="app_button_dialog_cancel">Cancel</string>
     <string name="app_text_loading">Loading...</string>
+    <string name="app_button_clear_data">Clear data</string>
 
     <string name="app_datetime_today_text">Today</string>
     <string name="app_datetime_yesterday_text">Yesterday</string>
