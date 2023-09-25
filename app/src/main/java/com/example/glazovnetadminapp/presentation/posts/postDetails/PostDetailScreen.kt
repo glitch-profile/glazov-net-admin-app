@@ -50,7 +50,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.glazovnetadminapp.R
+import com.example.glazovnetadminapp.domain.models.posts.PostType.Companion.toPostTypeCode
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
+import com.example.glazovnetadminapp.presentation.destinations.EditPostScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -118,7 +120,21 @@ fun PostDetailScreen(
                 },
                 actions = {
                     viewModel.state.posts.firstOrNull()?.let {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = {
+                            navigator.navigate(
+                                EditPostScreenDestination(
+                                    postId = it.postId,
+                                    postTitle = it.title,
+                                    postFullDescription = it.fullDescription,
+                                    postCreationDate = it.creationDate,
+                                    postShortDescription = it.shortDescription ?: "",
+                                    postTypeCode = it.postType.toPostTypeCode(),
+                                    postImageUrl = it.image?.imageUrl ?: "",
+                                    postImageWidth = it.image?.imageWidth,
+                                    postImageHeight = it.image?.imageHeight
+                                )
+                            )
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit"

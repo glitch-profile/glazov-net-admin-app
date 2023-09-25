@@ -1,10 +1,8 @@
-package com.example.glazovnetadminapp.presentation.posts.addPost
+package com.example.glazovnetadminapp.presentation.posts.editPost
 
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,39 +46,49 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.posts.PostType
+import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import java.time.OffsetDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
-@com.ramcosta.composedestinations.annotation.Destination
 @Composable
-fun AddPostScreen(
+@Destination
+fun EditPostScreen(
+    postId: String,
+    postTitle: String,
+    postFullDescription: String,
+    postCreationDate: OffsetDateTime,
+    postShortDescription: String,
+    postTypeCode: Int,
+    postImageUrl: String = "",
+    postImageWidth: Int? = null,
+    postImageHeight: Int? = null,
     navigator: DestinationsNavigator,
-    viewModel: AddPostViewModel = hiltViewModel(),
+    viewModel: EditPostViewModel = hiltViewModel(),
     context: Context = LocalContext.current
 ) {
     var titleText by remember {
-        mutableStateOf("")
+        mutableStateOf(postTitle)
     }
     var fullDescription by remember {
-        mutableStateOf("")
+        mutableStateOf(postFullDescription)
     }
     var shortDescription by remember {
-        mutableStateOf("")
+        mutableStateOf(postShortDescription)
     }
     var imageUrl by remember {
-        mutableStateOf("")
+        mutableStateOf(postImageUrl)
     }
     var isDropdownExpanded by remember {
         mutableStateOf(false)
     }
     var selectedPostTypeCode by remember {
-        mutableIntStateOf(0)
+        mutableIntStateOf(postTypeCode)
     }
     val icon = if (isDropdownExpanded) {
         Icons.Filled.KeyboardArrowUp
@@ -90,6 +98,14 @@ fun AddPostScreen(
     var textFiledSize by remember {
         mutableStateOf(Size.Zero)
     }
+
+    fun checkDataTheSame(): Boolean {
+        return titleText == postTitle && fullDescription == postFullDescription
+                && shortDescription == postShortDescription
+                && imageUrl == postImageUrl
+                && selectedPostTypeCode == postTypeCode
+    }
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         modifier = Modifier
@@ -263,40 +279,40 @@ fun AddPostScreen(
                 }
                 Button(
                     onClick = {
-                        viewModel.submitPost(
-                            context = context,
-                            title = titleText,
-                            shortDescription = shortDescription,
-                            fullDescription = fullDescription,
-                            postType = selectedPostTypeCode,
-                            imageUrl = imageUrl
+                        viewModel.editPost(
+                            context,
+                            imageUrl !== postImageUrl,
+                            postId,
+                            titleText,
+                            postCreationDate,
+                            fullDescription,
+                            shortDescription,
+                            selectedPostTypeCode,
+                            imageUrl,
+                            postImageWidth,
+                            postImageHeight
                         )
                     },
                     enabled = (
-                        titleText.isNotBlank()
-                                && fullDescription.isNotBlank()
-                                && viewModel.state.isLoading.not()
-                    )
+                            titleText.isNotBlank()
+                                    && fullDescription.isNotBlank()
+                                    && viewModel.state.isLoading.not()
+                                    && checkDataTheSame().not()
+                            )
                 ) {
                     Text(text = stringResource(id = R.string.add_post_screen_confirm_button))
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
-            AnimatedVisibility(
-                visible = viewModel.state.message !== null,
-                enter = slideInVertically()
-            ) {
-                Text(
-                    text = viewModel.state.message ?: "",
-                    color = if (viewModel.state.isError) Color.Red else LocalTextStyle.current.color
-                )
-            }
+//            AnimatedVisibility(
+//                visible = viewModel.state.message !== null,
+//                enter = slideInVertically()
+//            ) {
+//                Text(
+//                    text = viewModel.state.message ?: "",
+//                    color = if (viewModel.state.isError) Color.Red else LocalTextStyle.current.color
+//                )
+//            }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewAddPostScreen() {
-//    AddPostScreen(navigator = )
 }

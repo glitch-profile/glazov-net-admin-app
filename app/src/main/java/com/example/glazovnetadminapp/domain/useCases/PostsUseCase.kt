@@ -31,4 +31,9 @@ class PostsUseCase @Inject constructor(
     suspend fun deletePostById(postId: String): Resource<Boolean> {
         return postsApiRepositoryImpl.deletePostById(API_KEY, postId = postId)
     }
+
+    suspend fun updatePost(postModel: PostModel): Resource<Boolean> {
+        val postModelDto = postModel.toPostModelDto()
+        return postsApiRepositoryImpl.editPost(API_KEY, postModelDto)
+    }
 }

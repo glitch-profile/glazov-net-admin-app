@@ -22,6 +22,7 @@ import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -92,7 +93,7 @@ class AddPostViewModel @Inject constructor(
         val imageLoader = ImageLoader(context)
         val imageRequest = ImageRequest.Builder(context)
             .data(url)
-            .diskCachePolicy(CachePolicy.DISABLED)
+            .diskCachePolicy(CachePolicy.READ_ONLY)
             .build()
         val imageResult = imageLoader.execute(imageRequest)
         return imageResult.drawable
