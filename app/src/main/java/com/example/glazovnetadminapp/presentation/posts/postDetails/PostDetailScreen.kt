@@ -132,7 +132,7 @@ fun PostDetailScreen(
                                     postImageUrl = it.image?.imageUrl ?: "",
                                     postImageWidth = it.image?.imageWidth,
                                     postImageHeight = it.image?.imageHeight
-                                )
+                                ), onlyIfResumed = true
                             )
                         }) {
                             Icon(

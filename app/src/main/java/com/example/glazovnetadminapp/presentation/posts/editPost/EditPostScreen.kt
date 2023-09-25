@@ -114,7 +114,7 @@ fun EditPostScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(id = R.string.app_add_post_screen_name))
+                    Text(text = stringResource(id = R.string.app_update_post_screen_name))
                 },
                 navigationIcon = {
                     IconButton(
@@ -262,11 +262,11 @@ fun EditPostScreen(
                     onClick = {
 
                         fun clearInputData() {
-                            titleText = ""
-                            fullDescription = ""
-                            shortDescription = ""
-                            selectedPostTypeCode = 0
-                            imageUrl = ""
+                            titleText = postTitle
+                            fullDescription = postFullDescription
+                            shortDescription = postShortDescription
+                            selectedPostTypeCode = postTypeCode
+                            imageUrl = postImageUrl
                             isDropdownExpanded = false
                         }
 
@@ -274,7 +274,7 @@ fun EditPostScreen(
                     }
                 ) {
                     Text(
-                        text = stringResource(id = R.string.app_button_clear_data)
+                        text = stringResource(id = R.string.app_button_reset_data)
                     )
                 }
                 Button(
@@ -304,15 +304,15 @@ fun EditPostScreen(
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
-//            AnimatedVisibility(
-//                visible = viewModel.state.message !== null,
-//                enter = slideInVertically()
-//            ) {
-//                Text(
-//                    text = viewModel.state.message ?: "",
-//                    color = if (viewModel.state.isError) Color.Red else LocalTextStyle.current.color
-//                )
-//            }
+            AnimatedVisibility(
+                visible = viewModel.state.message !== null,
+                enter = slideInVertically()
+            ) {
+                Text(
+                    text = viewModel.state.message ?: "",
+                    color = if (viewModel.state.isError) Color.Red else LocalTextStyle.current.color
+                )
+            }
         }
     }
 }

@@ -15,6 +15,7 @@
     <string name="add_post_screen_select_post_type">Выберите тип поста</string>
     <string name="app_post_delete_dialog_title">Удалить пост?</string>
     <string name="app_post_delete_dialog_text">Вы уверены, что хотите удалить этот пост? Его будет невозможно восстановить позже</string>
+    <string name="app_button_reset_data">Сбросить</string>
     <string name="app_datetime_today_text">Сегодня</string>
     <string name="app_datetime_yesterday_text">Вчера</string>
     <string name="app_posts_screen_name">Новости</string>
@@ -25,4 +26,5 @@
     <string name="app_edit_post_screen_name">Редактировать запись</string>
     <string name="app_text_loading">Загрузка...</string>
     <string name="app_button_clear_data">Очистить данные</string>
+    <string name="app_update_post_screen_name">Редактировать запись</string>
 </resources>

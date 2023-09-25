@@ -55,9 +55,6 @@ class AddPostViewModel @Inject constructor(
             )
             val currentTime = OffsetDateTime.now()
             val imageModel = if (imageUrl.isNotBlank()) {
-                state = state.copy(
-                    message = "getting image..."
-                )
                 val image = loadImage(context, imageUrl)
                 image?.let {
                     ImageModel(
@@ -90,6 +87,9 @@ class AddPostViewModel @Inject constructor(
     }
 
     private suspend fun loadImage(context: Context, url: String): Drawable? {
+        state = state.copy(
+            message = "getting image..."
+        )
         val imageLoader = ImageLoader(context)
         val imageRequest = ImageRequest.Builder(context)
             .data(url)

@@ -5,6 +5,7 @@
 
     <string name="app_posts_screen_name">News</string>
     <string name="app_add_post_screen_name">Add new post</string>
+    <string name="app_update_post_screen_name">Edit post</string>
     <string name="app_post_detail_screen_name">Post details</string>
     <string name="app_edit_post_screen_name">Edit post</string>
 
@@ -28,6 +29,7 @@
     <string name="app_button_dialog_cancel">Cancel</string>
     <string name="app_text_loading">Loading...</string>
     <string name="app_button_clear_data">Clear data</string>
+    <string name="app_button_reset_data">Reset</string>
 
     <string name="app_datetime_today_text">Today</string>
     <string name="app_datetime_yesterday_text">Yesterday</string>
