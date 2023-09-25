@@ -33,8 +33,8 @@ sealed class PostType(
                 else -> News
             }
         }
-        fun toPostTypeCode(postType: PostType): Int {
-            return when (postType) {
+        fun PostType.toPostTypeCode(): Int {
+            return when (this) {
                 News -> 0
                 Announcement -> 1
                 Greeting -> 2

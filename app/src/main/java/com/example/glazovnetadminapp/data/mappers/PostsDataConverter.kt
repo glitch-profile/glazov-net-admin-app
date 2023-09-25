@@ -3,6 +3,7 @@ package com.example.glazovnetadminapp.data.mappers
 import com.example.glazovnetadminapp.domain.models.ImageModel
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.models.posts.PostType
+import com.example.glazovnetadminapp.domain.models.posts.PostType.Companion.toPostTypeCode
 import com.example.glazovnetadminapp.entity.ImageModelDto
 import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
 import java.time.OffsetDateTime
@@ -31,7 +32,7 @@ fun PostModelDto.toPostModel(): PostModel {
 
 fun PostModel.toPostModelDto(): PostModelDto {
     val postCreationDateTime = creationDate.format(DateTimeFormatter.ISO_DATE_TIME)
-    val postTypeCode = PostType.toPostTypeCode(postType = postType)
+    val postTypeCode = postType.toPostTypeCode()
     val imageModelDto = image?.let {
         ImageModelDto(
             imageUrl = it.imageUrl,
