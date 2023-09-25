@@ -1,8 +1,10 @@
 package com.example.glazovnetadminapp.entity.postsDto
 
+import androidx.annotation.Keep
 import com.example.glazovnetadminapp.entity.ImageModelDto
 import com.squareup.moshi.Json
 
+@Keep
 data class PostModelDto(
     @field:Json(name = "id")
     val id: String = "",

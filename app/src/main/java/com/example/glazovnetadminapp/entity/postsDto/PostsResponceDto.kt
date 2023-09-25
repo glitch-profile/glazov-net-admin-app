@@ -1,7 +1,9 @@
 package com.example.glazovnetadminapp.entity.postsDto
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
+@Keep
 data class PostsResponceDto(
     @field:Json(name = "status")
     val status: Boolean,

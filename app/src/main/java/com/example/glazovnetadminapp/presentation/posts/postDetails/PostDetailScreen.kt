@@ -199,9 +199,7 @@ fun PostDetailScreen(
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        modifier = Modifier
-                            .animateContentSize(),
-                        text = post.shortDescription ?: post.fullDescription,
+                        text = post.fullDescription,
                         style = MaterialTheme.typography.bodyMedium,
                         softWrap = true,
                         overflow = TextOverflow.Ellipsis

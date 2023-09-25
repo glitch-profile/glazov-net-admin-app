@@ -90,8 +90,6 @@ fun PostCard(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    modifier = Modifier
-                        .animateContentSize(),
                     text = post.shortDescription ?: post.fullDescription,
                     style = MaterialTheme.typography.bodyMedium,
                     softWrap = true,
