@@ -11,33 +11,33 @@ import retrofit2.http.Query
 
 interface GlazovNetPostsApi {
 
-    @GET("allposts")
+    @GET("posts/getall")
     suspend fun getAllPosts(): PostsResponceDto
 
-    @GET("posts")
+    @GET("posts/getposts")
     suspend fun getPostsList(
         @Query("limit") limit: Int? = null,
         @Query("start_index") startIndex: Int? = null
     ): PostsResponceDto
 
-    @GET("getpost")
+    @GET("posts/get")
     suspend fun getPostById(
         @Query("post_id") postId: String
     ): PostsResponceDto
 
-    @POST("addpost")
+    @POST("posts/add")
     suspend fun addPost(
         @Body postModel: PostModelDto,
         @Query("api_key") apiKey: String
     ): PostsResponceDto
 
-    @PUT("editpost")
+    @PUT("posts/edit")
     suspend fun editPost(
         @Body postModel: PostModelDto,
         @Query("api_key") apiKey: String
     ): PostsResponceDto
 
-    @DELETE("deletepost")
+    @DELETE("posts/delete")
     suspend fun deletePostById(
         @Query("api_key") apiKey: String,
         @Query("post_id") postId: String
