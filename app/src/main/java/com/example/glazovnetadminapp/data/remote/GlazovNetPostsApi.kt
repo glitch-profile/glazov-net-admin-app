@@ -9,35 +9,37 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
 
+const val PATH = "api/posts"
+
 interface GlazovNetPostsApi {
 
-    @GET("posts/getall")
+    @GET("$PATH/getall")
     suspend fun getAllPosts(): PostsResponceDto
 
-    @GET("posts/getposts")
+    @GET("$PATH/getposts")
     suspend fun getPostsList(
         @Query("limit") limit: Int? = null,
         @Query("start_index") startIndex: Int? = null
     ): PostsResponceDto
 
-    @GET("posts/get")
+    @GET("$PATH/get")
     suspend fun getPostById(
         @Query("post_id") postId: String
     ): PostsResponceDto
 
-    @POST("posts/add")
+    @POST("$PATH/add")
     suspend fun addPost(
         @Body postModel: PostModelDto,
         @Query("api_key") apiKey: String
     ): PostsResponceDto
 
-    @PUT("posts/edit")
+    @PUT("$PATH/edit")
     suspend fun editPost(
         @Body postModel: PostModelDto,
         @Query("api_key") apiKey: String
     ): PostsResponceDto
 
-    @DELETE("posts/delete")
+    @DELETE("$PATH/delete")
     suspend fun deletePostById(
         @Query("api_key") apiKey: String,
         @Query("post_id") postId: String
