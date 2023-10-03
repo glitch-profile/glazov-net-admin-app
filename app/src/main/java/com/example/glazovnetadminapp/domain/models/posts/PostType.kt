@@ -3,7 +3,6 @@ package com.example.glazovnetadminapp.domain.models.posts
 import androidx.annotation.Keep
 import com.example.glazovnetadminapp.R
 
-@Keep
 sealed class PostType(
     val description: String,
     val stringResourceId: Int

@@ -1,6 +1,7 @@
 package com.example.glazovnetadminapp.di
 
 import com.example.glazovnetadminapp.data.remote.GlazovNetPostsApi
+import com.example.glazovnetadminapp.data.remote.GlazovNetTariffsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +21,16 @@ object ApiAppModule {
         return Retrofit.Builder()
 //            .baseUrl("http://192.168.1.215:8080/") //notebook
             .baseUrl("http://192.168.0.37:8080/")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGlazovNetTariffsApi(): GlazovNetTariffsApi {
+        return Retrofit.Builder()
+            .baseUrl("http://192.168.0.37:8080")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create()
