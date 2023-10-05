@@ -6,7 +6,7 @@ import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
 
-const val API_KEY = "J3gHkW9iLp7vQzXrE5NtFmAsCfYbDqUo"
+const val API_KEY = "test_api_key_123"
 
 class PostsUseCase @Inject constructor(
     private val postsApiRepositoryImpl: PostsApiRepositoryImpl
