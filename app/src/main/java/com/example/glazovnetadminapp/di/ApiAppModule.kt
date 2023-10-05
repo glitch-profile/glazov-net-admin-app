@@ -19,8 +19,8 @@ object ApiAppModule {
     @Singleton
     fun provideGlazovNetPostsApi(): GlazovNetPostsApi {
         return Retrofit.Builder()
-//            .baseUrl("http://192.168.1.215:8080/") //notebook
-            .baseUrl("http://192.168.0.37:8080/")
+            .baseUrl("http://192.168.1.215:8080/") //notebook
+//            .baseUrl("http://192.168.0.37:8080/")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create()
