@@ -69,7 +69,7 @@ fun PostCard(
                 modifier = modifier
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(8.dp),
                 horizontalAlignment = Alignment.Start,
             ) {
                 Text(
