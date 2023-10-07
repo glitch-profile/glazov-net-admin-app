@@ -6,34 +6,34 @@ import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
 
-const val API_KEY = "test_api_key_123"
+private const val API_KEY = "test_api_key_123"
 
 class PostsUseCase @Inject constructor(
-    private val postsApiRepositoryImpl: PostsApiRepositoryImpl
+    private val postsApiRepository: PostsApiRepositoryImpl
 ) {
 
     suspend fun getAllPosts(): Resource<List<PostModel?>> {
-        return postsApiRepositoryImpl.getAllPosts()
+        return postsApiRepository.getAllPosts()
     }
 
     suspend fun addPost(postModel: PostModel): Resource<Boolean> {
         val postModelDto = postModel.toPostModelDto()
-        return postsApiRepositoryImpl.addPost(
+        return postsApiRepository.addPost(
             apiKey = API_KEY,
             postModel = postModelDto
         )
     }
 
     suspend fun getPostById(postId: String): Resource<PostModel?> {
-        return postsApiRepositoryImpl.getPostById(postId)
+        return postsApiRepository.getPostById(postId)
     }
 
     suspend fun deletePostById(postId: String): Resource<Boolean> {
-        return postsApiRepositoryImpl.deletePostById(API_KEY, postId = postId)
+        return postsApiRepository.deletePostById(API_KEY, postId = postId)
     }
 
     suspend fun updatePost(postModel: PostModel): Resource<Boolean> {
         val postModelDto = postModel.toPostModelDto()
-        return postsApiRepositoryImpl.editPost(API_KEY, postModelDto)
+        return postsApiRepository.editPost(API_KEY, postModelDto)
     }
 }

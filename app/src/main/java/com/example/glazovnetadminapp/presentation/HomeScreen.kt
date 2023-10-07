@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.glazovnetadminapp.presentation.destinations.AddPostScreenDestination
 import com.example.glazovnetadminapp.presentation.destinations.PostsScreenDestination
+import com.example.glazovnetadminapp.presentation.tariffs.tariffsList.TariffsList
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -27,57 +28,58 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun HomeScreen(
     navigator: DestinationsNavigator
 ) {
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxSize()
-    ) {
-        Text(
-            text = "Api.Glazov.Net",
-            style = MaterialTheme.typography.displayMedium
-        )
-        Text(
-            text = "Admin App",
-            style = MaterialTheme.typography.displaySmall
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Divider(modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Text(
-            text = "Posts",
-            style = MaterialTheme.typography.displaySmall
-        )
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            OutlinedButton(
-                onClick = {
-                    navigator.navigate(PostsScreenDestination, onlyIfResumed = true)
-                },
-                modifier = Modifier
-                    .padding(5.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "All posts"
-                )
-            }
-            OutlinedButton(
-                onClick = {
-                    navigator.navigate(AddPostScreenDestination, onlyIfResumed = true)
-                },
-                modifier = Modifier
-                    .padding(5.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "Add post"
-                )
-            }
-        }
-    }
+//    Column(
+//        modifier = Modifier
+//            .padding(16.dp)
+//            .fillMaxSize()
+//    ) {
+//        Text(
+//            text = "Api.Glazov.Net",
+//            style = MaterialTheme.typography.displayMedium
+//        )
+//        Text(
+//            text = "Admin App",
+//            style = MaterialTheme.typography.displaySmall
+//        )
+//        Spacer(modifier = Modifier.height(10.dp))
+//        Divider(modifier = Modifier.fillMaxWidth())
+//        Spacer(modifier = Modifier.height(10.dp))
+//
+//        Text(
+//            text = "Posts",
+//            style = MaterialTheme.typography.displaySmall
+//        )
+//        Card(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//        ) {
+//            OutlinedButton(
+//                onClick = {
+//                    navigator.navigate(PostsScreenDestination, onlyIfResumed = true)
+//                },
+//                modifier = Modifier
+//                    .padding(5.dp)
+//                    .fillMaxWidth()
+//            ) {
+//                Text(
+//                    text = "All posts"
+//                )
+//            }
+//            OutlinedButton(
+//                onClick = {
+//                    navigator.navigate(AddPostScreenDestination, onlyIfResumed = true)
+//                },
+//                modifier = Modifier
+//                    .padding(5.dp)
+//                    .fillMaxWidth()
+//            ) {
+//                Text(
+//                    text = "Add post"
+//                )
+//            }
+//        }
+//    }
+    TariffsList()
 }
 
 @Preview(showBackground = true)
