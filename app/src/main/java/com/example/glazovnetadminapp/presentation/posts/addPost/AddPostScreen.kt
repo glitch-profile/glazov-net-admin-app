@@ -2,9 +2,7 @@ package com.example.glazovnetadminapp.presentation.posts.addPost
 
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,7 +46,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -126,7 +123,7 @@ fun AddPostScreen(
                 onValueChange = { titleText = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(top = 4.dp),
                 label = {
                     Text(
                         text = stringResource(id = R.string.add_post_screen_title)
@@ -144,7 +141,7 @@ fun AddPostScreen(
                 onValueChange = { fullDescription = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(top = 4.dp),
                 label = {
                     Text(
                         text = stringResource(id = R.string.add_post_screen_full_description)
@@ -168,7 +165,7 @@ fun AddPostScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp)
+                    .padding(top = 4.dp)
                     .onGloballyPositioned { coordinates ->
                         textFiledSize = coordinates.size.toSize()
                     },
@@ -186,7 +183,7 @@ fun AddPostScreen(
                     )
                 }
             )
-            DropdownMenu( //TODO("Rework the dropdown menu")
+            DropdownMenu( //TODO(Rework the dropdown menu)
                 expanded = isDropdownExpanded,
                 onDismissRequest = {
                     isDropdownExpanded = false
@@ -214,7 +211,7 @@ fun AddPostScreen(
                 onValueChange = { shortDescription = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(top = 4.dp),
                 label = {
                     Text(
                         text = stringResource(id = R.string.add_post_screen_short_description)
@@ -227,7 +224,7 @@ fun AddPostScreen(
                 onValueChange = { imageUrl = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(top = 4.dp),
                 maxLines = 2,
                 label = {
                     Text(
@@ -235,8 +232,8 @@ fun AddPostScreen(
                     )
                 }
             )
-            //TODO("image preview")
-            Spacer(modifier = Modifier.height(4.dp))
+            //TODO(image preview)
+            Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -273,10 +270,10 @@ fun AddPostScreen(
                         )
                     },
                     enabled = (
-                        titleText.isNotBlank()
-                                && fullDescription.isNotBlank()
-                                && viewModel.state.isLoading.not()
-                    )
+                            titleText.isNotBlank()
+                                    && fullDescription.isNotBlank()
+                                    && viewModel.state.isLoading.not()
+                            )
                 ) {
                     Text(text = stringResource(id = R.string.add_post_screen_confirm_button))
                 }
@@ -293,10 +290,4 @@ fun AddPostScreen(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewAddPostScreen() {
-//    AddPostScreen(navigator = )
 }

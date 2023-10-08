@@ -142,7 +142,7 @@ fun EditPostScreen(
                 onValueChange = { titleText = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(top = 4.dp),
                 label = {
                     Text(
                         text = stringResource(id = R.string.add_post_screen_title)
@@ -160,7 +160,7 @@ fun EditPostScreen(
                 onValueChange = { fullDescription = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(top = 4.dp),
                 label = {
                     Text(
                         text = stringResource(id = R.string.add_post_screen_full_description)
@@ -184,7 +184,7 @@ fun EditPostScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp)
+                    .padding(top = 4.dp)
                     .onGloballyPositioned { coordinates ->
                         textFiledSize = coordinates.size.toSize()
                     },
@@ -230,7 +230,7 @@ fun EditPostScreen(
                 onValueChange = { shortDescription = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(top = 4.dp),
                 label = {
                     Text(
                         text = stringResource(id = R.string.add_post_screen_short_description)
@@ -243,7 +243,7 @@ fun EditPostScreen(
                 onValueChange = { imageUrl = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(top = 4.dp),
                 maxLines = 2,
                 label = {
                     Text(
@@ -252,7 +252,7 @@ fun EditPostScreen(
                 }
             )
             //TODO("image preview")
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),

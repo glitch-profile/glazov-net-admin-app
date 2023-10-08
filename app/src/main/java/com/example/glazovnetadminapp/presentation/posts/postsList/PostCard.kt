@@ -56,7 +56,7 @@ fun PostCard(
         Card(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
-                .padding(8.dp)
+                .padding(bottom = 8.dp)
                 .clickable {
                     navigator.navigate(
                         PostDetailScreenDestination(postId = post.postId),

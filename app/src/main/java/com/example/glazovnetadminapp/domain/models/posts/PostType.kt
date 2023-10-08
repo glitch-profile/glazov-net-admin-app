@@ -7,19 +7,19 @@ sealed class PostType(
     val description: String,
     val stringResourceId: Int
 ) {
-    object News: PostType(
+    data object News: PostType(
         description = "News",
         stringResourceId = R.string.post_type_news
     )
-    object Announcement: PostType(
+    data object Announcement: PostType(
         description = "Announcement",
         stringResourceId = R.string.post_type_announcement
     )
-    object Greeting: PostType(
+    data object Greeting: PostType(
         description = "Greetings",
         stringResourceId = R.string.post_type_greetings
     )
-    object Advertisement: PostType(
+    data object Advertisement: PostType(
         description = "Advertisement",
         stringResourceId = R.string.post_type_advertisement
     )

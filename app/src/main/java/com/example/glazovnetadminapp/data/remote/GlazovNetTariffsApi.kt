@@ -13,10 +13,8 @@ private const val PATH = "api/tariffs"
 
 interface GlazovNetTariffsApi {
 
-    @GET("$PATH/get")
-    suspend fun getAllTariffs(
-        @Query("tariffStatus") status: Boolean? = null
-    ): TariffsResponceDto
+    @GET("$PATH/getall")
+    suspend fun getAllTariffs(): TariffsResponceDto
 
     @POST("$PATH/add")
     suspend fun addTariff(
