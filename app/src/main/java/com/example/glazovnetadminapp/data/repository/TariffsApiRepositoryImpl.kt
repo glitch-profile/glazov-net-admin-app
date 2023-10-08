@@ -12,9 +12,9 @@ import javax.inject.Inject
 class TariffsApiRepositoryImpl @Inject constructor(
     private val tariffsApi: GlazovNetTariffsApi
 ): TariffsApiRepository {
-    override suspend fun getAllTariffs(tariffsStatus: Boolean?): Resource<List<TariffModel?>> {
+    override suspend fun getAllTariffs(): Resource<List<TariffModel?>> {
         return try {
-            val result = tariffsApi.getAllTariffs(tariffsStatus)
+            val result = tariffsApi.getAllTariffs()
             if (result.status) {
                 Resource.Success(
                     data = result.data.map{ it?.toTariffModel() },

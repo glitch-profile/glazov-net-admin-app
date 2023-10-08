@@ -16,7 +16,5 @@ data class TariffModelDto(
     @field:Json(name = "maxSpeed")
     val maxSpeed: Int,
     @field:Json(name = "costPerMonth")
-    val costPerMonth: Int,
-    @field:Json(name = "isActive")
-    val isActive: Boolean
+    val costPerMonth: Int
 )

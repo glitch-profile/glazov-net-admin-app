@@ -6,11 +6,15 @@ sealed class TariffType(
     val description: String,
     val stringResourceId: Int
 ) {
-    object Limited: TariffType(
+    data object Archive: TariffType(
+        description = "Archive",
+        stringResourceId = R.string.tariff_type_archive
+    )
+    data object Limited: TariffType(
         description = "Limited",
         stringResourceId = R.string.tariff_type_limited
     )
-    object Unlimited: TariffType(
+    data object Unlimited: TariffType(
         description = "Unlimited",
         stringResourceId = R.string.tariff_type_unlimited
     )
@@ -18,6 +22,7 @@ sealed class TariffType(
     companion object {
         fun fromTariffTypeCode(code: Int): TariffType {
             return when (code) {
+                -1 -> Archive
                 0 -> Limited
                 1 -> Unlimited
                 else -> Unlimited
@@ -25,6 +30,7 @@ sealed class TariffType(
         }
         fun TariffType.toTariffTypeCode(): Int {
             return when (this) {
+                Archive -> -1
                 Limited -> 0
                 Unlimited -> 1
             }

@@ -12,8 +12,7 @@ fun TariffModelDto.toTariffModel(): TariffModel {
         description = description,
         category = TariffType.fromTariffTypeCode(this.categoryCode),
         maxSpeed = maxSpeed,
-        costPerMonth = costPerMonth,
-        isActive = isActive
+        costPerMonth = costPerMonth
     )
 }
 
@@ -24,7 +23,6 @@ fun TariffModel.ToTariffModelDto(): TariffModelDto {
         categoryCode = this.category.toTariffTypeCode(),
         description = description,
         maxSpeed = maxSpeed,
-        costPerMonth = costPerMonth,
-        isActive = isActive
+        costPerMonth = costPerMonth
     )
 }
