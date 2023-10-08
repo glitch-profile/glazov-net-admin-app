@@ -9,6 +9,7 @@
     <string name="tariff_type_limited">Помегабайтный</string>
     <string name="tariff_type_unlimited">Безлимитный</string>
     <string name="app_text_field_required">*Обязательное поле</string>
+    <string name="tariff_screen_title">Тарифы</string>
     <string name="post_type_news">Новости</string>
     <string name="post_type_announcement">Объявление</string>
     <string name="post_type_greetings">Поздравление</string>
@@ -18,6 +19,8 @@
     <string name="app_post_delete_dialog_title">Удалить пост?</string>
     <string name="app_post_delete_dialog_text">Вы уверены, что хотите удалить этот пост? Его будет невозможно восстановить позже</string>
     <string name="app_button_reset_data">Сбросить</string>
+    <string name="tariff_cost_prefix">Стоимость:</string>
+    <string name="tariff_speed_prefix">Скорость до</string>
     <string name="app_datetime_today_text">Сегодня</string>
     <string name="app_datetime_yesterday_text">Вчера</string>
     <string name="app_posts_screen_name">Новости</string>
@@ -29,4 +32,11 @@
     <string name="app_text_loading">Загрузка...</string>
     <string name="app_button_clear_data">Очистить данные</string>
     <string name="app_update_post_screen_name">Редактировать запись</string>
+    <plurals name="tariff_cost_rubbles">
+        <item quantity="one">%d рубль</item>
+        <item quantity="few">%d рубля</item>
+        <item quantity="many">%d рублей</item>
+    </plurals>
+    <string name="tariff_speed_suffix">Мбит/с</string>
+    <string name="tariff_type_archive">Архив</string>
 </resources>
