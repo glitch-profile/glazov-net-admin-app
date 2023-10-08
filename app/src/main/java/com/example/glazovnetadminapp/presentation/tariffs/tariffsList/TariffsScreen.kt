@@ -101,7 +101,6 @@ fun TariffsScreen(
         Column(
             modifier = Modifier
                 .padding(it)
-                .padding(horizontal = 16.dp)
                 .fillMaxSize()
         ) {
             var selectedCategoryIndex by remember{
@@ -109,9 +108,9 @@ fun TariffsScreen(
             }
             Row(
                 modifier = Modifier
-                    .horizontalScroll(rememberScrollState()),
-
+                    .horizontalScroll(rememberScrollState())
             ) {
+                Spacer(modifier = Modifier.width(16.dp))
                 Button(
                     onClick = { selectedCategoryIndex = 0 }
                 ) {
@@ -129,32 +128,39 @@ fun TariffsScreen(
                 ) {
                     Text(text = "Archive")
                 }
+                Spacer(modifier = Modifier.width(16.dp))
             } //TODO("Add styles")
             FilterScreen(viewModel)
-            when (selectedCategoryIndex) {
-                0 -> {
-                    TariffsCard(
-                        TariffType.Unlimited,
-                        viewModel
-                    )
-                }
-                1 -> {
-                    TariffsCard(
-                        TariffType.Limited,
-                        viewModel
-                    )
-                }
-                2 -> {
-                    TariffsCard(
-                        TariffType.Archive,
-                        viewModel
-                    )
-                }
-                else -> {
-                    TariffsCard(
-                        TariffType.Unlimited,
-                        viewModel
-                    )
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxSize()
+            ) {
+                when (selectedCategoryIndex) {
+                    0 -> {
+                        TariffsCard(
+                            TariffType.Unlimited,
+                            viewModel
+                        )
+                    }
+                    1 -> {
+                        TariffsCard(
+                            TariffType.Limited,
+                            viewModel
+                        )
+                    }
+                    2 -> {
+                        TariffsCard(
+                            TariffType.Archive,
+                            viewModel
+                        )
+                    }
+                    else -> {
+                        TariffsCard(
+                            TariffType.Unlimited,
+                            viewModel
+                        )
+                    }
                 }
             }
         }
@@ -167,6 +173,7 @@ private fun FilterScreen(
 ) {
     Column(
         modifier = Modifier
+            .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .animateContentSize()
     ) {
