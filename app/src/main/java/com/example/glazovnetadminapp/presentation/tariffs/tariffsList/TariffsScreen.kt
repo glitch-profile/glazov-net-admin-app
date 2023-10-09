@@ -1,7 +1,10 @@
 package com.example.glazovnetadminapp.presentation.tariffs.tariffsList
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +15,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -41,6 +47,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -114,31 +122,36 @@ fun TariffsScreen(
             var selectedCategoryIndex by remember{
                 mutableIntStateOf(0)
             }
-//            val filteredTariffs = viewModel.filteredTariffs.collectAsState(initial = emptyList()).value
-            Row(
-                modifier = Modifier
-                    .horizontalScroll(rememberScrollState())
-            ) {
-                Spacer(modifier = Modifier.width(16.dp))
-                Button(
-                    onClick = { selectedCategoryIndex = 0 }
-                ) {
-                    Text(text = stringResource(id = R.string.tariff_type_unlimited))
+            LazyRow(
+                content = {
+                    items(TariffType.values().size) {
+                        val backgroundColor by animateColorAsState(
+                            if (selectedCategoryIndex == it) MaterialTheme.colorScheme.primary
+                            else Color.LightGray,
+                            label = "color"
+                        )
+                        Box(
+                            modifier = Modifier
+                                .padding(start = 16.dp)
+                                .clickable {
+                                    selectedCategoryIndex = it
+                                }
+                                .clip(RoundedCornerShape(10.dp))
+                                .widthIn(min = 100.dp)
+                                .background(backgroundColor)
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(id = TariffType.values()[it].stringResourceId),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.White
+                            )
+                        }
+                    }
+                    item { Spacer(modifier = Modifier.width(16.dp)) }
                 }
-                Spacer(modifier = Modifier.width(24.dp))
-                Button(
-                    onClick = { selectedCategoryIndex = 1 }
-                ) {
-                    Text(text = stringResource(id = R.string.tariff_type_limited))
-                }
-                Spacer(modifier = Modifier.width(24.dp))
-                Button(
-                    onClick = { selectedCategoryIndex = 2 }
-                ) {
-                    Text(text = "Archive")
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-            } //TODO("Add styles")
+            )
             FilterScreen(viewModel)
             Box(
                 modifier = Modifier
@@ -148,28 +161,24 @@ fun TariffsScreen(
                 when (selectedCategoryIndex) {
                     0 -> {
                         TariffsCard(
-                            //filteredTariffs,
                             TariffType.Unlimited,
                             viewModel
                         )
                     }
                     1 -> {
                         TariffsCard(
-                            //filteredTariffs,
                             TariffType.Limited,
                             viewModel
                         )
                     }
                     2 -> {
                         TariffsCard(
-                            //filteredTariffs,
                             TariffType.Archive,
                             viewModel
                         )
                     }
                     else -> {
                         TariffsCard(
-                            //filteredTariffs,
                             TariffType.Unlimited,
                             viewModel
                         )

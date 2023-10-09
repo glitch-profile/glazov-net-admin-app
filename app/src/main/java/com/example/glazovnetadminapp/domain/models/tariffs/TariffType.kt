@@ -35,5 +35,13 @@ sealed class TariffType(
                 Unlimited -> 1
             }
         }
+
+        fun values(): List<TariffType> {
+            return listOf(
+                Limited,
+                Unlimited,
+                Archive
+            )
+        }
     }
 }
