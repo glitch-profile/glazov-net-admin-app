@@ -2,9 +2,7 @@ package com.example.glazovnetadminapp.presentation.tariffs.tariffsList
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +15,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -28,7 +26,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,6 +33,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
@@ -94,6 +92,16 @@ fun TariffsScreen(
                             contentDescription = "Add tariff"
                         )
                     }
+                    IconButton(
+                        onClick = {
+                            viewModel.loadTariffs()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh tariffs"
+                        )
+                    }
                 }
             )
         }
@@ -106,6 +114,7 @@ fun TariffsScreen(
             var selectedCategoryIndex by remember{
                 mutableIntStateOf(0)
             }
+//            val filteredTariffs = viewModel.filteredTariffs.collectAsState(initial = emptyList()).value
             Row(
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())
@@ -139,24 +148,28 @@ fun TariffsScreen(
                 when (selectedCategoryIndex) {
                     0 -> {
                         TariffsCard(
+                            //filteredTariffs,
                             TariffType.Unlimited,
                             viewModel
                         )
                     }
                     1 -> {
                         TariffsCard(
+                            //filteredTariffs,
                             TariffType.Limited,
                             viewModel
                         )
                     }
                     2 -> {
                         TariffsCard(
+                            //filteredTariffs,
                             TariffType.Archive,
                             viewModel
                         )
                     }
                     else -> {
                         TariffsCard(
+                            //filteredTariffs,
                             TariffType.Unlimited,
                             viewModel
                         )
@@ -180,14 +193,15 @@ private fun FilterScreen(
         var isExpanded by remember {
             mutableStateOf(false)
         }
+        val nameFilterText = viewModel.nameFilter.collectAsState()
         AnimatedVisibility(visible = isExpanded) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = viewModel.nameFilter,
-                    onValueChange = { viewModel.nameFilter = it },
+                    value = nameFilterText.value,
+                    onValueChange = { viewModel.updateNameFilter(it) },
                     singleLine = true,
                     label = {
                         Text(
@@ -219,8 +233,8 @@ private fun TariffsCard(
     tariffType: TariffType,
     viewModel: TariffsScreenViewModel
 ) {
-    val tariffs = viewModel.state.tariffsData.filter {
-        it.category == tariffType && it.name.contains(viewModel.nameFilter)
+    val tariffs = viewModel.filteredTariffs.collectAsState().value.filter {
+        it.category == tariffType
     }
     if (tariffs.isNotEmpty()) {
         Card(

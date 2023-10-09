@@ -1,19 +1,22 @@
 package com.example.glazovnetadminapp.presentation.tariffs.tariffsList
 
 import android.util.Log
-import androidx.annotation.FloatRange
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
-import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
 import com.example.glazovnetadminapp.domain.useCases.TariffsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,46 +25,70 @@ class TariffsScreenViewModel @Inject constructor(
     private val tariffsUseCase: TariffsUseCase
 ): ViewModel() {
 
-    var state by mutableStateOf(TariffsScreenState())
-        private set
-    var nameFilter by mutableStateOf(
-        ""
-    ) //TODO("make a working filter")
+    private val _state = MutableStateFlow(TariffsScreenState())
+    val state = _state.asStateFlow()
+
+    private val _nameFilter = MutableStateFlow("")
+    val nameFilter = _nameFilter.asStateFlow()
+
+    val filteredTariffs = nameFilter
+        .combine(_state) {name, state ->
+            if (name.isBlank()) {
+                state.tariffsData
+            } else {
+                state.tariffsData.filter {
+                    it.name.contains(name)
+                }
+            }
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            state.value.tariffsData
+        )
 
     init {
-        loadActiveTariffs()
+        loadTariffs()
     }
 
-    fun loadActiveTariffs() {
+    fun updateNameFilter(string: String) {
+        _nameFilter.update { string }
+    }
+
+    fun loadTariffs() {
         viewModelScope.launch {
-            state = state.copy(
-                isLoading = true,
-                message = null
-            )
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                    message = null
+                )
+            }
             val result = tariffsUseCase.getTariffs()
             when (result) {
                 is Resource.Success -> {
-                    state = if (result.data !== null) {
-                        state.copy(
-                            tariffsData = result.data.filterNotNull().toMutableList(),
-                            isLoading = false
-                        )
-
-                    } else {
-                        state.copy(
+                    _state.update {
+                        if (result.data !== null) {
+                            it.copy(
+                                tariffsData = result.data.filterNotNull().toMutableList(),
+                                isLoading = false
+                            )
+                        } else {
+                            it.copy(
+                                isLoading = false,
+                                message = result.message
+                            )
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    _state.update {
+                        it.copy(
                             isLoading = false,
                             message = result.message
                         )
                     }
                 }
-                is Resource.Error -> {
-                    state = state.copy(
-                        isLoading = false,
-                        message = result.message
-                    )
-                }
             }
-            Log.i("TAG", "loadActiveTariffs: $state")
         }
     }
 
@@ -69,14 +96,19 @@ class TariffsScreenViewModel @Inject constructor(
         tariff: TariffModel
     ) {
         viewModelScope.launch {
-            val tariffIndex = state.tariffsData.indexOfFirst {
-                it?.id == tariff.id
-            }
-            if (tariffIndex == -1) {
-                return@launch
+            val result = tariffsUseCase.updateTariff(tariff = tariff)
+            if (result.data == true) {
+                val tariffIndex = state.value.tariffsData.indexOfFirst {
+                    it.id == tariff.id
+                }
+                if (tariffIndex == -1) return@launch
+                    else _state.value.tariffsData[tariffIndex] = tariff
             } else {
-                state.tariffsData[tariffIndex] = tariff
-                tariffsUseCase.updateTariff(tariff = tariff)
+                _state.update {
+                    it.copy(
+                        message = result.message
+                    )
+                }
             }
         }
     }
@@ -85,14 +117,19 @@ class TariffsScreenViewModel @Inject constructor(
         tariffId: String
     ) {
         viewModelScope.launch {
-            val tariffIndex = state.tariffsData.indexOfFirst {
-                it?.id == tariffId
-            }
-            if (tariffIndex == -1) {
-                return@launch
+            val result = tariffsUseCase.deleteTariff(tariffId)
+            if (result.data == true) {
+                val tariffIndex = state.value.tariffsData.indexOfFirst {
+                    it.id == tariffId
+                }
+                if (tariffIndex == -1) return@launch
+                    else _state.value.tariffsData.removeAt(tariffIndex)
             } else {
-                state.tariffsData.removeAt(tariffIndex)
-                tariffsUseCase.deleteTariff(tariffId = tariffId)
+                _state.update {
+                    it.copy(
+                        message = result.message
+                    )
+                }
             }
         }
     }
@@ -101,10 +138,16 @@ class TariffsScreenViewModel @Inject constructor(
         tariff: TariffModel
     ) {
         viewModelScope.launch {
-            state.tariffsData.add(tariff)
-            tariffsUseCase.addTariff(tariff = tariff)
+            val result = tariffsUseCase.addTariff(tariff)
+            if (result.data == true) {
+                _state.value.tariffsData.add(tariff)
+            } else {
+                _state.update {
+                    it.copy(
+                        message = result.message
+                    )
+                }
+            }
         }
     }
-
-    //TODO(Flip api request and local changes in order)
 }
