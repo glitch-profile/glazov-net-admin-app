@@ -127,7 +127,12 @@ fun TariffsScreen(
                     items(TariffType.values().size) {
                         val backgroundColor by animateColorAsState(
                             if (selectedCategoryIndex == it) MaterialTheme.colorScheme.primary
-                            else Color.LightGray,
+                            else MaterialTheme.colorScheme.primaryContainer,
+                            label = "color"
+                        )
+                        val textColor by animateColorAsState(
+                            if (selectedCategoryIndex == it) MaterialTheme.colorScheme.onPrimary
+                            else MaterialTheme.colorScheme.onPrimaryContainer,
                             label = "color"
                         )
                         Box(
@@ -145,7 +150,7 @@ fun TariffsScreen(
                             Text(
                                 text = stringResource(id = TariffType.values()[it].stringResourceId),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = Color.White
+                                color = textColor
                             )
                         }
                     }

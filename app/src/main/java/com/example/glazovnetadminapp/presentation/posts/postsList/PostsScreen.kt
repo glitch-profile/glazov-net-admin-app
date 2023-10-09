@@ -109,9 +109,8 @@ fun PostsScreen(
                 postsViewModel.state.errorMessage?.let {
                     Text(
                         text = it,
-                        color = Color.Red,
+                        color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier
                     )
                     Button(
                         enabled = !postsViewModel.state.isLoading,

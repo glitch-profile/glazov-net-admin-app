@@ -175,7 +175,7 @@ fun PostDetailScreen(
                 viewModel.state.errorMessage?.let {
                     Text(
                         text = it,
-                        color = Color.Red,
+                        color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.titleSmall
                     )
                     Spacer(modifier = Modifier.height(16.dp))
