@@ -76,7 +76,7 @@ fun TariffsScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(id = R.string.tariff_screen_title)
+                        text = stringResource(id = R.string.app_tariffs_list_screen_name)
                     )
                 },
                 navigationIcon = {
@@ -124,14 +124,14 @@ fun TariffsScreen(
             }
             LazyRow(
                 content = {
-                    items(TariffType.values().size) {
+                    items(TariffType.values().size) { index ->
                         val backgroundColor by animateColorAsState(
-                            if (selectedCategoryIndex == it) MaterialTheme.colorScheme.primary
+                            if (selectedCategoryIndex == index) MaterialTheme.colorScheme.primary
                             else MaterialTheme.colorScheme.primaryContainer,
                             label = "color"
                         )
                         val textColor by animateColorAsState(
-                            if (selectedCategoryIndex == it) MaterialTheme.colorScheme.onPrimary
+                            if (selectedCategoryIndex == index) MaterialTheme.colorScheme.onPrimary
                             else MaterialTheme.colorScheme.onPrimaryContainer,
                             label = "color"
                         )
@@ -139,7 +139,7 @@ fun TariffsScreen(
                             modifier = Modifier
                                 .padding(start = 16.dp)
                                 .clickable {
-                                    selectedCategoryIndex = it
+                                    selectedCategoryIndex = index
                                 }
                                 .clip(RoundedCornerShape(10.dp))
                                 .widthIn(min = 100.dp)
@@ -148,7 +148,7 @@ fun TariffsScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = stringResource(id = TariffType.values()[it].stringResourceId),
+                                text = stringResource(id = TariffType.values()[index].stringResourceId),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = textColor
                             )
@@ -219,7 +219,7 @@ private fun FilterScreen(
                     singleLine = true,
                     label = {
                         Text(
-                            text = "Tariffs name"
+                            text = stringResource(id = R.string.tariff_name_filter_placeholder)
                         )
                     },
 
@@ -235,8 +235,8 @@ private fun FilterScreen(
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(
-                text = if (isExpanded) "Hide filters"
-                else "Show filters"
+                text = if (isExpanded) stringResource(id = R.string.app_hide_filters_button_text)
+                else stringResource(id = R.string.app_show_filters_button_text)
             )
         }
     }
@@ -315,7 +315,7 @@ private fun TariffsCard(
         }
     } else {
         Text(
-            text = "No tariffs found!"
+            text = stringResource(id = R.string.tariffs_not_found_text)
         )
     }
 }

@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.presentation.posts.postsList
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,30 +17,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
-import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
-import com.example.glazovnetadminapp.presentation.destinations.AddPostScreenDestination
-import com.example.glazovnetadminapp.presentation.destinations.HomeScreenDestination
 import com.example.glazovnetadminapp.presentation.destinations.PostDetailScreenDestination
-import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun PostCard(
@@ -114,7 +101,7 @@ fun PostCard(
                     )
                     Text(
                         textAlign = TextAlign.End,
-                        text = "${stringResource(id = R.string.posts_source_text)}: ${image.imageUrl}",
+                        text = "${stringResource(id = R.string.post_card_source_text)}: ${image.imageUrl}",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodySmall,
