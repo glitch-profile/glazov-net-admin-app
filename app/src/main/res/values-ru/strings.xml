@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="posts_source_text">Источник</string>
+    <string name="post_card_source_text">Источник</string>
     <string name="add_post_screen_title">Заголовок</string>
     <string name="add_post_screen_short_description">Короткое описание записи</string>
     <string name="add_post_screen_full_description">Текст записи</string>
@@ -9,7 +9,6 @@
     <string name="tariff_type_limited">Помегабайтный</string>
     <string name="tariff_type_unlimited">Безлимитный</string>
     <string name="app_text_field_required">*Обязательное поле</string>
-    <string name="tariff_screen_title">Тарифы</string>
     <string name="post_type_news">Новости</string>
     <string name="post_type_announcement">Объявление</string>
     <string name="post_type_greetings">Поздравление</string>
@@ -39,4 +38,14 @@
     </plurals>
     <string name="tariff_speed_suffix">Мбит/с</string>
     <string name="tariff_type_archive">Архив</string>
+    <string name="menu_posts_title_text">Посты</string>
+    <string name="menu_tariffs_title_text">Тарифы</string>
+    <string name="menu_details_title_text">Подробности</string>
+    <string name="menu_about_app_button_text">О приложении</string>
+    <string name="app_tariffs_list_screen_name">Список тарифов</string>
+    <string name="app_about_app_screen_name">О приложении</string>
+    <string name="tariff_name_filter_placeholder">Наименование тарифа</string>
+    <string name="app_show_filters_button_text">Показать фильтры</string>
+    <string name="app_hide_filters_button_text">Спрятать фильтры</string>
+    <string name="tariffs_not_found_text">Тарифы не найдены</string>
 </resources>
