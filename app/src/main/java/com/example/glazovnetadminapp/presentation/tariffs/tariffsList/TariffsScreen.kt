@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.presentation.tariffs.tariffsList
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -118,6 +119,7 @@ fun TariffsScreen(
             var selectedCategoryIndex by remember {
                 mutableIntStateOf(0)
             }
+            val state = viewModel.state.collectAsState()
             LazyRow(
                 content = {
                     items(TariffType.values().size) { index ->
@@ -154,7 +156,7 @@ fun TariffsScreen(
                 }
             )
             FilterScreen(viewModel)
-            if (viewModel.state.collectAsState().value.isLoading) {
+            if (state.value.isLoading) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier

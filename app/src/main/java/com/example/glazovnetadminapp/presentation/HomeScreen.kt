@@ -61,6 +61,7 @@ fun HomeScreen(
                     .padding(start = 16.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
+            Divider(modifier = Modifier.fillMaxWidth())
             MenuButton(
                 text = stringResource(id = R.string.app_posts_screen_name),
                 onClick = {
@@ -82,6 +83,7 @@ fun HomeScreen(
                     .padding(start = 16.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
+            Divider(modifier = Modifier.fillMaxWidth())
             MenuButton(
                 text = stringResource(id = R.string.app_tariffs_list_screen_name),
                 onClick = {
@@ -97,6 +99,7 @@ fun HomeScreen(
                     .padding(start = 16.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
+            Divider(modifier = Modifier.fillMaxWidth())
             MenuButton(
                 text = stringResource(id = R.string.menu_about_app_button_text),
                 isEnable = false,
