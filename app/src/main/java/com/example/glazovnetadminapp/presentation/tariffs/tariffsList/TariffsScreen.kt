@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.presentation.tariffs.tariffsList
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -53,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.glazovnetadminapp.R
+import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -120,6 +120,8 @@ fun TariffsScreen(
                 mutableIntStateOf(0)
             }
             val state = viewModel.state.collectAsState()
+            val filteredTariffs = viewModel.filteredTariffs.collectAsState().value
+
             LazyRow(
                 content = {
                     items(TariffType.values().size) { index ->
@@ -182,29 +184,29 @@ fun TariffsScreen(
                     when (selectedCategoryIndex) {
                         0 -> {
                             TariffsCard(
-                                TariffType.Unlimited,
-                                viewModel
+                                filteredTariffs,
+                                TariffType.Unlimited
                             )
                         }
 
                         1 -> {
                             TariffsCard(
-                                TariffType.Limited,
-                                viewModel
+                                filteredTariffs,
+                                TariffType.Limited
                             )
                         }
 
                         2 -> {
                             TariffsCard(
-                                TariffType.Archive,
-                                viewModel
+                                filteredTariffs,
+                                TariffType.Archive
                             )
                         }
 
                         else -> {
                             TariffsCard(
-                                TariffType.Unlimited,
-                                viewModel
+                                filteredTariffs,
+                                TariffType.Unlimited
                             )
                         }
                     }
@@ -264,10 +266,10 @@ private fun FilterScreen(
 
 @Composable
 private fun TariffsCard(
-    tariffType: TariffType,
-    viewModel: TariffsScreenViewModel
+    tariffs: List<TariffModel>,
+    tariffType: TariffType
 ) {
-    val tariffs = viewModel.filteredTariffs.collectAsState().value.filter {
+    val filteredTariffs = tariffs.filter {
         it.category == tariffType
     }
     Card(
@@ -291,7 +293,7 @@ private fun TariffsCard(
                 style = MaterialTheme.typography.bodyLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
-            if (tariffs.isEmpty()) {
+            if (filteredTariffs.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.tariffs_not_found_text)
                 )
@@ -301,7 +303,7 @@ private fun TariffsCard(
                         .padding(horizontal = 8.dp),
                     content = {
                         items(
-                            items = tariffs,
+                            items = filteredTariffs,
                             key = { it.id }
                         ) {
                             Text(
