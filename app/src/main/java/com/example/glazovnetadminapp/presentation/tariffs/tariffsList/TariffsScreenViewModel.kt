@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
+import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
 import com.example.glazovnetadminapp.domain.useCases.TariffsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,8 +33,8 @@ class TariffsScreenViewModel @Inject constructor(
     private val _nameFilter = MutableStateFlow("")
     val nameFilter = _nameFilter.asStateFlow()
 
-    val filteredTariffs = nameFilter
-        .combine(_state) {name, state ->
+    val filteredTariffs = state
+        .combine(nameFilter) {state, name ->
             if (name.isBlank()) {
                 state.tariffsData
             } else {
@@ -45,7 +46,7 @@ class TariffsScreenViewModel @Inject constructor(
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),
-            initialValue = state.value.tariffsData
+            initialValue = listOf()
         )
 
     init {
