@@ -191,7 +191,7 @@ fun TariffsScreen(
                         0 -> {
                             TariffsCard(
                                 filteredTariffs.value,
-                                TariffType.Unlimited,
+                                TariffType.Limited,
                                 viewModel
                             )
                         }
@@ -199,7 +199,7 @@ fun TariffsScreen(
                         1 -> {
                             TariffsCard(
                                 filteredTariffs.value,
-                                TariffType.Limited,
+                                TariffType.Unlimited,
                                 viewModel
                             )
                         }
@@ -298,7 +298,7 @@ private fun TariffsCard(
         ) {
             Text(
                 text = stringResource(id = tariffType.stringResourceId),
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.headlineSmall
             )
             Text(
                 text = tariffType.description,
@@ -375,12 +375,14 @@ private fun TariffsCard(
                                                 text = stringResource(id = R.string.app_edit_button)
                                             )
                                         }
-                                        TextButton(
-                                            onClick = { /*TODO*/ }
-                                        ) {
-                                            Text(
-                                                text = stringResource(id = R.string.tariffs_move_to_archive_button)
-                                            )
+                                        if (it.category !== TariffType.Archive) {
+                                            TextButton(
+                                                onClick = { /*TODO*/ }
+                                            ) {
+                                                Text(
+                                                    text = stringResource(id = R.string.tariffs_move_to_archive_button)
+                                                )
+                                            }
                                         }
                                     }
                                 }

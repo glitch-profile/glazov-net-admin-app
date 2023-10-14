@@ -127,9 +127,39 @@ class TariffsScreenViewModel @Inject constructor(
                             costPerMonth = 500
                         ),
                         TariffModel(
+                            id = "1223",
+                            name = "Like 100",
+                            description = "This is some long description about this tariff. It has max speed to 100 Mbits/s only for 600 per month",
+                            category = TariffType.Unlimited,
+                            maxSpeed = 100,
+                            costPerMonth = 600
+                        ),
+                        TariffModel(
+                            id = "1224",
+                            name = "Like 60",
+                            category = TariffType.Unlimited,
+                            maxSpeed = 60,
+                            costPerMonth = 500
+                        ),
+                        TariffModel(
+                            id = "1233",
+                            name = "Like 100",
+                            description = "This is some long description about this tariff. It has max speed to 100 Mbits/s only for 600 per month",
+                            category = TariffType.Unlimited,
+                            maxSpeed = 100,
+                            costPerMonth = 600
+                        ),
+                        TariffModel(
+                            id = "1234",
+                            name = "Like 60",
+                            category = TariffType.Unlimited,
+                            maxSpeed = 60,
+                            costPerMonth = 500
+                        ),
+                        TariffModel(
                             id = "125",
                             name = "Like 30",
-                            category = TariffType.Unlimited,
+                            category = TariffType.Archive,
                             maxSpeed = 30,
                             costPerMonth = 400
                         )
