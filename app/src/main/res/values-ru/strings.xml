@@ -20,6 +20,7 @@
     <string name="app_button_reset_data">Сбросить</string>
     <string name="tariff_cost_prefix">Стоимость:</string>
     <string name="tariff_speed_prefix">Скорость до</string>
+    <string name="tariffs_move_to_archive_button">В архив</string>
     <string name="app_datetime_today_text">Сегодня</string>
     <string name="app_datetime_yesterday_text">Вчера</string>
     <string name="app_posts_screen_name">Новости</string>
@@ -45,7 +46,9 @@
     <string name="app_tariffs_list_screen_name">Список тарифов</string>
     <string name="app_about_app_screen_name">О приложении</string>
     <string name="tariff_name_filter_placeholder">Наименование тарифа</string>
-    <string name="app_show_filters_button_text">Показать фильтры</string>
-    <string name="app_hide_filters_button_text">Спрятать фильтры</string>
+    <string name="app_show_filters_button">Показать фильтры</string>
+    <string name="app_hide_filters_button">Спрятать фильтры</string>
     <string name="tariffs_not_found_text">Тарифы не найдены</string>
+    <string name="app_delete_button">Удалить</string>
+    <string name="app_edit_button">Редактировать</string>
 </resources>

@@ -46,14 +46,17 @@
     </plurals>
     <string name="tariff_name_filter_placeholder">Tariff name</string>
     <string name="tariffs_not_found_text">Tariffs not found!</string>
+    <string name="tariffs_move_to_archive_button">Archive</string>
 
     <string name="app_datetime_today_text">Today</string>
     <string name="app_datetime_yesterday_text">Yesterday</string>
     <string name="app_text_loading">Loading…</string>
-    <string name="app_show_filters_button_text">Show filters</string>
-    <string name="app_hide_filters_button_text">Hide filters</string>
+    <string name="app_show_filters_button">Show filters</string>
+    <string name="app_hide_filters_button">Hide filters</string>
     <string name="app_button_dialog_confirm">Confirm</string>
     <string name="app_button_dialog_cancel">Cancel</string>
     <string name="app_button_clear_data">Clear data</string>
     <string name="app_button_reset_data">Reset</string>
+    <string name="app_delete_button">Delete</string>
+    <string name="app_edit_button">Edit</string>
 </resources>
