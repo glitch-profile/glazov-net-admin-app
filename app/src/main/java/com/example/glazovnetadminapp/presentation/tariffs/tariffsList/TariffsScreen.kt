@@ -5,8 +5,10 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -64,6 +67,10 @@ fun TariffsScreen(
     viewModel: TariffsScreenViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
+    var isEditPostWindowExpanded by remember {
+        mutableStateOf(false)
+    }
+
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         modifier = Modifier
@@ -99,7 +106,7 @@ fun TariffsScreen(
                     }
                     IconButton(
                         onClick = {
-                            viewModel.loadTariffs()
+                            viewModel.loadTariffsLocal()
                         }
                     ) {
                         Icon(
@@ -120,8 +127,7 @@ fun TariffsScreen(
                 mutableIntStateOf(0)
             }
             val state = viewModel.state.collectAsState()
-            val filteredTariffs = viewModel.filteredTariffs.collectAsState().value
-
+            val filteredTariffs = viewModel.filteredTariffs.collectAsState()
             LazyRow(
                 content = {
                     items(TariffType.values().size) { index ->
@@ -184,29 +190,33 @@ fun TariffsScreen(
                     when (selectedCategoryIndex) {
                         0 -> {
                             TariffsCard(
-                                filteredTariffs,
-                                TariffType.Unlimited
+                                filteredTariffs.value,
+                                TariffType.Unlimited,
+                                viewModel
                             )
                         }
 
                         1 -> {
                             TariffsCard(
-                                filteredTariffs,
-                                TariffType.Limited
+                                filteredTariffs.value,
+                                TariffType.Limited,
+                                viewModel
                             )
                         }
 
                         2 -> {
                             TariffsCard(
-                                filteredTariffs,
-                                TariffType.Archive
+                                filteredTariffs.value,
+                                TariffType.Archive,
+                                viewModel
                             )
                         }
 
                         else -> {
                             TariffsCard(
-                                filteredTariffs,
-                                TariffType.Unlimited
+                                filteredTariffs.value,
+                                TariffType.Unlimited,
+                                viewModel
                             )
                         }
                     }
@@ -257,8 +267,8 @@ private fun FilterScreen(
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(
-                text = if (isExpanded) stringResource(id = R.string.app_hide_filters_button_text)
-                else stringResource(id = R.string.app_show_filters_button_text)
+                text = if (isExpanded) stringResource(id = R.string.app_hide_filters_button)
+                else stringResource(id = R.string.app_show_filters_button)
             )
         }
     }
@@ -267,7 +277,8 @@ private fun FilterScreen(
 @Composable
 private fun TariffsCard(
     tariffs: List<TariffModel>,
-    tariffType: TariffType
+    tariffType: TariffType,
+    viewModel: TariffsScreenViewModel
 ) {
     val filteredTariffs = tariffs.filter {
         it.category == tariffType
@@ -275,7 +286,8 @@ private fun TariffsCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .animateContentSize()
+            .animateContentSize(),
+        shape = MaterialTheme.shapes.medium
     ) {
         Column(
             modifier = Modifier
@@ -306,35 +318,78 @@ private fun TariffsCard(
                             items = filteredTariffs,
                             key = { it.id }
                         ) {
-                            Text(
-                                text = it.name,
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            it.description?.let { description ->
-                                Text(
-                                    text = description,
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+                            var isOptionsButtonsExpanded by remember {
+                                mutableStateOf(false)
                             }
-                            Text(
-                                text = stringResource(id = R.string.tariff_speed_prefix) +
-                                        " ${it.maxSpeed} " + stringResource(id = R.string.tariff_speed_suffix),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Text(
-                                text = stringResource(id = R.string.tariff_cost_prefix) + " " + pluralStringResource(
-                                    id = R.plurals.tariff_cost_rubbles,
-                                    count = it.costPerMonth,
-                                    formatArgs = arrayOf(it.costPerMonth)
-                                ),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Divider(
+                            Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
+                                    .clickable {
+                                        isOptionsButtonsExpanded = !isOptionsButtonsExpanded
+                                    }
+                            ) {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = it.name,
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                                it.description?.let { description ->
+                                    Text(
+                                        text = description,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                                Text(
+                                    text = stringResource(id = R.string.tariff_speed_prefix) +
+                                            " ${it.maxSpeed} " + stringResource(id = R.string.tariff_speed_suffix),
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.tariff_cost_prefix) + " " + pluralStringResource(
+                                        id = R.plurals.tariff_cost_rubbles,
+                                        count = it.costPerMonth,
+                                        formatArgs = arrayOf(it.costPerMonth)
+                                    ),
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                                AnimatedVisibility(visible = isOptionsButtonsExpanded) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        TextButton(
+                                            onClick = {
+                                                viewModel.removeTariffLocal(it.id)
+                                            }
+                                        ) {
+                                            Text(
+                                                text = stringResource(id = R.string.app_delete_button),
+                                                color = Color.Red
+                                            )
+                                        }
+                                        TextButton(
+                                            onClick = { /*TODO*/ }
+                                        ) {
+                                            Text(
+                                                text = stringResource(id = R.string.app_edit_button)
+                                            )
+                                        }
+                                        TextButton(
+                                            onClick = { /*TODO*/ }
+                                        ) {
+                                            Text(
+                                                text = stringResource(id = R.string.tariffs_move_to_archive_button)
+                                            )
+                                        }
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Divider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                )
+                            }
                         }
                     }
                 )

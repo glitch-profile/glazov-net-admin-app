@@ -15,11 +15,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,12 +47,14 @@ class TariffsScreenViewModel @Inject constructor(
         }
         .stateIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
+            SharingStarted.Eagerly,
             initialValue = listOf()
         )
 
     init {
-        loadTariffs()
+        //loadTariffs()
+        loadTariffsLocal()
+
     }
 
     fun updateNameFilter(string: String) {
@@ -71,7 +75,7 @@ class TariffsScreenViewModel @Inject constructor(
                     _state.update {
                         if (result.data !== null) {
                             it.copy(
-                                tariffsData = result.data.filterNotNull().toMutableList(),
+                                tariffsData = result.data.filterNotNull(),
                                 isLoading = false
                             )
                         } else {
@@ -94,6 +98,53 @@ class TariffsScreenViewModel @Inject constructor(
         }
     }
 
+    @Deprecated("Use only without internet connection")
+    fun loadTariffsLocal() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                    tariffsData = mutableListOf()
+                )
+            }
+            delay(500L)
+            _state.update {
+                it.copy(
+                    tariffsData = listOf(
+                        TariffModel(
+                            id = "123",
+                            name = "Like 100",
+                            description = "This is some long description about this tariff. It has max speed to 100 Mbits/s only for 600 per month",
+                            category = TariffType.Unlimited,
+                            maxSpeed = 100,
+                            costPerMonth = 600
+                        ),
+                        TariffModel(
+                            id = "124",
+                            name = "Like 60",
+                            category = TariffType.Unlimited,
+                            maxSpeed = 60,
+                            costPerMonth = 500
+                        ),
+                        TariffModel(
+                            id = "125",
+                            name = "Like 30",
+                            category = TariffType.Unlimited,
+                            maxSpeed = 30,
+                            costPerMonth = 400
+                        )
+                    ),
+                    isLoading = false,
+                    message = null
+                )
+            }
+            filteredTariffs.collectLatest {
+                Log.i("TAG", "loadTariffsLocal: $it")
+
+            }
+        }
+    }
+
     fun updateTariff(
         tariff: TariffModel
     ) {
@@ -104,7 +155,15 @@ class TariffsScreenViewModel @Inject constructor(
                     it.id == tariff.id
                 }
                 if (tariffIndex == -1) return@launch
-                    else _state.value.tariffsData[tariffIndex] = tariff
+                else {
+                    val newTariffsList = state.value.tariffsData.toMutableList()
+                    newTariffsList[tariffIndex] = tariff
+                    _state.update {
+                        it.copy(
+                            tariffsData = newTariffsList
+                        )
+                    }
+                }
             } else {
                 _state.update {
                     it.copy(
@@ -125,11 +184,39 @@ class TariffsScreenViewModel @Inject constructor(
                     it.id == tariffId
                 }
                 if (tariffIndex == -1) return@launch
-                    else _state.value.tariffsData.removeAt(tariffIndex)
+                else {
+                    val newTariffsList = state.value.tariffsData.toMutableList()
+                    newTariffsList.removeAt(tariffIndex)
+                    _state.update {
+                        it.copy(
+                            tariffsData = newTariffsList
+                        )
+                    }
+                }
             } else {
                 _state.update {
                     it.copy(
                         message = result.message
+                    )
+                }
+            }
+        }
+    }
+
+    @Deprecated("Ony use without internet connection")
+    fun removeTariffLocal(tariffId: String) {
+        viewModelScope.launch {
+            val tariffIndex = state.value.tariffsData.indexOfFirst {
+                it.id == tariffId
+            }
+            if (tariffIndex == -1) {
+                return@launch
+            } else {
+                val newTariffsList = state.value.tariffsData.toMutableList()
+                newTariffsList.removeAt(tariffIndex)
+                _state.update {
+                    it.copy(
+                        tariffsData = newTariffsList
                     )
                 }
             }
@@ -142,7 +229,13 @@ class TariffsScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val result = tariffsUseCase.addTariff(tariff)
             if (result.data == true) {
-                _state.value.tariffsData.add(tariff)
+                val newTariffsList = state.value.tariffsData.toMutableList()
+                newTariffsList.add(index = 0, element = tariff)
+                _state.update {
+                    it.copy(
+                        tariffsData = newTariffsList
+                    )
+                }
             } else {
                 _state.update {
                     it.copy(
