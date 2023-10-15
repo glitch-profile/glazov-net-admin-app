@@ -23,23 +23,23 @@ sealed class TariffType(
         fun fromTariffTypeCode(code: Int): TariffType {
             return when (code) {
                 -1 -> Archive
-                0 -> Limited
-                1 -> Unlimited
+                0 -> Unlimited
+                1 -> Limited
                 else -> Unlimited
             }
         }
         fun TariffType.toTariffTypeCode(): Int {
             return when (this) {
                 Archive -> -1
-                Limited -> 0
-                Unlimited -> 1
+                Unlimited -> 0
+                Limited -> 1
             }
         }
 
         fun values(): List<TariffType> {
             return listOf(
-                Limited,
                 Unlimited,
+                Limited,
                 Archive
             )
         }

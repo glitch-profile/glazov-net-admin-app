@@ -191,7 +191,7 @@ fun TariffsScreen(
                         0 -> {
                             TariffsCard(
                                 filteredTariffs.value,
-                                TariffType.Limited,
+                                TariffType.Unlimited,
                                 viewModel
                             )
                         }
@@ -199,7 +199,7 @@ fun TariffsScreen(
                         1 -> {
                             TariffsCard(
                                 filteredTariffs.value,
-                                TariffType.Unlimited,
+                                TariffType.Limited,
                                 viewModel
                             )
                         }
@@ -296,15 +296,6 @@ private fun TariffsCard(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.Start
         ) {
-            Text(
-                text = stringResource(id = tariffType.stringResourceId),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Text(
-                text = tariffType.description,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Spacer(modifier = Modifier.height(8.dp))
             if (filteredTariffs.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.tariffs_not_found_text)
@@ -331,7 +322,7 @@ private fun TariffsCard(
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = it.name,
-                                    style = MaterialTheme.typography.titleLarge
+                                    style = MaterialTheme.typography.titleMedium
                                 )
                                 it.description?.let { description ->
                                     Text(
@@ -342,7 +333,7 @@ private fun TariffsCard(
                                 Text(
                                     text = stringResource(id = R.string.tariff_speed_prefix) +
                                             " ${it.maxSpeed} " + stringResource(id = R.string.tariff_speed_suffix),
-                                    style = MaterialTheme.typography.titleSmall
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
                                 Text(
                                     text = stringResource(id = R.string.tariff_cost_prefix) + " " + pluralStringResource(
@@ -350,7 +341,7 @@ private fun TariffsCard(
                                         count = it.costPerMonth,
                                         formatArgs = arrayOf(it.costPerMonth)
                                     ),
-                                    style = MaterialTheme.typography.titleSmall
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
                                 AnimatedVisibility(visible = isOptionsButtonsExpanded) {
                                     Row(
