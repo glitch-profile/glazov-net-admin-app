@@ -28,7 +28,7 @@ interface GlazovNetTariffsApi {
         @Query("api_key") apiKey: String
     ): TariffsResponceDto
 
-    @DELETE("$PATH/delete")
+    @DELETE("$PATH/remove")
     suspend fun deleteTariffById(
         @Query("tariff_id") tariffId: String,
         @Query("api_key") apiKey: String

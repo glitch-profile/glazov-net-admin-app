@@ -106,7 +106,7 @@ fun TariffsScreen(
                     }
                     IconButton(
                         onClick = {
-                            viewModel.loadTariffsLocal()
+                            viewModel.loadTariffs()
                         }
                     ) {
                         Icon(
@@ -351,7 +351,7 @@ private fun TariffsCard(
                                     ) {
                                         TextButton(
                                             onClick = {
-                                                viewModel.removeTariffLocal(it.id)
+                                                viewModel.removeTariff(it.id)
                                             }
                                         ) {
                                             Text(

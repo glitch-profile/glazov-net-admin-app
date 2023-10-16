@@ -11,8 +11,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://192.168.1.215:8080/"
-//private const val BASE_URL = "http://192.168.0.37:8080/"
+//private const val BASE_URL = "http://192.168.1.215:8080/"
+private const val BASE_URL = "http://192.168.0.18:8080/"
 
 @Module
 @InstallIn(SingletonComponent::class)

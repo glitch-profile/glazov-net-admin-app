@@ -52,8 +52,8 @@ class TariffsScreenViewModel @Inject constructor(
         )
 
     init {
-        //loadTariffs()
-        loadTariffsLocal()
+        loadTariffs()
+        //loadTariffsLocal()
 
     }
 
@@ -180,10 +180,12 @@ class TariffsScreenViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             val result = tariffsUseCase.deleteTariff(tariffId)
+            Log.i("TAG", "removeTariff: db result - ${result.message}")
             if (result.data == true) {
                 val tariffIndex = state.value.tariffsData.indexOfFirst {
                     it.id == tariffId
                 }
+                Log.i("TAG", "removeTariff: index to delete - $tariffIndex")
                 if (tariffIndex == -1) return@launch
                 else {
                     val newTariffsList = state.value.tariffsData.toMutableList()
