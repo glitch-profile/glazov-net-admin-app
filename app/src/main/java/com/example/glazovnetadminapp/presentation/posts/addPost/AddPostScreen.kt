@@ -155,55 +155,60 @@ fun AddPostScreen(
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = stringResource(id = PostType.fromPostTypeCode(selectedPostTypeCode).stringResourceId),
-                onValueChange = {},
-                readOnly = true,
-                supportingText = {
-                    Text(
-                        text = stringResource(id = R.string.app_text_field_required)
-                    )
-                },
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp)
-                    .onGloballyPositioned { coordinates ->
-                        textFiledSize = coordinates.size.toSize()
-                    },
-
-                label = {
-                    Text(
-                        text = stringResource(id = R.string.add_post_screen_select_post_type)
-                    )
-                },
-                trailingIcon = {
-                    Icon(
-                        icon,
-                        "",
-                        modifier = Modifier.clickable { isDropdownExpanded = !isDropdownExpanded }
-                    )
-                }
-            )
-            DropdownMenu( //TODO(Rework the dropdown menu)
-                expanded = isDropdownExpanded,
-                onDismissRequest = {
-                    isDropdownExpanded = false
-                },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { textFiledSize.width.toDp() })
             ) {
-                for (index in 0..3) {
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = stringResource(id = PostType.fromPostTypeCode(index).stringResourceId)
-                            )
+                OutlinedTextField(
+                    value = stringResource(id = PostType.fromPostTypeCode(selectedPostTypeCode).stringResourceId),
+                    onValueChange = {},
+                    readOnly = true,
+                    supportingText = {
+                        Text(
+                            text = stringResource(id = R.string.app_text_field_required)
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp)
+                        .onGloballyPositioned { coordinates ->
+                            textFiledSize = coordinates.size.toSize()
                         },
-                        onClick = {
-                            selectedPostTypeCode = index
-                            isDropdownExpanded = false
-                        }
-                    )
+
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.add_post_screen_select_post_type)
+                        )
+                    },
+                    trailingIcon = {
+                        Icon(
+                            icon,
+                            "",
+                            modifier = Modifier.clickable { isDropdownExpanded = !isDropdownExpanded }
+                        )
+                    }
+                )
+                DropdownMenu(
+                    expanded = isDropdownExpanded,
+                    onDismissRequest = {
+                        isDropdownExpanded = false
+                    },
+                    modifier = Modifier
+                        .width(with(LocalDensity.current) { textFiledSize.width.toDp() })
+                ) {
+                    PostType.values().forEachIndexed { index, postType ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(id = postType.stringResourceId)
+                                )
+                            },
+                            onClick = {
+                                selectedPostTypeCode = index
+                                isDropdownExpanded = false
+                            }
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))

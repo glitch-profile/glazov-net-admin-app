@@ -42,6 +42,12 @@ sealed class PostType(
                 Advertisement -> 3
             }
         }
+        fun values() = listOf(
+            News,
+            Announcement,
+            Greeting,
+            Advertisement
+        )
     }
 }
 
