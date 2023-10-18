@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.presentation.destinations.AddPostScreenDestination
+import com.example.glazovnetadminapp.presentation.destinations.EditPostScreenDestination
 import com.example.glazovnetadminapp.presentation.destinations.PostsScreenDestination
 import com.example.glazovnetadminapp.presentation.destinations.TariffsScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
@@ -81,7 +81,7 @@ fun HomeScreen(
             MenuButton(
                 text = stringResource(id = R.string.app_add_post_screen_name),
                 onClick = {
-                    navigator.navigate(AddPostScreenDestination, onlyIfResumed = true)
+                    navigator.navigate(EditPostScreenDestination(), onlyIfResumed = true)
                 },
                 iconVector = Icons.Default.Add
             )

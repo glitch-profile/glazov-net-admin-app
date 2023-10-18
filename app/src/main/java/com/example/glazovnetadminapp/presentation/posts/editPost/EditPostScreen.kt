@@ -55,17 +55,18 @@ import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.time.OffsetDateTime
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Destination
 fun EditPostScreen(
-    postId: String,
-    postTitle: String,
-    postFullDescription: String,
-    postCreationDate: OffsetDateTime,
-    postShortDescription: String,
-    postTypeCode: Int,
+    postId: String? = null,
+    postTitle: String = "",
+    postFullDescription: String = "",
+    postCreationDate: OffsetDateTime? = null,
+    postShortDescription: String = "",
+    postTypeCode: Int = 0,
     postImageUrl: String = "",
     postImageWidth: Int? = null,
     postImageHeight: Int? = null,
@@ -115,7 +116,10 @@ fun EditPostScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(id = R.string.app_update_post_screen_name))
+                    Text(
+                        text = if (postId == null) stringResource(id = R.string.app_add_post_screen_name)
+                        else stringResource(id = R.string.app_update_post_screen_name)
+                    )
                 },
                 navigationIcon = {
                     IconButton(
@@ -285,19 +289,30 @@ fun EditPostScreen(
                 }
                 Button(
                     onClick = {
-                        viewModel.editPost(
-                            context,
-                            imageUrl !== postImageUrl,
-                            postId,
-                            titleText,
-                            postCreationDate,
-                            fullDescription,
-                            shortDescription,
-                            selectedPostTypeCode,
-                            imageUrl,
-                            postImageWidth,
-                            postImageHeight
-                        )
+                        if (postId == null) {
+                            viewModel.addNewPost(
+                                context,
+                                titleText,
+                                shortDescription,
+                                fullDescription,
+                                selectedPostTypeCode,
+                                imageUrl
+                            )
+                        } else {
+                            viewModel.editPost(
+                                context,
+                                imageUrl !== postImageUrl,
+                                postId,
+                                titleText,
+                                postCreationDate ?: OffsetDateTime.now(ZoneId.systemDefault()),
+                                fullDescription,
+                                shortDescription,
+                                selectedPostTypeCode,
+                                imageUrl,
+                                postImageWidth,
+                                postImageHeight
+                            )
+                        }
                     },
                     enabled = (
                             titleText.isNotBlank()

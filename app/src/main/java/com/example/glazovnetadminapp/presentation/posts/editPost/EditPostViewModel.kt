@@ -14,7 +14,6 @@ import com.example.glazovnetadminapp.domain.models.ImageModel
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
-import com.example.glazovnetadminapp.presentation.posts.addPost.AddPostScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
@@ -25,7 +24,7 @@ class EditPostViewModel @Inject constructor(
     private val postsUseCase: PostsUseCase
 ) : ViewModel() {
 
-    var state by mutableStateOf(AddPostScreenState())
+    var state by mutableStateOf(EditPostScreenState())
         private set
 
     fun editPost(
@@ -86,6 +85,53 @@ class EditPostViewModel @Inject constructor(
                 isLoading = false,
                 message = status.message,
                 isError = (status.data?.not()) ?: false
+            )
+        }
+    }
+
+    fun addNewPost(
+        context: Context,
+        title: String,
+        shortDescription: String,
+        fullDescription: String,
+        postType: Int,
+        imageUrl: String
+    ) {
+        viewModelScope.launch {
+            state = state.copy(
+                isLoading = true,
+                isError = false,
+                message = "getting info..."
+            )
+            val currentTime = OffsetDateTime.now()
+            val imageModel = if (imageUrl.isNotBlank()) {
+                val image = loadImage(context, imageUrl)
+                image?.let {
+                    ImageModel(
+                        imageUrl = imageUrl,
+                        imageWidth = it.intrinsicWidth,
+                        imageHeight = it.intrinsicHeight
+                    )
+                }
+            } else null
+            state = state.copy(
+                message = "uploading..."
+            )
+            val status = postsUseCase.addPost(
+                PostModel(
+                    postId = "",
+                    title = title,
+                    creationDate = currentTime,
+                    shortDescription = shortDescription.ifBlank { null },
+                    fullDescription = fullDescription,
+                    postType = PostType.fromPostTypeCode(postType),
+                    image = imageModel
+                )
+            )
+            state = state.copy(
+                isLoading = false,
+                isError = (status.data?.not()) ?: true,
+                message = status.message
             )
         }
     }

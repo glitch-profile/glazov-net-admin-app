@@ -1,6 +1,6 @@
-package com.example.glazovnetadminapp.presentation.posts.addPost
+package com.example.glazovnetadminapp.presentation.posts.editPost
 
-data class AddPostScreenState(
+data class EditPostScreenState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val message: String? = null

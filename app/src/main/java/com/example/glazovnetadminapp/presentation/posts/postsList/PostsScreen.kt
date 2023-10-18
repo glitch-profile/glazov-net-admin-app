@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.presentation.destinations.AddPostScreenDestination
+import com.example.glazovnetadminapp.presentation.destinations.EditPostScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -64,7 +64,7 @@ fun PostsScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            navigator.navigate(AddPostScreenDestination, onlyIfResumed = true)
+                            navigator.navigate(EditPostScreenDestination(), onlyIfResumed = true)
                         }
                     ) {
                         Icon(
