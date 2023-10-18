@@ -31,10 +31,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -368,7 +370,13 @@ private fun TariffsCard(
                                         }
                                         if (it.category !== TariffType.Archive) {
                                             TextButton(
-                                                onClick = { /*TODO*/ }
+                                                onClick = {
+                                                    viewModel.updateTariff(
+                                                        it.copy(
+                                                            category = TariffType.Archive
+                                                        )
+                                                    )
+                                                }
                                             ) {
                                                 Text(
                                                     text = stringResource(id = R.string.tariffs_move_to_archive_button)
@@ -388,5 +396,16 @@ private fun TariffsCard(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun AddTariffScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(text = "Add tariff")
     }
 }
