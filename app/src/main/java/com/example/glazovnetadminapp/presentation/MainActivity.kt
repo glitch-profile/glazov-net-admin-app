@@ -6,9 +6,23 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
+import androidx.navigation.compose.rememberNavController
+import com.example.glazovnetadminapp.presentation.posts.editPost.EditPostScreen
+import com.example.glazovnetadminapp.presentation.posts.postDetails.PostDetailScreen
+import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreen
+import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreenViewModel
+import com.example.glazovnetadminapp.presentation.tariffs.tariffsList.TariffsScreenViewModel
 import com.example.glazovnetadminapp.ui.theme.GlazovNetAdminAppTheme
-import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,11 +35,65 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DestinationsNavHost(
-                        navGraph = NavGraphs.root
-                    )
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = "home"
+                    ) {
+                        composable("home") {
+                            HomeScreen(navController)
+                        }
+                        navigation(
+                            startDestination = "posts_list",
+                            route = "posts"
+                        ) {
+                            composable("posts_list") {
+                                val viewModel = it.sharedViewModel<PostsScreenViewModel>(navController = navController)
+                                PostsScreen(
+                                    navController,
+                                    viewModel
+                                )
+                            }
+                            composable("post_details") {
+                                val viewModel = it.sharedViewModel<PostsScreenViewModel>(navController = navController)
+                                PostDetailScreen(
+                                    navController,
+                                    viewModel.selectedPostToViewDetails,
+                                    viewModel
+                                )
+                            }
+                            composable("edit_post") {
+                                val viewModel = it.sharedViewModel<PostsScreenViewModel>(navController = navController)
+                                EditPostScreen(
+                                    navController = navController,
+                                    post = viewModel.selectedPostToEdit,
+                                    viewModel
+                                )
+                            }
+                        }
+                        navigation(
+                            startDestination = "tariffs_list",
+                            route = "tariffs"
+                        ) {
+                            composable("tariffs_list") {
+                                val viewModel = it.sharedViewModel<TariffsScreenViewModel>(navController = navController)
+                            }
+                            composable("edit_tariff") {
+                                val viewModel = it.sharedViewModel<TariffsScreenViewModel>(navController = navController)
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+}
+
+@Composable
+inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navController: NavController): T {
+    val navGraphRoute = destination.parent?.route ?: return hiltViewModel()
+    val parentEntry = remember(this) {
+        navController.getBackStackEntry(navGraphRoute)
+    }
+    return hiltViewModel(parentEntry)
 }

@@ -43,21 +43,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.domain.models.posts.PostType.Companion.toPostTypeCode
+import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
-import com.example.glazovnetadminapp.presentation.destinations.EditPostScreenDestination
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Destination
 @Composable
 fun PostDetailScreen(
-    postId: String,
-    navigator: DestinationsNavigator,
-    viewModel: PostDetailViewModel = hiltViewModel()
+    navController: NavController,
+    post: PostModel? = null,
+    viewModel: PostsScreenViewModel
 ) {
 
     var showDeleteConfirmationDialog by remember {
@@ -65,7 +63,6 @@ fun PostDetailScreen(
     }
     val scrollBehavior =
         TopAppBarDefaults.pinnedScrollBehavior() //Поведение TopAppBar при прокрутке
-    viewModel.getPostById(postId)
 
     if (showDeleteConfirmationDialog) {
         AlertDialog(
@@ -73,7 +70,7 @@ fun PostDetailScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        viewModel.deletePost(postId)
+                        viewModel.deletePost(post!!.postId)
                         showDeleteConfirmationDialog = false
                     }
                 ) {
@@ -106,7 +103,9 @@ fun PostDetailScreen(
                     Text(text = stringResource(id = R.string.app_post_detail_screen_name))
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navigator.popBackStack() }) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Go back"
@@ -114,21 +113,10 @@ fun PostDetailScreen(
                     }
                 },
                 actions = {
-                    viewModel.state.posts.firstOrNull()?.let {
+                    post?.let {
                         IconButton(onClick = {
-                            navigator.navigate(
-                                EditPostScreenDestination(
-                                    postId = it.postId,
-                                    postTitle = it.title,
-                                    postFullDescription = it.fullDescription,
-                                    postCreationDate = it.creationDate,
-                                    postShortDescription = it.shortDescription ?: "",
-                                    postTypeCode = it.postType.toPostTypeCode(),
-                                    postImageUrl = it.image?.imageUrl ?: "",
-                                    postImageWidth = it.image?.imageWidth,
-                                    postImageHeight = it.image?.imageHeight
-                                ), onlyIfResumed = true
-                            )
+                            viewModel.setPostToEdit(post)
+                            navController.navigate("edit_post")
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
@@ -154,76 +142,60 @@ fun PostDetailScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            if (viewModel.state.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(16.dp)
-                )
+            if (post != null) {
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    text = stringResource(id = R.string.app_text_loading),
-                    textAlign = TextAlign.Center
+                    text = post.title,
+                    style = MaterialTheme.typography.titleLarge,
+                    softWrap = true,
+                    maxLines = 2
                 )
-            } else {
-                viewModel.state.errorMessage?.let {
-                    Text(
-                        text = it,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.titleSmall
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "${post.creationDate.convertDaysOffsetToString()}, ID: ${post.postId}", //Конвертируем к локальному времени
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = post.fullDescription,
+                    style = MaterialTheme.typography.bodyMedium,
+                    softWrap = true,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                post.image?.let { image ->
+                    val imageAspectRatio = image.imageWidth.toFloat() / image.imageHeight.toFloat()
+                    Spacer(modifier = Modifier.height(10.dp))
+                    AsyncImage(
+                        model = image.imageUrl,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .fillMaxWidth()
+                            .aspectRatio(imageAspectRatio),
+                        contentScale = ContentScale.Crop,
+                        filterQuality = FilterQuality.Medium
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                viewModel.state.posts.firstOrNull()?.let { post ->
                     Text(
-                        text = post.title,
-                        style = MaterialTheme.typography.titleLarge,
-                        softWrap = true,
-                        maxLines = 2
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "${post.creationDate.convertDaysOffsetToString()}, ID: ${post.postId}", //Конвертируем к локальному времени
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Divider(
+                        textAlign = TextAlign.End,
+                        text = "${stringResource(id = R.string.post_card_source_text)}: ${image.imageUrl}",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier
                             .fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(
-                        text = post.fullDescription,
-                        style = MaterialTheme.typography.bodyMedium,
-                        softWrap = true,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    post.image?.let { image ->
-                        val imageAspectRatio = image.imageWidth.toFloat() / image.imageHeight.toFloat()
-                        Spacer(modifier = Modifier.height(10.dp))
-                        AsyncImage(
-                            model = image.imageUrl,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(10.dp))
-                                .fillMaxWidth()
-                                .aspectRatio(imageAspectRatio),
-                            contentScale = ContentScale.Crop,
-                            filterQuality = FilterQuality.Medium
-                        )
-                        Text(
-                            textAlign = TextAlign.End,
-                            text = "${stringResource(id = R.string.post_card_source_text)}: ${image.imageUrl}",
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
-                    }
                 }
+            } else {
+                Text(
+                    text = "no post found",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.titleSmall
+                )
             }
         }
     }

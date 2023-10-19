@@ -31,12 +31,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -59,16 +57,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
-import com.example.glazovnetadminapp.presentation.destinations.EditTariffScreenDestination
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Destination
 fun TariffsScreen(
     viewModel: TariffsScreenViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
 ) {
     var isEditPostWindowExpanded by remember {
         mutableStateOf(false)
@@ -89,7 +82,7 @@ fun TariffsScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navigator.popBackStack()
+                            //navigator.popBackStack() TODO
                         }
                     ) {
                         Icon(
@@ -101,7 +94,7 @@ fun TariffsScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            navigator.navigate(EditTariffScreenDestination())
+                            //navigator.navigate(EditTariffScreenDestination()) TODO
                         }
                     ) {
                         Icon(

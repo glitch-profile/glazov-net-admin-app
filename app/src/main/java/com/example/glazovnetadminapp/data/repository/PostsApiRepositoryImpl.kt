@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.data.repository
 
-import android.util.Log
 import com.example.glazovnetadminapp.data.mappers.toPostModel
 import com.example.glazovnetadminapp.data.remote.GlazovNetPostsApi
 import com.example.glazovnetadminapp.domain.models.posts.PostModel

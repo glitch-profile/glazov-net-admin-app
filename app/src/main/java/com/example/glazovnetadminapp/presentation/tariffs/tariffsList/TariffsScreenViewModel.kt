@@ -1,27 +1,19 @@
 package com.example.glazovnetadminapp.presentation.tariffs.tariffsList
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
-import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
 import com.example.glazovnetadminapp.domain.useCases.TariffsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 
 @HiltViewModel

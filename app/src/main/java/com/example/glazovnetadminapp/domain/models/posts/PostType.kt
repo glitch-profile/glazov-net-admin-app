@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.domain.models.posts
 
-import androidx.annotation.Keep
 import com.example.glazovnetadminapp.R
 
 sealed class PostType(

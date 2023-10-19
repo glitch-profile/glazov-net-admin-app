@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.data.repository
 
-import com.example.glazovnetadminapp.data.mappers.ToTariffModelDto
 import com.example.glazovnetadminapp.data.mappers.toTariffModel
 import com.example.glazovnetadminapp.data.remote.GlazovNetTariffsApi
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel

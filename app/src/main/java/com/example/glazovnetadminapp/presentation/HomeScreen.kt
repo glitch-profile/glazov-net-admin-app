@@ -1,11 +1,9 @@
 package com.example.glazovnetadminapp.presentation
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,13 +13,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -31,23 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.presentation.destinations.EditPostScreenDestination
-import com.example.glazovnetadminapp.presentation.destinations.PostsScreenDestination
-import com.example.glazovnetadminapp.presentation.destinations.TariffsScreenDestination
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RootNavGraph(start = true)
-@Destination
 @Composable
 fun HomeScreen(
-    navigator: DestinationsNavigator
+    navController: NavController
 ) {
     Scaffold(
         topBar = {
@@ -74,14 +61,14 @@ fun HomeScreen(
             MenuButton(
                 text = stringResource(id = R.string.app_posts_screen_name),
                 onClick = {
-                    navigator.navigate(PostsScreenDestination, onlyIfResumed = true)
+                    navController.navigate("posts")
                 },
                 iconVector = Icons.Default.DateRange
             )
             MenuButton(
                 text = stringResource(id = R.string.app_add_post_screen_name),
                 onClick = {
-                    navigator.navigate(EditPostScreenDestination(), onlyIfResumed = true)
+                    //navigator.navigate(EditPostScreenDestination(), onlyIfResumed = true)
                 },
                 iconVector = Icons.Default.Add
             )
@@ -97,7 +84,7 @@ fun HomeScreen(
             MenuButton(
                 text = stringResource(id = R.string.app_tariffs_list_screen_name),
                 onClick = {
-                    navigator.navigate(TariffsScreenDestination, onlyIfResumed = true)
+                    //navigator.navigate(TariffsScreenDestination, onlyIfResumed = true)
                 },
                 iconVector = Icons.Default.List
             )

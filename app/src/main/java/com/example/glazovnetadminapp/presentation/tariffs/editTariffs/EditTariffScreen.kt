@@ -3,7 +3,6 @@ package com.example.glazovnetadminapp.presentation.tariffs.editTariffs
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -37,7 +35,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -47,28 +44,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType.Companion.toTariffTypeCode
-import com.example.glazovnetadminapp.presentation.tariffs.tariffsList.TariffsScreenViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.time.OffsetDateTime
-import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Destination
 fun EditTariffScreen(
     tariffId: String? = null,
     tariffName: String = "",
     tariffDescription: String = "",
     tariffType: TariffType = TariffType.Unlimited,
     maxSpeed: Int = 0,
-    costPerMonth: Int = 0,
-    navigator: DestinationsNavigator,
+    costPerMonth: Int = 0
 ) {
     var name by remember{
         mutableStateOf(tariffName)
@@ -118,7 +106,9 @@ fun EditTariffScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigator.popBackStack() }
+                        onClick = {
+                            //navigator.popBackStack() TODO
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,

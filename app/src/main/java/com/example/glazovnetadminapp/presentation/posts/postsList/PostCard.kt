@@ -24,20 +24,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
-import com.example.glazovnetadminapp.presentation.destinations.PostDetailScreenDestination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 fun PostCard(
-    postModel: PostModel?,
-    modifier: Modifier = Modifier,
-    navigator: DestinationsNavigator
+    postModel: PostModel,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    postModel?.let { post ->
+    postModel.let { post ->
         val descriptionMaxLines = if (post.image == null) 10
         else 2
         Card(
@@ -45,10 +44,7 @@ fun PostCard(
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .clickable {
-                    navigator.navigate(
-                        PostDetailScreenDestination(postId = post.postId),
-                        onlyIfResumed = true
-                    )
+                    onClick.invoke()
                 }
                 .fillMaxWidth()
         ) {
@@ -95,9 +91,6 @@ fun PostCard(
                             .aspectRatio(imageAspectRatio),
                         contentScale = ContentScale.Crop,
                         filterQuality = FilterQuality.Medium
-//                        onSuccess = {
-//                            println("image width: ${it.painter.intrinsicSize.width}, image height: ${it.painter.intrinsicSize.height}")
-//                        }
                     )
                     Text(
                         textAlign = TextAlign.End,
@@ -112,10 +105,4 @@ fun PostCard(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PostCardPreview() {
-
 }
