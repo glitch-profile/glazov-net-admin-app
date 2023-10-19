@@ -146,11 +146,11 @@ fun TariffsScreen(
                         Box(
                             modifier = Modifier
                                 .padding(start = 16.dp)
+                                .widthIn(min = 100.dp)
+                                .clip(RoundedCornerShape(10.dp))
                                 .clickable {
                                     selectedCategoryIndex = index
                                 }
-                                .clip(RoundedCornerShape(10.dp))
-                                .widthIn(min = 100.dp)
                                 .background(backgroundColor)
                                 .padding(16.dp),
                             contentAlignment = Alignment.Center
