@@ -68,7 +68,7 @@ fun HomeScreen(
             MenuButton(
                 text = stringResource(id = R.string.app_add_post_screen_name),
                 onClick = {
-                    //navigator.navigate(EditPostScreenDestination(), onlyIfResumed = true)
+                    navController.navigate("edit_post")
                 },
                 iconVector = Icons.Default.Add
             )

@@ -174,6 +174,7 @@ class PostsScreenViewModel @Inject constructor(
                             posts = newPostsList
                         )
                     }
+                    setPostToViewDetails(post)
                 }
             }
         }
