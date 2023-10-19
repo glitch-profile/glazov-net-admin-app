@@ -59,6 +59,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
+import com.example.glazovnetadminapp.presentation.destinations.EditTariffScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -99,7 +100,9 @@ fun TariffsScreen(
                 },
                 actions = {
                     IconButton(
-                        onClick = { /*TODO*/ }
+                        onClick = {
+                            navigator.navigate(EditTariffScreenDestination())
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,

@@ -53,8 +53,6 @@ class TariffsScreenViewModel @Inject constructor(
 
     init {
         loadTariffs()
-        //loadTariffsLocal()
-
     }
 
     fun updateNameFilter(string: String) {
@@ -98,53 +96,6 @@ class TariffsScreenViewModel @Inject constructor(
         }
     }
 
-    @Deprecated("Use only without internet connection")
-    fun loadTariffsLocal() {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    isLoading = true,
-                    tariffsData = mutableListOf()
-                )
-            }
-            delay(500L)
-            _state.update {
-                it.copy(
-                    tariffsData = listOf(
-                        TariffModel(
-                            id = "123",
-                            name = "Like 100",
-                            description = "This is some long description about this tariff. It has max speed to 100 Mbits/s only for 600 per month",
-                            category = TariffType.Unlimited,
-                            maxSpeed = 100,
-                            costPerMonth = 600
-                        ),
-                        TariffModel(
-                            id = "124",
-                            name = "Like 60",
-                            category = TariffType.Unlimited,
-                            maxSpeed = 60,
-                            costPerMonth = 500
-                        ),
-                        TariffModel(
-                            id = "1223",
-                            name = "Like 100",
-                            description = "This is some long description about this tariff. It has max speed to 100 Mbits/s only for 600 per month",
-                            category = TariffType.Unlimited,
-                            maxSpeed = 100,
-                            costPerMonth = 600
-                        )
-                    ),
-                    isLoading = false,
-                    message = null
-                )
-            }
-            filteredTariffs.collectLatest {
-                Log.i("TAG", "loadTariffsLocal: $it")
-
-            }
-        }
-    }
 
     fun updateTariff(
         tariff: TariffModel
@@ -200,26 +151,6 @@ class TariffsScreenViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         message = result.message
-                    )
-                }
-            }
-        }
-    }
-
-    @Deprecated("Ony use without internet connection")
-    fun removeTariffLocal(tariffId: String) {
-        viewModelScope.launch {
-            val tariffIndex = state.value.tariffsData.indexOfFirst {
-                it.id == tariffId
-            }
-            if (tariffIndex == -1) {
-                return@launch
-            } else {
-                val newTariffsList = state.value.tariffsData.toMutableList()
-                newTariffsList.removeAt(tariffIndex)
-                _state.update {
-                    it.copy(
-                        tariffsData = newTariffsList
                     )
                 }
             }

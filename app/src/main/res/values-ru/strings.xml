@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="post_card_source_text">Источник</string>
+    <string name="app_add_tariff_screen_name">Создать тариф</string>
+    <string name="app_edit_tariff_screen_name">Редактировать тариф</string>
     <string name="add_post_screen_title">Заголовок</string>
     <string name="add_post_screen_short_description">Короткое описание записи</string>
     <string name="add_post_screen_full_description">Текст записи</string>

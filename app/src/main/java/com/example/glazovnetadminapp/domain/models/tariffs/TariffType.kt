@@ -22,17 +22,17 @@ sealed class TariffType(
     companion object {
         fun fromTariffTypeCode(code: Int): TariffType {
             return when (code) {
-                -1 -> Archive
                 0 -> Unlimited
                 1 -> Limited
+                2 -> Archive
                 else -> Unlimited
             }
         }
         fun TariffType.toTariffTypeCode(): Int {
             return when (this) {
-                Archive -> -1
                 Unlimited -> 0
                 Limited -> 1
+                Archive -> 2
             }
         }
 
