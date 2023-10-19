@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -94,10 +93,6 @@ dependencies {
 
     //compose view model
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-
-    //navigation destinations
-    implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.54")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.9.54")
 
     //coil
     implementation("io.coil-kt:coil-compose:2.4.0")
