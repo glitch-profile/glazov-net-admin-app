@@ -25,7 +25,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -49,25 +48,21 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.models.posts.PostType.Companion.toPostTypeCode
 import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreenViewModel
-import java.time.OffsetDateTime
-import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditPostScreen(
     navController: NavController,
-    post: PostModel? = null,
     viewModel: PostsScreenViewModel,
     context: Context = LocalContext.current
 ) {
-    val state = viewModel.state.collectAsState().value
+    val state = viewModel.editPostState.collectAsState().value
+    val post = state.post
     var titleText by remember {
         mutableStateOf(post?.title ?: "")
     }
@@ -324,18 +319,16 @@ fun EditPostScreen(
                     Text(text = stringResource(id = R.string.add_post_screen_confirm_button))
                 }
             }
-//            Spacer(modifier = Modifier.height(4.dp))
-//            AnimatedVisibility(
-//                visible = viewModel.state.message !== null,
-//                enter = slideInVertically()
-//            ) {
-//                Text(
-//                    text = viewModel.state.message ?: "",
-//                    color = if (viewModel.state.isError) MaterialTheme.colorScheme.error
-//                        else LocalTextStyle.current.color,
-//                    style = MaterialTheme.typography.titleSmall
-//                )
-//            }
+            Spacer(modifier = Modifier.height(4.dp))
+            AnimatedVisibility(
+                visible = state.message !== null,
+                enter = slideInVertically()
+            ) {
+                Text(
+                    text = state.message ?: "",
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
         }
     }
 }

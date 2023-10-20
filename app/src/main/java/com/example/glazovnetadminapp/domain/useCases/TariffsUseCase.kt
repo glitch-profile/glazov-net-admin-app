@@ -26,7 +26,7 @@ class TariffsUseCase @Inject constructor(
 
     suspend fun addTariff(
         tariff: TariffModel
-    ): Resource<Boolean> {
+    ): Resource<TariffModel?> {
         return tariffsApiRepository.addTariff(
             apiKey = API_KEY,
             tariff = tariff.ToTariffModelDto()

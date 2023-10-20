@@ -3,9 +3,6 @@ package com.example.glazovnetadminapp.presentation.posts.postsList
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
@@ -16,6 +13,7 @@ import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.presentation.posts.editPost.EditPostScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,21 +30,28 @@ class PostsScreenViewModel @Inject constructor(
     private var _state = MutableStateFlow(PostsScreenState())
     val state = _state.asStateFlow()
 
-    var selectedPostToEdit: PostModel? = null //used to navigate to EditPostScreen
-        private set
-    var selectedPostToViewDetails: PostModel? = null //used to navigate to PostDetailsScreen
-        private set
+    private var _editPostState = MutableStateFlow(EditPostScreenState())
+    val editPostState = _editPostState.asStateFlow()
+
+    private var _openedPostState = MutableStateFlow<PostModel?>(null)
+    val openedPostModel = _openedPostState.asStateFlow()
 
     init {
         getAllPosts()
     }
 
     fun setPostToEdit(postModel: PostModel?) {
-        selectedPostToEdit = postModel
+        _editPostState.update {
+            EditPostScreenState(
+                post = postModel
+            )
+        }
     }
 
     fun setPostToViewDetails(postModel: PostModel?) {
-        selectedPostToViewDetails = postModel
+        _openedPostState.update {
+            postModel
+        }
     }
 
     fun getAllPosts() {
@@ -74,7 +79,6 @@ class PostsScreenViewModel @Inject constructor(
                         }
                     }
                 }
-
                 is Resource.Error -> {
                     Log.i("TAG", "getAllPosts: loading failed!!")
                     _state.update {
@@ -107,6 +111,7 @@ class PostsScreenViewModel @Inject constructor(
                             posts = newPostsList
                         )
                     }
+                    setPostToViewDetails(null)
                 }
             }
         }
@@ -127,6 +132,12 @@ class PostsScreenViewModel @Inject constructor(
     ) {
 
         viewModelScope.launch {
+            _editPostState.update {
+                it.copy(
+                    isLoading = true,
+                    message = "getting post data..."
+                )
+            }
             val imageModel = if (isNeedToUpdateImage) {
                 if (postImageUrl.isNotBlank()) {
                     val image = loadImage(context, postImageUrl)
@@ -156,12 +167,23 @@ class PostsScreenViewModel @Inject constructor(
                 postType = PostType.fromPostTypeCode(postTypeCode),
                 image = imageModel
             )
+            _editPostState.update {
+                it.copy(
+                    message = "updating post..."
+                )
+            }
             val status = postsUseCase.updatePost(post)
             if (status.data == true) {
                 val postIndex = state.value.posts.indexOfFirst {
                     it.postId == postId
                 }
                 if (postIndex == -1) {
+                    _editPostState.update {
+                        it.copy(
+                            isLoading = false,
+                            message = "error while updating post locally"
+                        )
+                    }
                     return@launch
                 } else {
                     val newPostsList = state.value.posts.toMutableList()
@@ -177,8 +199,14 @@ class PostsScreenViewModel @Inject constructor(
                     setPostToViewDetails(post)
                 }
             }
+            _editPostState.update {
+                it.copy(
+                    isLoading = false,
+                    message = if (status.data == true) "Complete!" else status.message
+                )
+            }
         }
-    } //TODO("Add state messages")
+    }
 
     fun addNewPost(
         context: Context,
@@ -189,6 +217,12 @@ class PostsScreenViewModel @Inject constructor(
         imageUrl: String
     ) {
         viewModelScope.launch {
+            _editPostState.update {
+                it.copy(
+                    isLoading = true,
+                    message = "getting post data..."
+                )
+            }
             val currentTime = OffsetDateTime.now()
             val imageModel = if (imageUrl.isNotBlank()) {
                 val image = loadImage(context, imageUrl)
@@ -209,14 +243,25 @@ class PostsScreenViewModel @Inject constructor(
                 postType = PostType.fromPostTypeCode(postType),
                 image = imageModel
             )
+            _editPostState.update {
+                it.copy(
+                    message = "saving post..."
+                )
+            }
             val status = postsUseCase.addPost(post)
             if (status.data == null) {
+                _editPostState.update {
+                    it.copy(
+                        isLoading = false,
+                        message = status.message
+                    )
+                }
                 return@launch
             } else {
                 val newPostsList = state.value.posts.toMutableList()
                 newPostsList.add(
                     index = 0,
-                    element = post
+                    element = status.data
                 )
                 _state.update {
                     it.copy(
@@ -224,10 +269,21 @@ class PostsScreenViewModel @Inject constructor(
                     )
                 }
             }
+            _editPostState.update {
+                it.copy(
+                    isLoading = false,
+                    message = "completed"
+                )
+            }
         }
-    } //TODO("Add state messages")
+    }
 
     private suspend fun loadImage(context: Context, url: String): Drawable? {
+        _editPostState.update {
+            it.copy(
+                message = "calculating image size..."
+            )
+        }
         val imageLoader = ImageLoader(context)
         val imageRequest = ImageRequest.Builder(context)
             .data(url)
@@ -235,5 +291,5 @@ class PostsScreenViewModel @Inject constructor(
             .build()
         val imageResult = imageLoader.execute(imageRequest)
         return imageResult.drawable
-    } //TODO("Add state messages")
+    }
 }

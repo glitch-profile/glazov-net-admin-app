@@ -154,9 +154,9 @@ class TariffsScreenViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             val result = tariffsUseCase.addTariff(tariff)
-            if (result.data == true) {
+            if (result.data != null) {
                 val newTariffsList = state.value.tariffsData.toMutableList()
-                newTariffsList.add(index = 0, element = tariff)
+                newTariffsList.add(index = 0, element = result.data)
                 _state.update {
                     it.copy(
                         tariffsData = newTariffsList

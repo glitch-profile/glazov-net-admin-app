@@ -71,12 +71,12 @@ class PostsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addPost(apiKey: String, postModel: PostModelDto): Resource<Boolean> {
+    override suspend fun addPost(apiKey: String, postModel: PostModelDto): Resource<PostModel?> {
         return try {
             val result = api.addPost(postModel = postModel, apiKey = apiKey)
             if (result.status) {
                 Resource.Success(
-                    data = true,
+                    data = result.data.firstOrNull()?.toPostModel(),
                     message = result.message
                 )
             } else {

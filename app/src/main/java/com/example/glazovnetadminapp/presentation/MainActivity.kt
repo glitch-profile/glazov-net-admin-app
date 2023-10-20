@@ -21,6 +21,8 @@ import com.example.glazovnetadminapp.presentation.posts.editPost.EditPostScreen
 import com.example.glazovnetadminapp.presentation.posts.postDetails.PostDetailScreen
 import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreen
 import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreenViewModel
+import com.example.glazovnetadminapp.presentation.tariffs.editTariffs.EditTariffScreen
+import com.example.glazovnetadminapp.presentation.tariffs.tariffsList.TariffsScreen
 import com.example.glazovnetadminapp.presentation.tariffs.tariffsList.TariffsScreenViewModel
 import com.example.glazovnetadminapp.ui.theme.GlazovNetAdminAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,7 +60,6 @@ class MainActivity : ComponentActivity() {
                                 val viewModel = it.sharedViewModel<PostsScreenViewModel>(navController = navController)
                                 PostDetailScreen(
                                     navController,
-                                    viewModel.selectedPostToViewDetails,
                                     viewModel
                                 )
                             }
@@ -66,7 +67,6 @@ class MainActivity : ComponentActivity() {
                                 val viewModel = it.sharedViewModel<PostsScreenViewModel>(navController = navController)
                                 EditPostScreen(
                                     navController = navController,
-                                    post = viewModel.selectedPostToEdit,
                                     viewModel
                                 )
                             }
@@ -77,9 +77,11 @@ class MainActivity : ComponentActivity() {
                         ) {
                             composable("tariffs_list") {
                                 val viewModel = it.sharedViewModel<TariffsScreenViewModel>(navController = navController)
+                                TariffsScreen()
                             }
                             composable("edit_tariff") {
                                 val viewModel = it.sharedViewModel<TariffsScreenViewModel>(navController = navController)
+                                EditTariffScreen()
                             }
                         }
                     }
