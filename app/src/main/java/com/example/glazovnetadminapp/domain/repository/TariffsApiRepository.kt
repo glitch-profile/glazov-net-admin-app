@@ -11,7 +11,7 @@ interface TariffsApiRepository {
     suspend fun addTariff(
         apiKey: String,
         tariff: TariffModelDto
-    ): Resource<Boolean>
+    ): Resource<TariffModel?>
 
     suspend fun deleteTariff(
         apiKey: String,

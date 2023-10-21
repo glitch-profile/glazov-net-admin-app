@@ -31,12 +31,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -56,19 +54,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
-import com.example.glazovnetadminapp.presentation.destinations.EditTariffScreenDestination
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Destination
 fun TariffsScreen(
-    viewModel: TariffsScreenViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+    navController: NavController,
+    viewModel: TariffsScreenViewModel,
 ) {
     var isEditPostWindowExpanded by remember {
         mutableStateOf(false)
@@ -89,7 +84,7 @@ fun TariffsScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navigator.popBackStack()
+                            navController.popBackStack()
                         }
                     ) {
                         Icon(
@@ -101,7 +96,8 @@ fun TariffsScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            navigator.navigate(EditTariffScreenDestination())
+                            viewModel.setTariffToEdit(null)
+                            navController.navigate("edit_tariff")
                         }
                     ) {
                         Icon(
@@ -195,6 +191,7 @@ fun TariffsScreen(
                     when (selectedCategoryIndex) {
                         0 -> {
                             TariffsCard(
+                                navController,
                                 filteredTariffs.value,
                                 TariffType.Unlimited,
                                 viewModel
@@ -203,6 +200,7 @@ fun TariffsScreen(
 
                         1 -> {
                             TariffsCard(
+                                navController,
                                 filteredTariffs.value,
                                 TariffType.Limited,
                                 viewModel
@@ -211,6 +209,7 @@ fun TariffsScreen(
 
                         2 -> {
                             TariffsCard(
+                                navController,
                                 filteredTariffs.value,
                                 TariffType.Archive,
                                 viewModel
@@ -219,6 +218,7 @@ fun TariffsScreen(
 
                         else -> {
                             TariffsCard(
+                                navController,
                                 filteredTariffs.value,
                                 TariffType.Unlimited,
                                 viewModel
@@ -281,6 +281,7 @@ private fun FilterScreen(
 
 @Composable
 private fun TariffsCard(
+    navController: NavController,
     tariffs: List<TariffModel>,
     tariffType: TariffType,
     viewModel: TariffsScreenViewModel
@@ -313,7 +314,7 @@ private fun TariffsCard(
                         items(
                             items = filteredTariffs,
                             key = { it.id }
-                        ) {
+                        ) {tariff ->
                             var isOptionsButtonsExpanded by remember {
                                 mutableStateOf(false)
                             }
@@ -326,10 +327,10 @@ private fun TariffsCard(
                             ) {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = it.name,
+                                    text = tariff.name,
                                     style = MaterialTheme.typography.titleMedium
                                 )
-                                it.description?.let { description ->
+                                tariff.description?.let { description ->
                                     Text(
                                         text = description,
                                         style = MaterialTheme.typography.bodyMedium
@@ -337,14 +338,14 @@ private fun TariffsCard(
                                 }
                                 Text(
                                     text = stringResource(id = R.string.tariff_speed_prefix) +
-                                            " ${it.maxSpeed} " + stringResource(id = R.string.tariff_speed_suffix),
+                                            " ${tariff.maxSpeed} " + stringResource(id = R.string.tariff_speed_suffix),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                                 Text(
                                     text = stringResource(id = R.string.tariff_cost_prefix) + " " + pluralStringResource(
                                         id = R.plurals.tariff_cost_rubbles,
-                                        count = it.costPerMonth,
-                                        formatArgs = arrayOf(it.costPerMonth)
+                                        count = tariff.costPerMonth,
+                                        formatArgs = arrayOf(tariff.costPerMonth)
                                     ),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
@@ -356,7 +357,7 @@ private fun TariffsCard(
                                     ) {
                                         TextButton(
                                             onClick = {
-                                                viewModel.removeTariff(it.id)
+                                                viewModel.removeTariff(tariff.id)
                                             }
                                         ) {
                                             Text(
@@ -365,17 +366,20 @@ private fun TariffsCard(
                                             )
                                         }
                                         TextButton(
-                                            onClick = { /*TODO*/ }
+                                            onClick = {
+                                                viewModel.setTariffToEdit(tariff)
+                                                navController.navigate("edit_tariff")
+                                            }
                                         ) {
                                             Text(
                                                 text = stringResource(id = R.string.app_edit_button)
                                             )
                                         }
-                                        if (it.category !== TariffType.Archive) {
+                                        if (tariff.category !== TariffType.Archive) {
                                             TextButton(
                                                 onClick = {
                                                     viewModel.updateTariff(
-                                                        it.copy(
+                                                        tariff.copy(
                                                             category = TariffType.Archive
                                                         )
                                                     )
@@ -399,16 +403,5 @@ private fun TariffsCard(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun AddTariffScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(text = "Add tariff")
     }
 }

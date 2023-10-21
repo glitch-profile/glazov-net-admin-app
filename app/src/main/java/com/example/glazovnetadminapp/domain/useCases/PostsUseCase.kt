@@ -16,7 +16,7 @@ class PostsUseCase @Inject constructor(
         return postsApiRepository.getAllPosts()
     }
 
-    suspend fun addPost(postModel: PostModel): Resource<Boolean> {
+    suspend fun addPost(postModel: PostModel): Resource<PostModel?> {
         val postModelDto = postModel.toPostModelDto()
         return postsApiRepository.addPost(
             apiKey = API_KEY,

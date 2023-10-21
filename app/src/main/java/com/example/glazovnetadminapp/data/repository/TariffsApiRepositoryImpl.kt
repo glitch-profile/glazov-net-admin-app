@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.data.repository
 
-import com.example.glazovnetadminapp.data.mappers.ToTariffModelDto
 import com.example.glazovnetadminapp.data.mappers.toTariffModel
 import com.example.glazovnetadminapp.data.remote.GlazovNetTariffsApi
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
@@ -32,7 +31,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addTariff(apiKey: String, tariff: TariffModelDto): Resource<Boolean> {
+    override suspend fun addTariff(apiKey: String, tariff: TariffModelDto): Resource<TariffModel?> {
         return try {
             val result = tariffsApi.addTariff(
                 apiKey = apiKey,
@@ -40,7 +39,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
             )
             if (result.status) {
                 Resource.Success(
-                    data = true,
+                    data = result.data.firstOrNull()?.toTariffModel(),
                     message = result.message
                 )
             } else {

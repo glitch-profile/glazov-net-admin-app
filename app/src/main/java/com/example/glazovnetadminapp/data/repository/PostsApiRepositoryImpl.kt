@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.data.repository
 
-import android.util.Log
 import com.example.glazovnetadminapp.data.mappers.toPostModel
 import com.example.glazovnetadminapp.data.remote.GlazovNetPostsApi
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
@@ -72,12 +71,12 @@ class PostsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addPost(apiKey: String, postModel: PostModelDto): Resource<Boolean> {
+    override suspend fun addPost(apiKey: String, postModel: PostModelDto): Resource<PostModel?> {
         return try {
             val result = api.addPost(postModel = postModel, apiKey = apiKey)
             if (result.status) {
                 Resource.Success(
-                    data = true,
+                    data = result.data.firstOrNull()?.toPostModel(),
                     message = result.message
                 )
             } else {

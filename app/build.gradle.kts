@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -15,7 +14,7 @@ android {
         minSdk = 29
         targetSdk = 34
         versionCode = 1
-        versionName = "0.0.71"
+        versionName = "0.1.14"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -52,14 +51,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
-    applicationVariants.all {
-        kotlin.sourceSets {
-            getByName(name) {
-                kotlin.srcDir("build/generated/ksp/$name/kotlin")
-            }
-        }
-    }
 }
 
 dependencies {
@@ -73,7 +64,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.core:core-ktx:1.12.0")
-//    implementation("androidx.navigation:navigation-compose:2.7.2")
+    implementation("androidx.navigation:navigation-compose:2.7.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -94,10 +85,6 @@ dependencies {
 
     //compose view model
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-
-    //navigation destinations
-    implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.54")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.9.54")
 
     //coil
     implementation("io.coil-kt:coil-compose:2.4.0")

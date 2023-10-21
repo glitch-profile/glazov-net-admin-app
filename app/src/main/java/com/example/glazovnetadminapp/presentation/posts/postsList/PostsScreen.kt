@@ -21,27 +21,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.presentation.destinations.EditPostScreenDestination
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Destination
 @Composable
 fun PostsScreen(
-    navigator: DestinationsNavigator,
-    postsViewModel: PostsScreenViewModel = hiltViewModel()
+    navController: NavController,
+    viewModel: PostsScreenViewModel
 ) {
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val state = viewModel.state.collectAsState().value
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -53,7 +51,9 @@ fun PostsScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigator.popBackStack() }
+                        onClick = {
+                            navController.popBackStack()
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -64,7 +64,8 @@ fun PostsScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            navigator.navigate(EditPostScreenDestination(), onlyIfResumed = true)
+                            viewModel.setPostToEdit(null)
+                            navController.navigate("edit_post")
                         }
                     ) {
                         Icon(
@@ -73,7 +74,7 @@ fun PostsScreen(
                         )
                     }
                     IconButton(
-                        onClick = { postsViewModel.getAllPosts() }
+                        onClick = { viewModel.getAllPosts() }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
@@ -92,7 +93,7 @@ fun PostsScreen(
                 .padding(values)
                 .padding(horizontal = 16.dp)
         ) {
-            if (postsViewModel.state.isLoading) {
+            if (state.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .align(CenterHorizontally)
@@ -105,18 +106,17 @@ fun PostsScreen(
                     textAlign = TextAlign.Center
                 )
             } else {
-                postsViewModel.state.errorMessage?.let {
+                state.errorMessage?.let {
                     Text(
                         text = it,
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.titleSmall,
                     )
                     Button(
-                        enabled = !postsViewModel.state.isLoading,
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth(),
-                        onClick = { postsViewModel.getAllPosts() }) {
+                        onClick = { viewModel.getAllPosts() }) {
                         Text(
                             text = "Try again!"
                         )
@@ -126,10 +126,13 @@ fun PostsScreen(
                     modifier = Modifier
                         .fillMaxSize(),
                     content = {
-                        items(postsViewModel.state.posts) {
+                        items(state.posts) {
                             PostCard(
                                 postModel = it,
-                                navigator = navigator
+                                onClick = {
+                                    viewModel.setPostToViewDetails(it)
+                                    navController.navigate("post_details")
+                                }
                             )
                         }
                     }

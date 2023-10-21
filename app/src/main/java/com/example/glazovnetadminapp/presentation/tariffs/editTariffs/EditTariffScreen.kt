@@ -1,9 +1,10 @@
 package com.example.glazovnetadminapp.presentation.tariffs.editTariffs
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -25,6 +25,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -32,12 +33,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -47,43 +48,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.domain.models.posts.PostType
+import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType.Companion.toTariffTypeCode
 import com.example.glazovnetadminapp.presentation.tariffs.tariffsList.TariffsScreenViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.time.OffsetDateTime
-import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Destination
 fun EditTariffScreen(
-    tariffId: String? = null,
-    tariffName: String = "",
-    tariffDescription: String = "",
-    tariffType: TariffType = TariffType.Unlimited,
-    maxSpeed: Int = 0,
-    costPerMonth: Int = 0,
-    navigator: DestinationsNavigator,
+    navController: NavController,
+    viewModel: TariffsScreenViewModel
 ) {
+    val state = viewModel.editTariffState.collectAsState().value
+    val tariff = state.tariff
+
     var name by remember{
-        mutableStateOf(tariffName)
+        mutableStateOf(tariff?.name ?: "")
     }
     var description by remember{
-        mutableStateOf(tariffDescription)
+        mutableStateOf(tariff?.description ?: "")
     }
     var tariffTypeCode by remember{
-        mutableIntStateOf(tariffType.toTariffTypeCode())
+        mutableIntStateOf(tariff?.category?.toTariffTypeCode() ?: 0)
     }
     var speed by remember{
-        mutableIntStateOf(maxSpeed)
+        mutableIntStateOf(tariff?.maxSpeed ?: 0)
     }
     var cost by remember{
-        mutableIntStateOf(costPerMonth)
+        mutableIntStateOf(tariff?.costPerMonth ?: 0)
     }
     var isDropdownExpanded by remember {
         mutableStateOf(false)
@@ -98,11 +92,12 @@ fun EditTariffScreen(
     }
 
     fun checkDataTheSame(): Boolean {
-        return name == tariffName && description == tariffDescription
-                && tariffTypeCode == tariffType.toTariffTypeCode()
-                && speed == maxSpeed
-                && cost == costPerMonth
+        return ((name == tariff?.name) && (description == (tariff?.description ?: ""))
+                && (tariffTypeCode == tariff?.category?.toTariffTypeCode())
+                && (speed == tariff?.maxSpeed)
+                && (cost == tariff?.costPerMonth))
     }
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         modifier = Modifier
@@ -112,13 +107,15 @@ fun EditTariffScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = if (tariffId == null) stringResource(id = R.string.app_add_tariff_screen_name)
+                        text = if (tariff == null) stringResource(id = R.string.app_add_tariff_screen_name)
                         else stringResource(id = R.string.app_edit_tariff_screen_name)
                     )
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigator.popBackStack() }
+                        onClick = {
+                            navController.popBackStack()
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -276,11 +273,11 @@ fun EditTariffScreen(
                     onClick = {
 
                         fun clearInputData() {
-                            name = tariffName
-                            description = tariffDescription
-                            tariffTypeCode = tariffType.toTariffTypeCode()
-                            speed = maxSpeed
-                            cost = costPerMonth
+                            name = tariff?.name ?: ""
+                            description = tariff?.description ?: ""
+                            tariffTypeCode = tariff?.category?.toTariffTypeCode() ?: 0
+                            speed = tariff?.maxSpeed ?: 0
+                            cost = tariff?.costPerMonth ?: 0
                             isDropdownExpanded = false
                         }
 
@@ -293,17 +290,48 @@ fun EditTariffScreen(
                 }
                 Button(
                     onClick = {
-
+                        if (tariff == null) {
+                            viewModel.addTariff(
+                                TariffModel(
+                                    id = "",
+                                    name = name,
+                                    description = description.ifBlank { null },
+                                    category = TariffType.fromTariffTypeCode(tariffTypeCode),
+                                    maxSpeed = speed,
+                                    costPerMonth = cost
+                                )
+                            )
+                        } else {
+                            viewModel.updateTariff(
+                                TariffModel(
+                                    id = tariff.id,
+                                    name = name,
+                                    description = description.ifBlank { null },
+                                    category = TariffType.fromTariffTypeCode(tariffTypeCode),
+                                    maxSpeed = speed,
+                                    costPerMonth = cost
+                                )
+                            )
+                        }
                     },
                     enabled = (
                             name.isNotBlank()
-                                    && description.isNotBlank()
-                                    //&& viewModel.state.isLoading.not()
+                                    && state.isLoading.not()
                                     && checkDataTheSame().not()
                             )
                 ) {
                     Text(text = stringResource(id = R.string.add_post_screen_confirm_button))
                 }
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            AnimatedVisibility(
+                visible = state.message !== null,
+                enter = slideInVertically()
+            ) {
+                Text(
+                    text = state.message ?: "",
+                    style = MaterialTheme.typography.titleSmall
+                )
             }
         }
     }

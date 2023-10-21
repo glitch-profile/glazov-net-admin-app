@@ -20,7 +20,7 @@ interface PostsApiRepository {
     suspend fun addPost(
         apiKey: String,
         postModel: PostModelDto
-    ): Resource<Boolean>
+    ): Resource<PostModel?>
 
     suspend fun editPost(
         apiKey: String,
