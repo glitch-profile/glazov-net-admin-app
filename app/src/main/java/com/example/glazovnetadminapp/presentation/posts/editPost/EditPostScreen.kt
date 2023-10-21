@@ -91,14 +91,10 @@ fun EditPostScreen(
     }
 
     fun checkDataTheSame(): Boolean {
-        return if (post !== null) {
-            (titleText == post.title) && (fullDescription == post.fullDescription)
-                    && (shortDescription == post.shortDescription)
-                    && (imageUrl == post.image?.imageUrl)
-                    && (selectedPostTypeCode == post.postType.toPostTypeCode())
-        } else {
-            false
-        }
+        return ((titleText == post?.title) && (fullDescription == post?.fullDescription)
+                    && (shortDescription == (post?.shortDescription ?: ""))
+                    && (imageUrl == (post?.image?.imageUrl ?: ""))
+                    && (selectedPostTypeCode == post?.postType?.toPostTypeCode()))
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()

@@ -84,7 +84,7 @@ fun HomeScreen(
             MenuButton(
                 text = stringResource(id = R.string.app_tariffs_list_screen_name),
                 onClick = {
-                    //navigator.navigate(TariffsScreenDestination, onlyIfResumed = true)
+                    navController.navigate("tariffs")
                 },
                 iconVector = Icons.Default.List
             )

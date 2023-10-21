@@ -77,11 +77,17 @@ class MainActivity : ComponentActivity() {
                         ) {
                             composable("tariffs_list") {
                                 val viewModel = it.sharedViewModel<TariffsScreenViewModel>(navController = navController)
-                                TariffsScreen()
+                                TariffsScreen(
+                                    navController = navController,
+                                    viewModel
+                                )
                             }
                             composable("edit_tariff") {
                                 val viewModel = it.sharedViewModel<TariffsScreenViewModel>(navController = navController)
-                                EditTariffScreen()
+                                EditTariffScreen(
+                                    navController,
+                                    viewModel
+                                )
                             }
                         }
                     }
