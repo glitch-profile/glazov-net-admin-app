@@ -98,7 +98,7 @@ fun HomeScreen(
             )
             Spacer(modifier = Modifier.height(8.dp))
             MenuButton(
-                text = stringResource(id = R.string.menu_about_app_button_text),
+                text = stringResource(id = R.string.menu_about_settings_button_text),
                 isEnable = false,
                 onClick = {
 

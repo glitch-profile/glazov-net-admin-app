@@ -46,6 +46,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
@@ -92,10 +93,10 @@ fun EditTariffScreen(
     }
 
     fun checkDataTheSame(): Boolean {
-        return ((name == tariff?.name) && (description == (tariff?.description ?: ""))
-                && (tariffTypeCode == tariff?.category?.toTariffTypeCode())
-                && (speed == tariff?.maxSpeed)
-                && (cost == tariff?.costPerMonth))
+        return ((name == tariff?.name) && (description == (tariff.description ?: ""))
+                && (tariffTypeCode == tariff.category.toTariffTypeCode())
+                && (speed == tariff.maxSpeed)
+                && (cost == tariff.costPerMonth))
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -142,7 +143,7 @@ fun EditTariffScreen(
                     .padding(top = 4.dp),
                 label = {
                     Text(
-                        text = stringResource(id = R.string.add_post_screen_title)
+                        text = stringResource(id = R.string.edit_tariff_name_text)
                     )
                 },
                 supportingText = {
@@ -160,7 +161,7 @@ fun EditTariffScreen(
                     .padding(top = 4.dp),
                 label = {
                     Text(
-                        text = stringResource(id = R.string.add_post_screen_full_description)
+                        text = stringResource(id = R.string.edit_tariff_description_text)
                     )
                 },
                 supportingText = {
@@ -192,7 +193,7 @@ fun EditTariffScreen(
 
                     label = {
                         Text(
-                            text = stringResource(id = R.string.add_post_screen_select_post_type)
+                            text = stringResource(id = R.string.edit_tariff_category_text)
                         )
                     },
                     trailingIcon = {
@@ -239,10 +240,10 @@ fun EditTariffScreen(
                     onValueChange = { speed = it.filter { it.isDigit() }.toIntOrNull() ?: 0 },
                     modifier = Modifier
                         .padding(top = 4.dp)
-                        .width(150.dp) ,
+                        .width(170.dp),
                     label = {
                         Text(
-                            text = "Max speed"
+                            text = stringResource(id = R.string.edit_tariff_max_speed_text)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -253,10 +254,10 @@ fun EditTariffScreen(
                     onValueChange = { cost = it.filter { it.isDigit() }.toIntOrNull() ?: 0 },
                     modifier = Modifier
                         .padding(top = 4.dp)
-                        .width(150.dp) ,
+                        .width(170.dp),
                     label = {
                         Text(
-                            text = "Cost per month"
+                            text = stringResource(id = R.string.edit_tariff_cost_text)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_about_settings_button_text">Настройки</string>
     <string name="post_card_source_text">Источник</string>
     <string name="app_add_tariff_screen_name">Создать тариф</string>
     <string name="app_edit_tariff_screen_name">Редактировать тариф</string>
@@ -33,7 +34,6 @@
     <string name="app_edit_post_screen_name">Редактировать запись</string>
     <string name="app_text_loading">Загрузка...</string>
     <string name="app_button_clear_data">Очистить данные</string>
-    <string name="app_update_post_screen_name">Редактировать запись</string>
     <plurals name="tariff_cost_rubbles">
         <item quantity="one">%d рубль</item>
         <item quantity="few">%d рубля</item>
@@ -44,13 +44,20 @@
     <string name="menu_posts_title_text">Посты</string>
     <string name="menu_tariffs_title_text">Тарифы</string>
     <string name="menu_details_title_text">Подробности</string>
-    <string name="menu_about_app_button_text">О приложении</string>
     <string name="app_tariffs_list_screen_name">Список тарифов</string>
-    <string name="app_about_app_screen_name">О приложении</string>
+    <string name="app_about_app_screen_name">Настройки</string>
     <string name="tariff_name_filter_placeholder">Наименование тарифа</string>
     <string name="app_show_filters_button">Показать фильтры</string>
     <string name="app_hide_filters_button">Спрятать фильтры</string>
     <string name="tariffs_not_found_text">Тарифы не найдены</string>
     <string name="app_delete_button">Удалить</string>
     <string name="app_edit_button">Редактировать</string>
+    <string name="settings_api_key_text">API ключ</string>
+    <string name="settings_api_key_description">АPI ключ нужен для того, что бы увеличить безопасность. Без него вы не сможете вносить изменения в базу данных. Пожалуйста, введите здесь ваш апи ключ.</string>
+    <string name="settings_security_title">Безопасность</string>
+    <string name="edit_tariff_name_text">Наименование тарифа</string>
+    <string name="edit_tariff_description_text">Описание тарифа</string>
+    <string name="edit_tariff_category_text">Категория</string>
+    <string name="edit_tariff_max_speed_text">Скорость</string>
+    <string name="edit_tariff_cost_text">Стоимость</string>
 </resources>
