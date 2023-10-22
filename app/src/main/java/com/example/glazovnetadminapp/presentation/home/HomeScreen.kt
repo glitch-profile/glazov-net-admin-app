@@ -224,7 +224,7 @@ fun WarningCard(
                         }
                     ) {
                         Text(
-                            text = "Close"
+                            text = stringResource(id = R.string.app_button_close)
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
@@ -235,7 +235,7 @@ fun WarningCard(
                         }
                     ) {
                         Text(
-                            text = "Fix now"
+                            text = stringResource(id = R.string.app_button_fix_now)
                         )
                     }
                 }

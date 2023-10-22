@@ -66,6 +66,8 @@
     <string name="app_hide_filters_button">Hide filters</string>
     <string name="app_button_dialog_confirm">Confirm</string>
     <string name="app_button_dialog_cancel">Cancel</string>
+    <string name="app_button_close">Close</string>
+    <string name="app_button_fix_now">Fix now</string>
     <string name="app_button_clear_data">Clear data</string>
     <string name="app_button_reset_data">Reset</string>
     <string name="app_delete_button">Delete</string>
