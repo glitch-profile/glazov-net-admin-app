@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.glazovnetadminapp.presentation.home.HomeScreen
 import com.example.glazovnetadminapp.presentation.posts.editPost.EditPostScreen
 import com.example.glazovnetadminapp.presentation.posts.postDetails.PostDetailScreen
 import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreen

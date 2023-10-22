@@ -1,13 +1,11 @@
 package com.example.glazovnetadminapp.domain.useCases
 
-import android.content.Context
 import com.example.glazovnetadminapp.data.mappers.toPostModelDto
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class PostsUseCase @Inject constructor(
     private val postsApiRepository: PostsApiRepositoryImpl,

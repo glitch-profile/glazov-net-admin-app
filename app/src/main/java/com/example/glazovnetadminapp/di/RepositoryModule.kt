@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.di
 
-import android.content.Context
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.TariffsApiRepositoryImpl
@@ -10,7 +9,6 @@ import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
