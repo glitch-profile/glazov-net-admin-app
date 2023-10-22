@@ -51,7 +51,7 @@
     <string name="app_delete_button">Удалить</string>
     <string name="app_edit_button">Редактировать</string>
     <string name="settings_api_key_text">API ключ</string>
-    <string name="settings_api_key_description">АPI ключ нужен для того, что бы увеличить безопасность. Без него вы не сможете вносить изменения в базу данных. Пожалуйста, введите здесь ваш апи ключ.</string>
+    <string name="settings_api_key_description">АPI ключ нужен для того, что бы увеличить безопасность. Без него вы не сможете вносить изменения в базу данных.</string>
     <string name="settings_security_title">Безопасность</string>
     <string name="edit_tariff_name_text">Наименование тарифа</string>
     <string name="edit_tariff_description_text">Описание тарифа</string>

@@ -55,7 +55,7 @@
     <string name="edit_tariff_cost_text">Cost</string>
 
     <string name="settings_api_key_text">API key</string>
-    <string name="settings_api_key_description">The API key is needed to increase security. Without it, you will not be able to make changes to the database. Please enter your api key here.</string>
+    <string name="settings_api_key_description">The API key is needed to increase security. Without it, you will not be able to make changes to the database.</string>
     <string name="settings_security_title">Security</string>
 
     <string name="app_datetime_today_text">Today</string>
