@@ -198,7 +198,9 @@ fun EditPostScreen(
                         Icon(
                             icon,
                             "",
-                            modifier = Modifier.clickable { isDropdownExpanded = !isDropdownExpanded }
+                            modifier = Modifier.clickable {
+                                isDropdownExpanded = !isDropdownExpanded
+                            }
                         )
                     }
                 )
@@ -252,7 +254,6 @@ fun EditPostScreen(
                     )
                 }
             )
-            //TODO("image preview")
             Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier

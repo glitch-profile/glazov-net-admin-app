@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.di
 
+import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.TariffsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
@@ -17,9 +18,13 @@ object UseCasesAppModule {
     @Provides
     @Singleton
     fun providePostsUseCase(
-        postsApiRepository: PostsApiRepositoryImpl
+        postsApiRepository: PostsApiRepositoryImpl,
+        localSettingsRepository: LocalSettingsRepositoryImpl
     ): PostsUseCase {
-        return PostsUseCase(postsApiRepository)
+        return PostsUseCase(
+            postsApiRepository,
+            localSettingsRepository
+        )
     }
 
     @Provides

@@ -21,6 +21,7 @@ import com.example.glazovnetadminapp.presentation.posts.editPost.EditPostScreen
 import com.example.glazovnetadminapp.presentation.posts.postDetails.PostDetailScreen
 import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreen
 import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreenViewModel
+import com.example.glazovnetadminapp.presentation.settings.SettingsScreen
 import com.example.glazovnetadminapp.presentation.tariffs.editTariffs.EditTariffScreen
 import com.example.glazovnetadminapp.presentation.tariffs.tariffsList.TariffsScreen
 import com.example.glazovnetadminapp.presentation.tariffs.tariffsList.TariffsScreenViewModel
@@ -44,6 +45,9 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("home") {
                             HomeScreen(navController)
+                        }
+                        composable("settings") {
+                            SettingsScreen(navController = navController)
                         }
                         navigation(
                             startDestination = "posts_list",
