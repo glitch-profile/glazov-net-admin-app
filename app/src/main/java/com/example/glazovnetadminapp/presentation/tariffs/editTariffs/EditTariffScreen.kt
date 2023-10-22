@@ -162,11 +162,6 @@ fun EditTariffScreen(
                     Text(
                         text = stringResource(id = R.string.edit_tariff_description_text)
                     )
-                },
-                supportingText = {
-                    Text(
-                        text = stringResource(id = R.string.app_text_field_required)
-                    )
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
