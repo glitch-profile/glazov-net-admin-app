@@ -1,15 +1,17 @@
 package com.example.glazovnetadminapp.domain.useCases
 
+import android.content.Context
 import com.example.glazovnetadminapp.data.mappers.toPostModelDto
+import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
-
-private const val API_KEY = "test_api_key_123"
+import kotlin.coroutines.coroutineContext
 
 class PostsUseCase @Inject constructor(
-    private val postsApiRepository: PostsApiRepositoryImpl
+    private val postsApiRepository: PostsApiRepositoryImpl,
+    private val localSettingsRepositoryImpl: LocalSettingsRepositoryImpl
 ) {
 
     suspend fun getAllPosts(): Resource<List<PostModel?>> {
@@ -19,7 +21,7 @@ class PostsUseCase @Inject constructor(
     suspend fun addPost(postModel: PostModel): Resource<PostModel?> {
         val postModelDto = postModel.toPostModelDto()
         return postsApiRepository.addPost(
-            apiKey = API_KEY,
+            apiKey = localSettingsRepositoryImpl.getSavedApiKey(),
             postModel = postModelDto
         )
     }
@@ -29,11 +31,17 @@ class PostsUseCase @Inject constructor(
     }
 
     suspend fun deletePostById(postId: String): Resource<Boolean> {
-        return postsApiRepository.deletePostById(API_KEY, postId = postId)
+        return postsApiRepository.deletePostById(
+            localSettingsRepositoryImpl.getSavedApiKey(),
+            postId = postId
+        )
     }
 
     suspend fun updatePost(postModel: PostModel): Resource<Boolean> {
         val postModelDto = postModel.toPostModelDto()
-        return postsApiRepository.editPost(API_KEY, postModelDto)
+        return postsApiRepository.editPost(
+            localSettingsRepositoryImpl.getSavedApiKey(),
+            postModelDto
+        )
     }
 }
