@@ -2,8 +2,10 @@ package com.example.glazovnetadminapp.presentation.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,7 +40,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -142,6 +143,7 @@ private fun MenuButton(
     iconVector: ImageVector? = null,
     iconDescription: String = "",
     iconTint: Color = MaterialTheme.colorScheme.primary,
+    textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
     horizontalPadding: Dp = 16.dp,
     verticalPadding: Dp = 16.dp,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium
@@ -163,7 +165,8 @@ private fun MenuButton(
             }
             Text(
                 text = text,
-                style = textStyle
+                style = textStyle,
+                color = textColor
             )
         }
         Divider(modifier = Modifier.fillMaxWidth())
@@ -176,16 +179,20 @@ fun WarningCard(
     title: String,
     description: String,
     screenRouteToOpen: String,
-    iconTint: Color = MaterialTheme.colorScheme.primary
+    iconTint: Color = MaterialTheme.colorScheme.primary,
 ) {
     var isNeedToShowCard by rememberSaveable {
         mutableStateOf(true)
     }
     AnimatedVisibility(visible = isNeedToShowCard) {
-        Card(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = MaterialTheme.shapes.medium
+                )
         ) {
             Column(
                 modifier = Modifier
@@ -206,10 +213,12 @@ fun WarningCard(
                         Text(
                             text = title,
                             style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                         Text(
                             text = description,
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }

@@ -288,11 +288,14 @@ private fun TariffsCard(
     val filteredTariffs = tariffs.filter {
         it.category == tariffType
     }
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .animateContentSize(),
-        shape = MaterialTheme.shapes.medium
+            .animateContentSize()
+            .background(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                shape = MaterialTheme.shapes.medium
+            )
     ) {
         Column(
             modifier = Modifier
@@ -303,7 +306,8 @@ private fun TariffsCard(
         ) {
             if (filteredTariffs.isEmpty()) {
                 Text(
-                    text = stringResource(id = R.string.tariffs_not_found_text)
+                    text = stringResource(id = R.string.tariffs_not_found_text),
+                    color = MaterialTheme.colorScheme.error
                 )
             } else {
                 LazyColumn(
@@ -327,18 +331,21 @@ private fun TariffsCard(
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = tariff.name,
-                                    style = MaterialTheme.typography.titleMedium
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 )
                                 tariff.description?.let { description ->
                                     Text(
                                         text = description,
-                                        style = MaterialTheme.typography.bodyMedium
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     )
                                 }
                                 Text(
                                     text = stringResource(id = R.string.tariff_speed_prefix) +
                                             " ${tariff.maxSpeed} " + stringResource(id = R.string.tariff_speed_suffix),
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 )
                                 Text(
                                     text = stringResource(id = R.string.tariff_cost_prefix) + " " + pluralStringResource(
@@ -346,7 +353,8 @@ private fun TariffsCard(
                                         count = tariff.costPerMonth,
                                         formatArgs = arrayOf(tariff.costPerMonth)
                                     ),
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 )
                                 AnimatedVisibility(visible = isOptionsButtonsExpanded) {
                                     Row(

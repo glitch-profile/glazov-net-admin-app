@@ -1,6 +1,8 @@
 package com.example.glazovnetadminapp.presentation.posts.postsList
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -37,14 +39,17 @@ fun PostCard(
     postModel.let { post ->
         val descriptionMaxLines = if (post.image == null) 10
         else 2
-        Card(
-            shape = RoundedCornerShape(10.dp),
+        Box(
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .clickable {
                     onClick.invoke()
                 }
                 .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = MaterialTheme.shapes.medium
+                )
         ) {
             Column(
                 modifier = modifier
@@ -56,13 +61,15 @@ fun PostCard(
                 Text(
                     text = post.title,
                     style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     softWrap = true,
                     maxLines = 2
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${post.creationDate.convertDaysOffsetToString()}, ID: ${post.postId}", //Конвертируем к локальному времени
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Divider(
@@ -73,6 +80,7 @@ fun PostCard(
                 Text(
                     text = post.shortDescription ?: post.fullDescription,
                     style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     softWrap = true,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = descriptionMaxLines
@@ -96,6 +104,7 @@ fun PostCard(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
                             .fillMaxWidth()
                     )
