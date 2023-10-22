@@ -51,6 +51,7 @@
     <string name="app_delete_button">Удалить</string>
     <string name="app_edit_button">Редактировать</string>
     <string name="settings_api_key_text">API ключ</string>
+    <string name="settings_api_key_not_found_text">API ключ не найден</string>
     <string name="settings_api_key_description">АPI ключ нужен для того, что бы увеличить безопасность. Без него вы не сможете вносить изменения в базу данных.</string>
     <string name="settings_security_title">Безопасность</string>
     <string name="edit_tariff_name_text">Наименование тарифа</string>
@@ -58,6 +59,5 @@
     <string name="edit_tariff_category_text">Категория</string>
     <string name="edit_tariff_max_speed_text">Скорость</string>
     <string name="edit_tariff_cost_text">Стоимость</string>
-    <string name="menu_settings_button_text">Настройки</string>
     <string name="app_settings_screen_name">Настройки</string>
 </resources>

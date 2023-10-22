@@ -30,9 +30,13 @@ object UseCasesAppModule {
     @Provides
     @Singleton
     fun provideTariffsUseCase(
-        tariffsApiRepository: TariffsApiRepositoryImpl
+        tariffsApiRepository: TariffsApiRepositoryImpl,
+        localSettingsRepository: LocalSettingsRepositoryImpl
     ): TariffsUseCase {
-        return TariffsUseCase(tariffsApiRepository)
+        return TariffsUseCase(
+            tariffsApiRepository,
+            localSettingsRepository
+        )
     }
 
 }

@@ -71,7 +71,7 @@ fun HomeScreen(
             if (viewModel.isApiKeyEmpty) {
                 WarningCard(
                     navController = navController,
-                    title = "API key not found",
+                    title = stringResource(id = R.string.settings_api_key_not_found_text),
                     description = stringResource(id = R.string.settings_api_key_description),
                     screenRouteToOpen = "settings"
                 )
@@ -175,7 +175,8 @@ fun WarningCard(
     navController: NavController,
     title: String,
     description: String,
-    screenRouteToOpen: String
+    screenRouteToOpen: String,
+    iconTint: Color = MaterialTheme.colorScheme.primary
 ) {
     var isNeedToShowCard by rememberSaveable {
         mutableStateOf(true)
@@ -184,7 +185,7 @@ fun WarningCard(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, bottom = 4.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -197,7 +198,8 @@ fun WarningCard(
                         imageVector = Icons.Default.Info,
                         contentDescription = null,
                         modifier = Modifier
-                            .size(30.dp)
+                            .size(30.dp),
+                        tint = iconTint
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
@@ -214,7 +216,7 @@ fun WarningCard(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(
                         onClick = {
@@ -225,6 +227,7 @@ fun WarningCard(
                             text = "Close"
                         )
                     }
+                    Spacer(modifier = Modifier.width(8.dp))
                     TextButton(
                         onClick = {
                             navController.navigate(screenRouteToOpen)
