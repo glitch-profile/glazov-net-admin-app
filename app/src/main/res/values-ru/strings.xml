@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_about_settings_button_text">Настройки</string>
     <string name="post_card_source_text">Источник</string>
     <string name="app_add_tariff_screen_name">Создать тариф</string>
     <string name="app_edit_tariff_screen_name">Редактировать тариф</string>
@@ -45,7 +44,6 @@
     <string name="menu_tariffs_title_text">Тарифы</string>
     <string name="menu_details_title_text">Подробности</string>
     <string name="app_tariffs_list_screen_name">Список тарифов</string>
-    <string name="app_about_app_screen_name">Настройки</string>
     <string name="tariff_name_filter_placeholder">Наименование тарифа</string>
     <string name="app_show_filters_button">Показать фильтры</string>
     <string name="app_hide_filters_button">Спрятать фильтры</string>
@@ -60,4 +58,6 @@
     <string name="edit_tariff_category_text">Категория</string>
     <string name="edit_tariff_max_speed_text">Скорость</string>
     <string name="edit_tariff_cost_text">Стоимость</string>
+    <string name="menu_settings_button_text">Настройки</string>
+    <string name="app_settings_screen_name">Настройки</string>
 </resources>

@@ -4,7 +4,6 @@
     <string name="menu_posts_title_text">Posts</string>
     <string name="menu_tariffs_title_text">Tariffs</string>
     <string name="menu_details_title_text">Details</string>
-    <string name="menu_about_settings_button_text">Settings</string>
 
     <string name="post_card_source_text">Source</string>
 
@@ -13,7 +12,7 @@
     <string name="app_post_detail_screen_name">Post details</string>
     <string name="app_edit_post_screen_name">Edit post</string>
     <string name="app_tariffs_list_screen_name">Tariffs list</string>
-    <string name="app_about_app_screen_name">Settings</string>
+    <string name="app_settings_screen_name">Settings</string>
     <string name="app_add_tariff_screen_name">New tariff</string>
     <string name="app_edit_tariff_screen_name">Edit tariff</string>
 
