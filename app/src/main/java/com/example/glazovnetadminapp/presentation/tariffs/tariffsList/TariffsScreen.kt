@@ -24,7 +24,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,6 +56,7 @@ import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
+import com.example.glazovnetadminapp.presentation.RequestErrorScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -180,27 +180,15 @@ fun TariffsScreen(
                 }
             } else {
                 if (state.value.message != null) {
-                    Column(
+                    RequestErrorScreen(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
-                            .fillMaxSize()
-                    ) {
-                        Text(
-                            text = state.value.message.toString(),
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.titleSmall,
-                        )
-                        Button(
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .fillMaxWidth(),
-                            onClick = { viewModel.loadTariffs() }) {
-                            Text(
-                                text = "Try again!"
-                            )
+                            .fillMaxSize(),
+                        errorText = state.value.message.toString(),
+                        onActionButtonClick = {
+                            viewModel.loadTariffs()
                         }
-                    }
-
+                    )
                 } else {
                     Box(
                         modifier = Modifier

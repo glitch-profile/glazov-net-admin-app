@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
+import com.example.glazovnetadminapp.presentation.RequestErrorScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,21 +108,16 @@ fun PostsScreen(
                 )
             } else {
                 state.errorMessage?.let {
-                    Text(
-                        text = it,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.titleSmall,
-                    )
-                    Button(
+                    RequestErrorScreen(
                         modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth(),
-                        onClick = { viewModel.getAllPosts() }) {
-                        Text(
-                            text = "Try again!"
-                        )
-                    }
+                            .fillMaxSize(),
+                        errorText = it,
+                        onActionButtonClick = {
+                            viewModel.getAllPosts()
+                        }
+                    )
                 }
+            }
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize(),
