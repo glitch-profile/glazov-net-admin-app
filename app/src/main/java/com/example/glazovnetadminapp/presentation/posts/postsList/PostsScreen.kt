@@ -118,23 +118,21 @@ fun PostsScreen(
                     )
                 }
             }
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    content = {
-                        items(state.posts) {
-                            PostCard(
-                                postModel = it,
-                                onClick = {
-                                    viewModel.setPostToViewDetails(it)
-                                    navController.navigate("post_details")
-                                }
-                            )
-                        }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+                content = {
+                    items(state.posts) {
+                        PostCard(
+                            postModel = it,
+                            onClick = {
+                                viewModel.setPostToViewDetails(it)
+                                navController.navigate("post_details")
+                            }
+                        )
                     }
-                )
-            }
+                }
+            )
         }
     }
-
 }
