@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,9 +64,6 @@ fun TariffsScreen(
     navController: NavController,
     viewModel: TariffsScreenViewModel,
 ) {
-    var isEditPostWindowExpanded by remember {
-        mutableStateOf(false)
-    }
 
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -181,46 +179,70 @@ fun TariffsScreen(
                     )
                 }
             } else {
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxSize()
-                ) {
-                    when (selectedCategoryIndex) {
-                        0 -> {
-                            TariffsCard(
-                                navController,
-                                filteredTariffs.value,
-                                TariffType.Unlimited,
-                                viewModel
+                if (state.value.message != null) {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxSize()
+                    ) {
+                        Text(
+                            text = state.value.message.toString(),
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                        Button(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                            onClick = { viewModel.loadTariffs() }) {
+                            Text(
+                                text = "Try again!"
                             )
                         }
+                    }
 
-                        1 -> {
-                            TariffsCard(
-                                navController,
-                                filteredTariffs.value,
-                                TariffType.Limited,
-                                viewModel
-                            )
-                        }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxSize()
+                    ) {
+                        when (selectedCategoryIndex) {
+                            0 -> {
+                                TariffsCard(
+                                    navController,
+                                    filteredTariffs.value,
+                                    TariffType.Unlimited,
+                                    viewModel
+                                )
+                            }
 
-                        2 -> {
-                            TariffsCard(
-                                navController,
-                                filteredTariffs.value,
-                                TariffType.Archive,
-                                viewModel
-                            )
-                        }
+                            1 -> {
+                                TariffsCard(
+                                    navController,
+                                    filteredTariffs.value,
+                                    TariffType.Limited,
+                                    viewModel
+                                )
+                            }
 
-                        else -> {
-                            TariffsCard(
-                                navController,
-                                filteredTariffs.value,
-                                TariffType.Unlimited,
-                                viewModel
-                            )
+                            2 -> {
+                                TariffsCard(
+                                    navController,
+                                    filteredTariffs.value,
+                                    TariffType.Archive,
+                                    viewModel
+                                )
+                            }
+
+                            else -> {
+                                TariffsCard(
+                                    navController,
+                                    filteredTariffs.value,
+                                    TariffType.Unlimited,
+                                    viewModel
+                                )
+                            }
                         }
                     }
                 }
