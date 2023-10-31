@@ -1,7 +1,7 @@
 package com.example.glazovnetadminapp.data.repository
 
 import com.example.glazovnetadminapp.data.mappers.toPostModel
-import com.example.glazovnetadminapp.data.remote.GlazovNetPostsApi
+import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
@@ -9,7 +9,7 @@ import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
 import javax.inject.Inject
 
 class PostsApiRepositoryImpl @Inject constructor(
-    private val api: GlazovNetPostsApi
+    private val api: GlazovNetApi
 ): PostsApiRepository {
     override suspend fun getAllPosts(): Resource<List<PostModel?>> {
         return try {
@@ -36,7 +36,7 @@ class PostsApiRepositoryImpl @Inject constructor(
             val result = api.getPostsList(limit = limit, startIndex = startIndex)
             if (result.status) {
                 Resource.Success(
-                    data = result.data.map { it?.toPostModel() },
+                    data = result.data.map { it.toPostModel() },
                     message = result.message
                 )
             } else {
@@ -56,7 +56,7 @@ class PostsApiRepositoryImpl @Inject constructor(
             val result = api.getPostById(postId = postId)
             if (result.status) {
                 Resource.Success(
-                    data = result.data[0]?.toPostModel(),
+                    data = result.data.firstOrNull()?.toPostModel(),
                     message = result.message
                 )
             } else {

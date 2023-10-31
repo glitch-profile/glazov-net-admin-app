@@ -1,6 +1,7 @@
 package com.example.glazovnetadminapp.data.repository
 
 import com.example.glazovnetadminapp.data.mappers.toTariffModel
+import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.data.remote.GlazovNetTariffsApi
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository
@@ -9,14 +10,14 @@ import com.example.glazovnetadminapp.entity.tariffsDto.TariffModelDto
 import javax.inject.Inject
 
 class TariffsApiRepositoryImpl @Inject constructor(
-    private val tariffsApi: GlazovNetTariffsApi
+    private val api: GlazovNetApi
 ): TariffsApiRepository {
     override suspend fun getAllTariffs(): Resource<List<TariffModel?>> {
         return try {
-            val result = tariffsApi.getAllTariffs()
+            val result = api.getAllTariffs()
             if (result.status) {
                 Resource.Success(
-                    data = result.data.map{ it?.toTariffModel() },
+                    data = result.data.map{ it.toTariffModel() },
                     message = result.message
                 )
             } else {
@@ -33,7 +34,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
 
     override suspend fun addTariff(apiKey: String, tariff: TariffModelDto): Resource<TariffModel?> {
         return try {
-            val result = tariffsApi.addTariff(
+            val result = api.addTariff(
                 apiKey = apiKey,
                 newTariff = tariff
             )
@@ -56,7 +57,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
 
     override suspend fun deleteTariff(apiKey: String, tariffId: String): Resource<Boolean> {
         return try {
-            val result = tariffsApi.deleteTariffById(
+            val result = api.deleteTariffById(
                 apiKey = apiKey,
                 tariffId = tariffId
             )
@@ -79,7 +80,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
 
     override suspend fun updateTariff(apiKey: String, tariff: TariffModelDto): Resource<Boolean> {
         return try {
-            val result = tariffsApi.editTariff(
+            val result = api.editTariff(
                 apiKey = apiKey,
                 tariff = tariff
             )

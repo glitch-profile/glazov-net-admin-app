@@ -1,6 +1,6 @@
 package com.example.glazovnetadminapp.di
 
-import com.example.glazovnetadminapp.data.remote.GlazovNetPostsApi
+import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.data.remote.GlazovNetTariffsApi
 import dagger.Module
 import dagger.Provides
@@ -11,8 +11,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://82.179.121.21:8080/" //notebook
-//private const val BASE_URL = "http://192.168.1.215:8080/" //local notebook
+private const val BASE_URL = "http://82.179.120.64:8080/" //notebook
 //private const val BASE_URL = "http://192.168.0.18:8080/" /local computer
 
 @Module
@@ -21,17 +20,7 @@ object ApiAppModule {
 
     @Provides
     @Singleton
-    fun provideGlazovNetPostsApi(): GlazovNetPostsApi {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create()
-    }
-
-    @Provides
-    @Singleton
-    fun provideGlazovNetTariffsApi(): GlazovNetTariffsApi {
+    fun provideGlazovNetPostsApi(): GlazovNetApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
