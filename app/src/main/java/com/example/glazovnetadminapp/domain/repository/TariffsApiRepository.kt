@@ -6,7 +6,7 @@ import com.example.glazovnetadminapp.entity.tariffsDto.TariffModelDto
 
 interface TariffsApiRepository {
 
-    suspend fun getAllTariffs(): Resource<List<TariffModel?>>
+    suspend fun getAllTariffs(): Resource<List<TariffModel>>
 
     suspend fun addTariff(
         apiKey: String,

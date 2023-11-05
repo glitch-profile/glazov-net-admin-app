@@ -1,8 +1,10 @@
 package com.example.glazovnetadminapp.di
 
+import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.TariffsApiRepositoryImpl
+import com.example.glazovnetadminapp.domain.repository.AnnouncementsApiRepository
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
 import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository
@@ -33,4 +35,10 @@ abstract class RepositoryModule {
     abstract fun bindLocalSettingRepository(
         localSettingsRepositoryImpl: LocalSettingsRepositoryImpl
     ): LocalSettingsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAnnouncementsRepository(
+        announcementsApiRepositoryImpl: AnnouncementsApiRepositoryImpl
+    ): AnnouncementsApiRepository
 }

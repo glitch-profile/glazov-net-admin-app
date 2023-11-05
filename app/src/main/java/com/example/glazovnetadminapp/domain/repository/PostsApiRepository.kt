@@ -6,12 +6,12 @@ import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
 
 interface PostsApiRepository {
 
-    suspend fun getAllPosts(): Resource<List<PostModel?>>
+    suspend fun getAllPosts(): Resource<List<PostModel>>
 
     suspend fun getPostsList (
         limit: Int? = null,
         startIndex: Int? = null
-    ): Resource<List<PostModel?>>
+    ): Resource<List<PostModel>>
 
     suspend fun getPostById (
         postId: String

@@ -6,12 +6,25 @@ import com.example.glazovnetadminapp.domain.models.announcements.AnnouncementMod
 import com.example.glazovnetadminapp.domain.repository.AnnouncementsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.entity.announcementsDto.AnnouncementModelDto
-import com.example.glazovnetadminapp.entity.filtersDto.FilterModelDto
 import javax.inject.Inject
 
 class AnnouncementsApiRepositoryImpl @Inject constructor(
     private val api: GlazovNetApi
 ): AnnouncementsApiRepository {
+    override suspend fun getAnnouncements(): Resource<List<AnnouncementModel>> {
+        return try {
+            val result = api.getAnnouncements()
+            Resource.Success(
+                data = result.data.map { it.toAnnouncementModel() },
+                message = result.message
+            )
+        } catch (e: Exception) {
+            Resource.Error(
+                message = e.message.toString()
+            )
+        }
+    }
+
     override suspend fun createAnnouncement(
         apiKey: String,
         newAnnouncement: AnnouncementModelDto
@@ -57,39 +70,6 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
                     message = result.message
                 )
             }
-        } catch (e: Exception) {
-            Resource.Error(
-                message = e.message.toString()
-            )
-        }
-    }
-
-    override suspend fun createFilter(
-        apiKey: String,
-        addressFilter: FilterModelDto
-    ): Resource<FilterModelDto?> {
-        return try {
-
-        } catch (e: Exception) {
-            Resource.Error(
-                message = e.message.toString()
-            )
-        }
-    }
-
-    override suspend fun deleteFilter(apiKey: String, addressFilterId: String): Resource<Boolean> {
-        return try {
-
-        } catch (e: Exception) {
-            Resource.Error(
-                message = e.message.toString()
-            )
-        }
-    }
-
-    override suspend fun getFilters(limit: Int?): Resource<List<FilterModelDto>> {
-        return try {
-
         } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()

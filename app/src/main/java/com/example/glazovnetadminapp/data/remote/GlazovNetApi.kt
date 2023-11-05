@@ -78,25 +78,6 @@ interface GlazovNetApi {
         @Query("api_key") apiKey: String
     ): ApiResponseDto<List<TariffModelDto>>
 
-    //FILTERS
-
-    @GET("$FILTERS_PATH/get")
-    suspend fun getFilters(
-        @Query("limit") limit: Int? = null
-    ): ApiResponseDto<List<FilterModelDto>>
-
-    @POST("$FILTERS_PATH/create")
-    suspend fun createNewFilter(
-        @Query("api_key") apiKey: String,
-        @Body filter: FilterModelDto
-    ): ApiResponseDto<List<FilterModelDto>>
-
-    @DELETE("$TARIFFS_PATH/delete")
-    suspend fun deleteFilter(
-        @Query("api_key") apiKey: String,
-        @Query("id") filterId: String
-    ): ApiResponseDto<List<FilterModelDto>>
-
     //ADDRESSINFO
 
     @GET("$ADDRESS_PATH/getcitieslist")
@@ -106,6 +87,9 @@ interface GlazovNetApi {
     suspend fun getStreetsList(): List<String>
 
     //ANNOUNCEMENTS
+
+    @GET("$ANNOUNCEMENTS_PATH/getall")
+    suspend fun getAnnouncements(): ApiResponseDto<List<AnnouncementModelDto>>
 
     @POST("$ANNOUNCEMENTS_PATH/create")
     suspend fun createNewAnnouncement(

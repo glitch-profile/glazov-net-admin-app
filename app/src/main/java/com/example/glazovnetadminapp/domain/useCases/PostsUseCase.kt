@@ -12,7 +12,7 @@ class PostsUseCase @Inject constructor(
     private val localSettingsRepositoryImpl: LocalSettingsRepositoryImpl
 ) {
 
-    suspend fun getAllPosts(): Resource<List<PostModel?>> {
+    suspend fun getAllPosts(): Resource<List<PostModel>> {
         return postsApiRepository.getAllPosts()
     }
 

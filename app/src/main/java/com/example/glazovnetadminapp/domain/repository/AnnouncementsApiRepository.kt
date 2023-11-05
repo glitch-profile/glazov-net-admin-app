@@ -7,6 +7,8 @@ import com.example.glazovnetadminapp.entity.filtersDto.FilterModelDto
 
 interface AnnouncementsApiRepository {
 
+    suspend fun getAnnouncements(): Resource<List<AnnouncementModel>>
+
     suspend fun createAnnouncement(
         apiKey: String,
         newAnnouncement: AnnouncementModelDto
@@ -16,19 +18,5 @@ interface AnnouncementsApiRepository {
         apiKey: String,
         announcementId: String
     ): Resource<Boolean>
-
-    suspend fun createFilter(
-        apiKey: String,
-        addressFilter: FilterModelDto
-    ): Resource<FilterModelDto?>
-
-    suspend fun deleteFilter(
-        apiKey: String,
-        addressFilterId: String
-    ): Resource<Boolean>
-
-    suspend fun getFilters(
-        limit: Int? = null
-    ): Resource<List<FilterModelDto>>
 
 }

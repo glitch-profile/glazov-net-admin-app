@@ -13,7 +13,7 @@ class TariffsUseCase @Inject constructor(
     private val tariffsApiRepository: TariffsApiRepositoryImpl,
     private val localSettingsRepositoryImpl: LocalSettingsRepositoryImpl
 ) {
-    suspend fun getTariffs(): Resource<List<TariffModel?>> {
+    suspend fun getTariffs(): Resource<List<TariffModel>> {
         return tariffsApiRepository.getAllTariffs()
     }
 

@@ -11,7 +11,7 @@ import javax.inject.Inject
 class TariffsApiRepositoryImpl @Inject constructor(
     private val api: GlazovNetApi
 ): TariffsApiRepository {
-    override suspend fun getAllTariffs(): Resource<List<TariffModel?>> {
+    override suspend fun getAllTariffs(): Resource<List<TariffModel>> {
         return try {
             val result = api.getAllTariffs()
             if (result.status) {

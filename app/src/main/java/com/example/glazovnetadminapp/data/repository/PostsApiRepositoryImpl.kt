@@ -11,12 +11,12 @@ import javax.inject.Inject
 class PostsApiRepositoryImpl @Inject constructor(
     private val api: GlazovNetApi
 ): PostsApiRepository {
-    override suspend fun getAllPosts(): Resource<List<PostModel?>> {
+    override suspend fun getAllPosts(): Resource<List<PostModel>> {
         return try {
             val result = api.getAllPosts()
             if (result.status) {
                 Resource.Success(
-                    data = result.data.map { it?.toPostModel() },
+                    data = result.data.map { it.toPostModel() },
                     message = result.message
                 )
             } else {
@@ -31,7 +31,7 @@ class PostsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPostsList(limit: Int?, startIndex: Int?): Resource<List<PostModel?>> {
+    override suspend fun getPostsList(limit: Int?, startIndex: Int?): Resource<List<PostModel>> {
         return try {
             val result = api.getPostsList(limit = limit, startIndex = startIndex)
             if (result.status) {
