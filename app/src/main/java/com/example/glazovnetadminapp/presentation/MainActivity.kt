@@ -17,6 +17,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.glazovnetadminapp.presentation.announcements.AddAnnouncementScreen
+import com.example.glazovnetadminapp.presentation.announcements.AnnouncementsScreen
+import com.example.glazovnetadminapp.presentation.announcements.AnnouncementsViewModel
 import com.example.glazovnetadminapp.presentation.home.HomeScreen
 import com.example.glazovnetadminapp.presentation.posts.editPost.EditPostScreen
 import com.example.glazovnetadminapp.presentation.posts.postDetails.PostDetailScreen
@@ -73,6 +76,25 @@ class MainActivity : ComponentActivity() {
                                 EditPostScreen(
                                     navController = navController,
                                     viewModel
+                                )
+                            }
+                        }
+                        navigation (
+                            startDestination = "announcements_list",
+                            route = "announcements"
+                        ) {
+                            composable("announcements_list") {
+                                val viewModel = it.sharedViewModel<AnnouncementsViewModel>(navController = navController)
+                                AnnouncementsScreen(
+                                    navController = navController,
+                                    viewModel = viewModel
+                                )
+                            }
+                            composable("add_announcement") {
+                                val viewModel = it.sharedViewModel<AnnouncementsViewModel>(navController = navController)
+                                AddAnnouncementScreen(
+                                    navController = navController,
+                                    viewModel = viewModel
                                 )
                             }
                         }

@@ -91,11 +91,11 @@ fun HomeScreen(
                 iconVector = Icons.Default.DateRange
             )
             MenuButton(
-                text = stringResource(id = R.string.app_add_post_screen_name),
+                text = stringResource(id = R.string.app_announcements_screen_name),
                 onClick = {
-                    navController.navigate("edit_post")
+                    navController.navigate("announcements")
                 },
-                iconVector = Icons.Default.Add
+                iconVector = Icons.Default.List
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -129,6 +129,7 @@ fun HomeScreen(
                 },
                 iconVector = Icons.Default.Settings
             )
+
         }
     }
 }
