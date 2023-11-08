@@ -1,8 +1,10 @@
 package com.example.glazovnetadminapp.di
 
+import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.TariffsApiRepositoryImpl
+import com.example.glazovnetadminapp.domain.useCases.AnnouncementsUseCase
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import com.example.glazovnetadminapp.domain.useCases.TariffsUseCase
 import dagger.Module
@@ -35,6 +37,18 @@ object UseCasesAppModule {
     ): TariffsUseCase {
         return TariffsUseCase(
             tariffsApiRepository,
+            localSettingsRepository
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideAnnouncementsUseCase(
+        announcementsApiRepository: AnnouncementsApiRepositoryImpl,
+        localSettingsRepository: LocalSettingsRepositoryImpl
+    ): AnnouncementsUseCase {
+        return AnnouncementsUseCase(
+            announcementsApiRepository,
             localSettingsRepository
         )
     }
