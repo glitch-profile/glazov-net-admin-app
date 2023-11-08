@@ -36,9 +36,9 @@
     <string name="app_text_loading">Загрузка...</string>
     <string name="app_button_clear_data">Очистить данные</string>
     <plurals name="tariff_cost_rubbles">
-        <item quantity="one">%d рубль</item>
-        <item quantity="few">%d рубля</item>
-        <item quantity="many">%d рублей</item>
+        <item quantity="one">%d рубль в месяц</item>
+        <item quantity="few">%d рубля в месяц</item>
+        <item quantity="many">%d рублей в месяц</item>
     </plurals>
     <string name="tariff_speed_suffix">Мбит/с</string>
     <string name="tariff_type_archive">Архив</string>
@@ -65,4 +65,5 @@
     <string name="app_buttom_try_again">Попробовать снова</string>
     <string name="app_button_close">Закрыть</string>
     <string name="app_button_fix_now">Исправить</string>
+    <string name="tariff_cost_text_suffix">руб./мес.</string>
 </resources>

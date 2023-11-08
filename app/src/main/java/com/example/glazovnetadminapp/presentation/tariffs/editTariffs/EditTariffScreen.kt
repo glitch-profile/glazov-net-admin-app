@@ -74,10 +74,10 @@ fun EditTariffScreen(
         mutableIntStateOf(tariff?.category?.toTariffTypeCode() ?: 0)
     }
     var speed by remember{
-        mutableIntStateOf(tariff?.maxSpeed ?: 0)
+        mutableStateOf(tariff?.maxSpeed?.toString() ?: "")
     }
     var cost by remember{
-        mutableIntStateOf(tariff?.costPerMonth ?: 0)
+        mutableStateOf(tariff?.costPerMonth?.toString() ?: "")
     }
     var isDropdownExpanded by remember {
         mutableStateOf(false)
@@ -94,8 +94,8 @@ fun EditTariffScreen(
     fun checkDataTheSame(): Boolean {
         return ((name == tariff?.name) && (description == (tariff.description ?: ""))
                 && (tariffTypeCode == tariff.category.toTariffTypeCode())
-                && (speed == tariff.maxSpeed)
-                && (cost == tariff.costPerMonth))
+                && (speed == tariff.maxSpeed.toString())
+                && (cost == tariff.costPerMonth.toString()))
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -230,8 +230,8 @@ fun EditTariffScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 OutlinedTextField(
-                    value = speed.toString(),
-                    onValueChange = { speed = it.filter { it.isDigit() }.toIntOrNull() ?: 0 },
+                    value = speed,
+                    onValueChange = { speed = it.filter { it.isDigit() } },
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .width(170.dp),
@@ -240,18 +240,28 @@ fun EditTariffScreen(
                             text = stringResource(id = R.string.edit_tariff_max_speed_text)
                         )
                     },
+                    supportingText = {
+                        Text(
+                            text = stringResource(id = R.string.tariff_speed_suffix)
+                        )
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                 )
                 OutlinedTextField(
-                    value = cost.toString(),
-                    onValueChange = { cost = it.filter { it.isDigit() }.toIntOrNull() ?: 0 },
+                    value = cost,
+                    onValueChange = { cost = it.filter { it.isDigit() } },
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .width(170.dp),
                     label = {
                         Text(
                             text = stringResource(id = R.string.edit_tariff_cost_text)
+                        )
+                    },
+                    supportingText = {
+                        Text(
+                            text = stringResource(id = R.string.tariff_cost_text_suffix)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -271,8 +281,8 @@ fun EditTariffScreen(
                             name = tariff?.name ?: ""
                             description = tariff?.description ?: ""
                             tariffTypeCode = tariff?.category?.toTariffTypeCode() ?: 0
-                            speed = tariff?.maxSpeed ?: 0
-                            cost = tariff?.costPerMonth ?: 0
+                            speed = tariff?.maxSpeed?.toString() ?: ""
+                            cost = tariff?.costPerMonth?.toString() ?: ""
                             isDropdownExpanded = false
                         }
 
@@ -292,8 +302,8 @@ fun EditTariffScreen(
                                     name = name,
                                     description = description.ifBlank { null },
                                     category = TariffType.fromTariffTypeCode(tariffTypeCode),
-                                    maxSpeed = speed,
-                                    costPerMonth = cost
+                                    maxSpeed = speed.toInt(),
+                                    costPerMonth = cost.toInt()
                                 )
                             )
                         } else {
@@ -303,14 +313,16 @@ fun EditTariffScreen(
                                     name = name,
                                     description = description.ifBlank { null },
                                     category = TariffType.fromTariffTypeCode(tariffTypeCode),
-                                    maxSpeed = speed,
-                                    costPerMonth = cost
+                                    maxSpeed = speed.toInt(),
+                                    costPerMonth = cost.toInt()
                                 )
                             )
                         }
                     },
                     enabled = (
                             name.isNotBlank()
+                                    && (speed.toIntOrNull() != null)
+                                    && (cost.toIntOrNull() != null)
                                     && state.isLoading.not()
                                     && checkDataTheSame().not()
                             )

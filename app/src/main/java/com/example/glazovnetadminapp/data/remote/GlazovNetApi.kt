@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.data.remote
 
-import com.example.glazovnetadminapp.entity.filtersDto.FilterModelDto
 import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.announcementsDto.AnnouncementModelDto
 import com.example.glazovnetadminapp.entity.postsDto.PostModelDto

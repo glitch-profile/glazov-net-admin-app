@@ -42,9 +42,10 @@
     <string name="tariff_cost_prefix">Cost:</string>
     <string name="tariff_speed_prefix">Speed up to</string>
     <string name="tariff_speed_suffix">Mbits/s</string>
+    <string name="tariff_cost_text_suffix">rub./month</string>
     <plurals name="tariff_cost_rubbles">
-        <item quantity="one">%d rubble</item>
-        <item quantity="other">%d rubbles</item>
+        <item quantity="one">%d ruble per month</item>
+        <item quantity="other">%d rubbles per month</item>
     </plurals>
     <string name="tariff_name_filter_placeholder">Tariff name</string>
     <string name="tariffs_not_found_text">Tariffs not found!</string>
