@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.di
 
+import com.example.glazovnetadminapp.data.repository.AddressApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
@@ -41,4 +42,10 @@ abstract class RepositoryModule {
     abstract fun bindAnnouncementsRepository(
         announcementsApiRepositoryImpl: AnnouncementsApiRepositoryImpl
     ): AnnouncementsApiRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAddressApiRepository(
+        addressApiRepositoryImpl: AddressApiRepositoryImpl
+    ): AddressApiRepositoryImpl
 }

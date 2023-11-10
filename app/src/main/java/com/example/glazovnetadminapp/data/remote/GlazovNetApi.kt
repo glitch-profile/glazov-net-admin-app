@@ -80,10 +80,15 @@ interface GlazovNetApi {
     //ADDRESSINFO
 
     @GET("$ADDRESS_PATH/getcitieslist")
-    suspend fun getCitiesList(): List<String>
+    suspend fun getCitiesList(
+        @Query("name") city: String
+    ): List<String>
 
     @GET("$ADDRESS_PATH/getstreetslist")
-    suspend fun getStreetsList(): List<String>
+    suspend fun getStreetsList(
+        @Query("city") city: String,
+        @Query("name") street: String
+    ): List<String>
 
     //ANNOUNCEMENTS
 

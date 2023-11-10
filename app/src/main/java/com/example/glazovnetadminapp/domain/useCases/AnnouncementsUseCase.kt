@@ -1,6 +1,7 @@
 package com.example.glazovnetadminapp.domain.useCases
 
 import com.example.glazovnetadminapp.data.mappers.toAnnouncementModelDto
+import com.example.glazovnetadminapp.data.repository.AddressApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.announcements.AnnouncementModel
@@ -9,6 +10,7 @@ import javax.inject.Inject
 
 class AnnouncementsUseCase @Inject constructor(
     private val announcementsApiRepository: AnnouncementsApiRepositoryImpl,
+    private val addressApiRepository: AddressApiRepositoryImpl,
     private val localSettingsRepository: LocalSettingsRepositoryImpl
 ) {
 
@@ -35,6 +37,19 @@ class AnnouncementsUseCase @Inject constructor(
             apiKey = apiKey,
             announcementId = announcementId
         )
+    }
+
+    suspend fun getCitiesList(
+        cityName: String
+    ): List<String> {
+        return addressApiRepository.getCitiesWithName(cityName)
+    }
+
+    suspend fun getStreetsList(
+        cityName: String,
+        streetName: String
+    ): List<String> {
+        return addressApiRepository.getStreetsWithName(cityName, streetName)
     }
 
 }
