@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.useCases.TariffsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.presentation.ScreenState
 import com.example.glazovnetadminapp.presentation.tariffs.editTariffs.EditTariffScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +22,7 @@ class TariffsScreenViewModel @Inject constructor(
     private val tariffsUseCase: TariffsUseCase
 ): ViewModel() {
 
-    private val _state = MutableStateFlow(TariffsScreenState())
+    private val _state = MutableStateFlow(ScreenState<TariffModel>())
     val state = _state.asStateFlow()
 
     private val _nameFilter = MutableStateFlow("")
@@ -30,9 +31,9 @@ class TariffsScreenViewModel @Inject constructor(
     val filteredTariffs = state
         .combine(nameFilter) {state, name ->
             if (name.isBlank()) {
-                state.tariffsData
+                state.data
             } else {
-                state.tariffsData.filter {
+                state.data.filter {
                     it.name.contains(name)
                 }
             }
@@ -76,7 +77,7 @@ class TariffsScreenViewModel @Inject constructor(
                     _state.update {
                         if (result.data !== null) {
                             it.copy(
-                                tariffsData = result.data.filterNotNull(),
+                                data = result.data.filterNotNull(),
                                 isLoading = false
                             )
                         } else {
@@ -112,7 +113,7 @@ class TariffsScreenViewModel @Inject constructor(
             }
             val result = tariffsUseCase.updateTariff(tariff = tariff)
             if (result.data == true) {
-                val tariffIndex = state.value.tariffsData.indexOfFirst {
+                val tariffIndex = state.value.data.indexOfFirst {
                     it.id == tariff.id
                 }
                 if (tariffIndex == -1) {
@@ -124,11 +125,11 @@ class TariffsScreenViewModel @Inject constructor(
                     }
                 }
                 else {
-                    val newTariffsList = state.value.tariffsData.toMutableList()
+                    val newTariffsList = state.value.data.toMutableList()
                     newTariffsList[tariffIndex] = tariff
                     _state.update {
                         it.copy(
-                            tariffsData = newTariffsList
+                            data = newTariffsList
                         )
                     }
                     _editTariffState.update{
@@ -149,22 +150,23 @@ class TariffsScreenViewModel @Inject constructor(
         }
     }
 
+    //TODO:(Add data checking inside viewModel)
     fun removeTariff(
         tariffId: String
     ) {
         viewModelScope.launch {
             val result = tariffsUseCase.deleteTariff(tariffId)
             if (result.data == true) {
-                val tariffIndex = state.value.tariffsData.indexOfFirst {
+                val tariffIndex = state.value.data.indexOfFirst {
                     it.id == tariffId
                 }
                 if (tariffIndex == -1) return@launch
                 else {
-                    val newTariffsList = state.value.tariffsData.toMutableList()
+                    val newTariffsList = state.value.data.toMutableList()
                     newTariffsList.removeAt(tariffIndex)
                     _state.update {
                         it.copy(
-                            tariffsData = newTariffsList
+                            data = newTariffsList
                         )
                     }
                 }
@@ -190,11 +192,11 @@ class TariffsScreenViewModel @Inject constructor(
             }
             val result = tariffsUseCase.addTariff(tariff)
             if (result.data != null) {
-                val newTariffsList = state.value.tariffsData.toMutableList()
+                val newTariffsList = state.value.data.toMutableList()
                 newTariffsList.add(index = 0, element = result.data)
                 _state.update {
                     it.copy(
-                        tariffsData = newTariffsList
+                        data = newTariffsList
                     )
                 }
                 _editTariffState.update {

@@ -13,6 +13,7 @@ import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.presentation.ScreenState
 import com.example.glazovnetadminapp.presentation.posts.editPost.EditPostScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +28,7 @@ class PostsScreenViewModel @Inject constructor(
     private val postsUseCase: PostsUseCase
 ) : ViewModel() {
 
-    private var _state = MutableStateFlow(PostsScreenState())
+    private var _state = MutableStateFlow(ScreenState<PostModel>())
     val state = _state.asStateFlow()
 
     private var _editPostState = MutableStateFlow(EditPostScreenState())
@@ -59,7 +60,7 @@ class PostsScreenViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     isLoading = true,
-                    errorMessage = null
+                    message = null
                 )
             }
             Log.i("TAG", "getAllPosts: now loading")
@@ -68,13 +69,13 @@ class PostsScreenViewModel @Inject constructor(
                     _state.update {
                         if (result.data != null) {
                             it.copy(
-                                posts = result.data.filterNotNull(),
+                                data = result.data.filterNotNull(),
                                 isLoading = false
                             )
                         } else {
                             it.copy(
                                 isLoading = false,
-                                errorMessage = result.message
+                                message = result.message
                             )
                         }
                     }
@@ -84,7 +85,7 @@ class PostsScreenViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = result.message
+                            message = result.message
                         )
                     }
                 }
@@ -99,16 +100,16 @@ class PostsScreenViewModel @Inject constructor(
             val result = postsUseCase.deletePostById(postIdToDelete)
             //TODO("add state messages")
             if (result.data == true) {
-                val postIndex = state.value.posts.indexOfFirst { post ->
+                val postIndex = state.value.data.indexOfFirst { post ->
                     post.postId == postIdToDelete }
                 if (postIndex == -1) {
                     return@launch
                 } else {
-                    val newPostsList = state.value.posts.toMutableList()
+                    val newPostsList = state.value.data.toMutableList()
                     newPostsList.removeAt(postIndex)
                     _state.update {
                         it.copy(
-                            posts = newPostsList
+                            data = newPostsList
                         )
                     }
                     setPostToViewDetails(null)
@@ -174,7 +175,7 @@ class PostsScreenViewModel @Inject constructor(
             }
             val status = postsUseCase.updatePost(post)
             if (status.data == true) {
-                val postIndex = state.value.posts.indexOfFirst {
+                val postIndex = state.value.data.indexOfFirst {
                     it.postId == postId
                 }
                 if (postIndex == -1) {
@@ -186,14 +187,14 @@ class PostsScreenViewModel @Inject constructor(
                     }
                     return@launch
                 } else {
-                    val newPostsList = state.value.posts.toMutableList()
+                    val newPostsList = state.value.data.toMutableList()
                     newPostsList.set(
                         index = postIndex,
                         element = post
                     )
                     _state.update {
                         it.copy(
-                            posts = newPostsList
+                            data = newPostsList
                         )
                     }
                     setPostToViewDetails(post)
@@ -258,14 +259,14 @@ class PostsScreenViewModel @Inject constructor(
                 }
                 return@launch
             } else {
-                val newPostsList = state.value.posts.toMutableList()
+                val newPostsList = state.value.data.toMutableList()
                 newPostsList.add(
                     index = 0,
                     element = status.data
                 )
                 _state.update {
                     it.copy(
-                        posts = newPostsList
+                        data = newPostsList
                     )
                 }
             }
