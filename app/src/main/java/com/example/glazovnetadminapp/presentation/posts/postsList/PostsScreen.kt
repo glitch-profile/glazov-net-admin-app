@@ -87,7 +87,6 @@ fun PostsScreen(
             )
         }
     ) { values ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -107,7 +106,7 @@ fun PostsScreen(
                     textAlign = TextAlign.Center
                 )
             } else {
-                state.errorMessage?.let {
+                state.message?.let {
                     RequestErrorScreen(
                         modifier = Modifier
                             .fillMaxSize(),
@@ -122,7 +121,7 @@ fun PostsScreen(
                 modifier = Modifier
                     .fillMaxSize(),
                 content = {
-                    items(state.posts) {
+                    items(state.data) {
                         PostCard(
                             postModel = it,
                             onClick = {

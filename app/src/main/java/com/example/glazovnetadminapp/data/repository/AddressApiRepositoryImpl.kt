@@ -8,11 +8,7 @@ class AddressApiRepositoryImpl @Inject constructor(
     private val api: GlazovNetApi
 ): AddressApiRepository {
     override suspend fun getStreetsWithName(cityName: String, streetName: String): List<String> {
-        return if (cityName.isBlank() || streetName.isBlank()) {
-            emptyList()
-        } else {
-            api.getStreetsList(cityName, streetName)
-        }
+        return api.getStreetsList(cityName, streetName)
     }
 
     override suspend fun checkIfStreetExists(cityName: String, streetName: String): Boolean {
@@ -20,11 +16,7 @@ class AddressApiRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCitiesWithName(cityName: String): List<String> {
-        return if (cityName.isBlank()) {
-            emptyList()
-        } else {
-            api.getCitiesList(cityName)
-        }
+        return api.getCitiesList(cityName)
     }
 
     override suspend fun checkIfCityExists(cityName: String): Boolean {

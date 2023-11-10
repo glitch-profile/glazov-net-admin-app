@@ -42,14 +42,16 @@ class AnnouncementsUseCase @Inject constructor(
     suspend fun getCitiesList(
         cityName: String
     ): List<String> {
-        return addressApiRepository.getCitiesWithName(cityName)
+        return if (cityName.isBlank()) emptyList()
+        else addressApiRepository.getCitiesWithName(cityName)
     }
 
     suspend fun getStreetsList(
         cityName: String,
         streetName: String
     ): List<String> {
-        return addressApiRepository.getStreetsWithName(cityName, streetName)
+        return if (cityName.isBlank() || streetName.isBlank()) emptyList()
+        else addressApiRepository.getStreetsWithName(cityName, streetName)
     }
 
 }

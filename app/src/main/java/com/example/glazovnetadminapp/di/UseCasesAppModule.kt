@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.di
 
+import com.example.glazovnetadminapp.data.repository.AddressApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
@@ -45,10 +46,12 @@ object UseCasesAppModule {
     @Singleton
     fun provideAnnouncementsUseCase(
         announcementsApiRepository: AnnouncementsApiRepositoryImpl,
+        addressApiRepository: AddressApiRepositoryImpl,
         localSettingsRepository: LocalSettingsRepositoryImpl
     ): AnnouncementsUseCase {
         return AnnouncementsUseCase(
             announcementsApiRepository,
+            addressApiRepository,
             localSettingsRepository
         )
     }
