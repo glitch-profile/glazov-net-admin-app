@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.presentation.announcements
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,9 +15,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
+import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,14 +50,15 @@ fun AddAnnouncementScreen(
     navController: NavController,
     viewModel: AnnouncementsViewModel
 ) {
+    var announcement = viewModel.announcementToEdit.collectAsState().value
     var title by remember {
-        mutableStateOf("")
+        mutableStateOf(announcement?.title ?: "")
     }
     var text by remember {
-        mutableStateOf("")
+        mutableStateOf(announcement?.text ?: "")
     }
     var filters by rememberSaveable {
-        mutableStateOf(emptyList<AddressFilterElement>())
+        mutableStateOf(announcement?.filters ?: emptyList())
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -126,33 +132,82 @@ fun AddAnnouncementScreen(
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Column(
+            Divider(modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(4.dp))
+            AddFilterScreen(
+                onAddFilter = { filter ->
+                    val newFiltersList = filters.toMutableList()
+                    newFiltersList.add(index = 0, element = filter)
+                    filters = newFiltersList
+                }
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            FiltersScreen(
+                filters = filters,
+                onRemoveFilter = { filter ->
+                    val newFilters = filters.toMutableList()
+                    newFilters.remove(filter)
+                    filters = newFilters
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun AddFilterScreen(
+    onAddFilter: (AddressFilterElement) -> Unit
+) {
+    Button(
+        onClick = {
+            onAddFilter.invoke(
+                AddressFilterElement(
+                    city = "Glazov",
+                    street = "Pryazhennikova",
+                    houseNumber = Random.nextInt(1, 999)
+                )
+            )
+        }
+    ) {
+        Text(text = "Add filter")
+    }
+}
+
+@Composable
+private fun FiltersScreen(
+    filters: List<AddressFilterElement>,
+    onRemoveFilter: (AddressFilterElement) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+    ) {
+        filters.forEach { filter ->
+            Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                filters.forEach { filter ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            text = "${filter.city}, ${filter.street}, ${filter.houseNumber}"
-                        )
-                        IconButton(
-                            onClick = { /*TODO*/ }
-                        ) {
-                           Icon(
-                               modifier = Modifier
-                                   .size(25.dp),
-                               imageVector = Icons.Default.Clear,
-                               contentDescription = "remove filter"
-                           )
-                        }
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f),
+                    text = "${filter.city}, ${filter.street}, ${filter.houseNumber}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                IconButton(
+                    modifier = Modifier
+                        .size(35.dp),
+                    onClick = {
+                        onRemoveFilter.invoke(filter)
                     }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = "remove filter"
+                    )
                 }
             }
         }

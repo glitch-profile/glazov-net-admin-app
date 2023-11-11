@@ -9,6 +9,7 @@ import com.example.glazovnetadminapp.presentation.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,8 +22,8 @@ class AnnouncementsViewModel @Inject constructor(
     private var _state = MutableStateFlow(ScreenState<AnnouncementModel>())
     val state = _state.asStateFlow()
 
-    private var _filtersToEdit = MutableStateFlow(emptyList<AddressFilterElement>())
-    val filtersToEdit = _filtersToEdit.asStateFlow()
+    private var _announcementToEdit = MutableStateFlow<AnnouncementModel?>(null)
+    val announcementToEdit = _announcementToEdit.asStateFlow()
 
     private var _citiesList = MutableStateFlow(emptyList<String>())
     val citiesList = _citiesList.asStateFlow()
