@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -24,11 +26,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +42,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
@@ -137,8 +144,10 @@ fun AddAnnouncementScreen(
             AddFilterScreen(
                 onAddFilter = { filter ->
                     val newFiltersList = filters.toMutableList()
-                    newFiltersList.add(index = 0, element = filter)
-                    filters = newFiltersList
+                    newFiltersList.add(filter)
+                    filters = newFiltersList.sortedBy {
+                        "${it.city}${it.street}${it.houseNumber / 1000f}"
+                    }
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -156,21 +165,106 @@ fun AddAnnouncementScreen(
 
 @Composable
 private fun AddFilterScreen(
-    onAddFilter: (AddressFilterElement) -> Unit
+    onAddFilter: (AddressFilterElement) -> Unit = {}
 ) {
-    Button(
-        onClick = {
-            onAddFilter.invoke(
-                AddressFilterElement(
-                    city = "Glazov",
-                    street = "Pryazhennikova",
-                    houseNumber = Random.nextInt(1, 999)
-                )
+    var city by remember {
+        mutableStateOf("")
+    }
+    var street by remember {
+        mutableStateOf("")
+    }
+    var houseNumber by remember {
+        mutableStateOf("")
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth(0.3f),
+                value = city,
+                onValueChange = {
+                    city = it
+                },
+                label = {
+                    Text(
+                        text = "City"
+                    )
+                },
+                singleLine = true
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth(0.6f),
+                value = street,
+                onValueChange = {
+                    street = it
+                },
+                label = {
+                    Text(
+                        text = "Street"
+                    )
+                },
+                singleLine = true
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                value = houseNumber,
+                onValueChange = {
+                    houseNumber = it.filter { it.isDigit() }
+                },
+                label = {
+                    Text(
+                        text = "House"
+                    )
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
-    ) {
-        Text(text = "Add filter")
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            TextButton(
+                onClick = {
+                    city = ""
+                    street = ""
+                    houseNumber = ""
+                }
+            ) {
+                Text(text = "Clear all")
+            }
+            Button(
+                onClick = {
+                    onAddFilter.invoke(
+                        AddressFilterElement(
+                            city = city,
+                            street = street,
+                            houseNumber = houseNumber.toInt()
+                        )
+                    )
+                }
+            ) {
+                Text(text = "Add filter")
+            }
+        }
+
     }
+
+
 }
 
 @Composable
