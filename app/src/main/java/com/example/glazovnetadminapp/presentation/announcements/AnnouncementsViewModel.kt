@@ -31,8 +31,8 @@ class AnnouncementsViewModel @Inject constructor(
     val streetsSearchText = _streetsSearchText.asStateFlow()
 
     init {
-        _citiesSearchText.debounce(3000L)
-        _streetsSearchText.debounce(300L)
+        _citiesSearchText.debounce(500L)
+        _streetsSearchText.debounce(500L)
     }
 
 }
