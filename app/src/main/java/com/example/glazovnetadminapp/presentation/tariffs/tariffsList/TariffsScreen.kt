@@ -131,12 +131,12 @@ fun TariffsScreen(
                         val backgroundColor by animateColorAsState(
                             if (selectedCategoryIndex == index) MaterialTheme.colorScheme.primary
                             else MaterialTheme.colorScheme.primaryContainer,
-                            label = "color"
+                            label = "TariffTypeButtonBackgroundColor"
                         )
                         val textColor by animateColorAsState(
                             if (selectedCategoryIndex == index) MaterialTheme.colorScheme.onPrimary
                             else MaterialTheme.colorScheme.onPrimaryContainer,
-                            label = "color"
+                            label = "TariffTypeButtonTextColor"
                         )
                         Box(
                             modifier = Modifier
@@ -301,27 +301,25 @@ private fun TariffsCard(
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
-            .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shape = MaterialTheme.shapes.medium
-            )
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(vertical = 8.dp)
                 .animateContentSize()
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.Start
         ) {
             if (filteredTariffs.isEmpty()) {
                 Text(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp),
                     text = stringResource(id = R.string.tariffs_not_found_text),
                     color = MaterialTheme.colorScheme.error
                 )
             } else {
                 LazyColumn(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp),
                     content = {
                         items(
                             items = filteredTariffs,
@@ -332,10 +330,13 @@ private fun TariffsCard(
                             }
                             Column(
                                 modifier = Modifier
+
                                     .fillMaxWidth()
                                     .clickable {
                                         isOptionsButtonsExpanded = !isOptionsButtonsExpanded
                                     }
+                                    .padding(horizontal = 8.dp)
+
                             ) {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(

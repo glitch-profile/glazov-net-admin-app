@@ -41,14 +41,12 @@ fun PostCard(
         Box(
             modifier = Modifier
                 .padding(bottom = 8.dp)
+                .fillMaxWidth()
+                .clip(MaterialTheme.shapes.medium)
                 .clickable {
                     onClick.invoke()
                 }
-                .fillMaxWidth()
-                .background(
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    shape = MaterialTheme.shapes.medium
-                )
+                .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
             Column(
                 modifier = modifier
