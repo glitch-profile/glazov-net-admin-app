@@ -86,7 +86,7 @@ fun EditPostScreen(
     } else {
         Icons.Filled.KeyboardArrowDown
     }
-    var textFiledSize by remember {
+    var textFieldSize by remember {
         mutableStateOf(Size.Zero)
     }
 
@@ -186,7 +186,7 @@ fun EditPostScreen(
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                         .onGloballyPositioned { coordinates ->
-                            textFiledSize = coordinates.size.toSize()
+                            textFieldSize = coordinates.size.toSize()
                         },
 
                     label = {
@@ -210,7 +210,7 @@ fun EditPostScreen(
                         isDropdownExpanded = false
                     },
                     modifier = Modifier
-                        .width(with(LocalDensity.current) { textFiledSize.width.toDp() })
+                        .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                 ) {
                     PostType.values().forEachIndexed { index, postType ->
                         DropdownMenuItem(

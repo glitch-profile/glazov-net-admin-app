@@ -25,28 +25,14 @@ class AnnouncementsViewModel @Inject constructor(
     private var _announcementToEdit = MutableStateFlow<AnnouncementModel?>(null)
     val announcementToEdit = _announcementToEdit.asStateFlow()
 
-    private var _citiesList = MutableStateFlow(emptyList<String>())
-    val citiesList = _citiesList.asStateFlow()
-    private var _streetsList = MutableStateFlow(emptyList<String>())
-    val streetsList = _streetsList.asStateFlow()
+    private var _citiesSearchText = MutableStateFlow("")
+    val citiesSearchText = _citiesSearchText.asStateFlow()
+    private var _streetsSearchText = MutableStateFlow("")
+    val streetsSearchText = _streetsSearchText.asStateFlow()
 
-    fun getCitiesList(
-        cityName: String
-    ) {
-        viewModelScope.launch {
-            val list = announcementsUseCase.getCitiesList(cityName)
-            _citiesList.update { list }
-        }
-    }
-
-    fun getStreetsList(
-        cityName: String,
-        streetName: String
-    ) {
-        viewModelScope.launch {
-            val list = announcementsUseCase.getStreetsList(cityName, streetName)
-            _streetsList.update { list }
-        }
+    init {
+        _citiesSearchText.debounce(3000L)
+        _streetsSearchText.debounce(300L)
     }
 
 }
