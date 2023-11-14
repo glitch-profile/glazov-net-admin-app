@@ -10,7 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://82.179.120.30:8080/" //notebook
+private const val BASE_URL = "http://82.179.120.193:8080/" //notebook
 //private const val BASE_URL = "http://146.120.105.211:8080/" //computer
 
 @Module

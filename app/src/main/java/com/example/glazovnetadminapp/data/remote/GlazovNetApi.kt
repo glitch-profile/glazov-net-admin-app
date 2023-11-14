@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.data.remote
 
+import com.example.glazovnetadminapp.entity.AddressModelDto
 import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.announcementsDto.AnnouncementModelDto
 import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
@@ -81,14 +82,23 @@ interface GlazovNetApi {
 
     @GET("$ADDRESS_PATH/getcitieslist")
     suspend fun getCitiesList(
-        @Query("name") city: String
+        @Query("city") city: String,
+        @Query("api_key") apiKey: String
     ): List<String>
 
     @GET("$ADDRESS_PATH/getstreetslist")
     suspend fun getStreetsList(
         @Query("city") city: String,
-        @Query("name") street: String
+        @Query("street") street: String,
+        @Query("api_key") apiKey: String
     ): List<String>
+
+    @GET("$ADDRESS_PATH/getaddresses")
+    suspend fun getAddresses(
+        @Query("city") city: String,
+        @Query("street") street: String,
+        @Query("api_key") apiKey: String
+    ): List<AddressModelDto>
 
     //ANNOUNCEMENTS
 
