@@ -133,12 +133,9 @@ fun AddAnnouncementScreen(
             Divider(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(4.dp))
             AddressSearchScreen(
-                onAddFilter = { filter ->
-                    val newFiltersList = filters.toMutableList()
-                    newFiltersList.add(filter)
-                    filters = newFiltersList.sortedBy {
-                        "${it.city}${it.street}${it.houseNumber / 1000f}"
-                    }
+                onTextChanged = { citySearch, streetSearch ->
+                    viewModel.updateSearch(citySearch, streetSearch)
+
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -156,7 +153,7 @@ fun AddAnnouncementScreen(
 
 @Composable
 private fun AddressSearchScreen(
-    onAddFilter: (AddressFilterElement) -> Unit = {}
+    onTextChanged: (String, String) -> Unit
 ) {
     var city by remember {
         mutableStateOf("")
@@ -183,6 +180,7 @@ private fun AddressSearchScreen(
                 value = city,
                 onValueChange = {
                     city = it
+                    onTextChanged.invoke(city, street)
                 },
                 label = {
                     Text(
@@ -203,6 +201,7 @@ private fun AddressSearchScreen(
                 value = street,
                 onValueChange = {
                     street = it
+                    onTextChanged.invoke(city, street)
                 },
                 label = {
                     Text(
