@@ -9,6 +9,7 @@ import com.example.glazovnetadminapp.domain.useCases.AnnouncementsUseCase
 import com.example.glazovnetadminapp.entity.AddressModelDto
 import com.example.glazovnetadminapp.presentation.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,6 +17,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -36,28 +39,32 @@ class AnnouncementsViewModel @Inject constructor(
     val announcementToEdit = _announcementToEdit.asStateFlow()
 
     private var _citiesSearchText = MutableStateFlow("")
-    val citiesSearchText = _citiesSearchText.asStateFlow()
+    private val citiesSearchJob = _citiesSearchText
+        .debounce(500)
+        .distinctUntilChanged()
+        .flowOn(Dispatchers.IO)
+        .onEach {
+            searchForAddresses(
+                _citiesSearchText.value,
+                _streetsSearchText.value
+            )
+        }
+        .launchIn(viewModelScope)
     private var _streetsSearchText = MutableStateFlow("")
-    val streetsSearchText = _streetsSearchText.asStateFlow()
+    private val streetsSearchJob = _streetsSearchText
+        .debounce(500)
+        .distinctUntilChanged()
+        .flowOn(Dispatchers.IO)
+        .onEach {
+            searchForAddresses(
+                _citiesSearchText.value,
+                _streetsSearchText.value
+            )
+        }
+        .launchIn(viewModelScope)
 
-    private val _filteredAddresses = combine(_citiesSearchText, _streetsSearchText) {cityText, streetText ->
-        Log.i("TAG", "Search should go now with params: $cityText, $streetText")
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.Eagerly, //TODO:Change to WhileSubscribed
-        emptyList<AddressModelDto>() //TODO:Add Model Element
-    )
-
-
-    init {
-        _filteredAddresses
-            .debounce(500)
-            .distinctUntilChanged()
-            .onEach {
-                Log.i("TAG", "Search should go now!: ")
-            }
-            .launchIn(viewModelScope)
-    }
+    private var _addresses = MutableStateFlow<List<AddressFilterElement>>(emptyList())
+    val addresses = _addresses.asStateFlow()
 
     fun updateSearch(
         citySearch: String,
@@ -67,6 +74,21 @@ class AnnouncementsViewModel @Inject constructor(
             _citiesSearchText.update { citySearch }
             _streetsSearchText.update { streetSearch }
         }
+    }
+
+    fun searchForAddresses(
+        city: String,
+        street: String
+    ) {
+        viewModelScope.launch {
+            if (city.isNotBlank() && street.isNotBlank()) {
+                Log.i("TAG", "searchForAddresses: Searching now!")
+                val addresses = announcementsUseCase.getAddresses(city, street)
+                _addresses.update { addresses }
+            }
+            else _addresses.update { emptyList() }
+        }
+
     }
 
 }

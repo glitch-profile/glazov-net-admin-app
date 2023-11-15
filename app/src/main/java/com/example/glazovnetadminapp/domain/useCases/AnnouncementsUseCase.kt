@@ -4,6 +4,7 @@ import com.example.glazovnetadminapp.data.mappers.toAnnouncementModelDto
 import com.example.glazovnetadminapp.data.repository.AddressApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
+import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.domain.models.announcements.AnnouncementModel
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
@@ -61,6 +62,14 @@ class AnnouncementsUseCase @Inject constructor(
                 apiKey = apiKey
             )
         } else emptyList()
+    }
+
+    suspend fun getAddresses(
+        cityName: String,
+        streetName: String
+    ): List<AddressFilterElement> {
+        val apiKey = localSettingsRepository.getSavedApiKey()
+        return addressApiRepository.getAddresses(cityName, streetName, apiKey)
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.domain.repository
 
+import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.entity.AddressModelDto
 
 interface AddressApiRepository {
@@ -26,6 +27,6 @@ interface AddressApiRepository {
         cityName: String,
         streetName: String,
         apiKey: String
-    ): List<AddressModelDto>
+    ): List<AddressFilterElement>
 
 }

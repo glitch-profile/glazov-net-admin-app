@@ -13,7 +13,7 @@ fun AnnouncementModelDto.toAnnouncementModel(): AnnouncementModel {
             AddressFilterElement(
                 city = element[0],
                 street = element[1],
-                houseNumber = element[2].toInt()
+                houseNumber = element[2]
             )
         } catch (e: Exception) {
             null
@@ -33,9 +33,9 @@ fun AnnouncementModel.toAnnouncementModelDto(): AnnouncementModelDto {
     val announcementCreationDate = this.creationDate.format(DateTimeFormatter.ISO_DATE_TIME)
     val filtersList = this.filters.map { element ->
         listOf(
-            element.city,
-            element.street,
-            element.houseNumber.toString()
+            element.city.lowercase(),
+            element.street.lowercase(),
+            element.houseNumber
         )
     }
     return AnnouncementModelDto(
