@@ -69,7 +69,7 @@ class PostsScreenViewModel @Inject constructor(
                     _state.update {
                         if (result.data != null) {
                             it.copy(
-                                data = result.data.filterNotNull(),
+                                data = result.data,
                                 isLoading = false
                             )
                         } else {
@@ -81,7 +81,6 @@ class PostsScreenViewModel @Inject constructor(
                     }
                 }
                 is Resource.Error -> {
-                    Log.i("TAG", "getAllPosts: loading failed!!")
                     _state.update {
                         it.copy(
                             isLoading = false,

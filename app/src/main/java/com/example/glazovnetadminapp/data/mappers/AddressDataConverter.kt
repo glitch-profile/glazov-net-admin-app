@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.domain.useCases
+package com.example.glazovnetadminapp.data.mappers
 
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.entity.AddressModelDto
