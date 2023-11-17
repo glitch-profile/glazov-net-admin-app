@@ -84,21 +84,21 @@ interface GlazovNetApi {
     suspend fun getCitiesList(
         @Query("city") city: String,
         @Query("api_key") apiKey: String
-    ): List<String>
+    ): ApiResponseDto<List<String>>
 
     @GET("$ADDRESS_PATH/getstreetslist")
     suspend fun getStreetsList(
         @Query("city") city: String,
         @Query("street") street: String,
         @Query("api_key") apiKey: String
-    ): List<String>
+    ): ApiResponseDto<List<String>>
 
     @GET("$ADDRESS_PATH/getaddresses")
     suspend fun getAddresses(
         @Query("city") city: String,
         @Query("street") street: String,
         @Query("api_key") apiKey: String
-    ): List<AddressModelDto>
+    ): ApiResponseDto<List<AddressModelDto>>
 
     //ANNOUNCEMENTS
 

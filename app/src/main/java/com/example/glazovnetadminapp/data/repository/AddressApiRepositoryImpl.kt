@@ -4,7 +4,7 @@ import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.domain.repository.AddressApiRepository
 import com.example.glazovnetadminapp.domain.useCases.toAddressFilterElement
-import com.example.glazovnetadminapp.entity.AddressModelDto
+import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
 
 class AddressApiRepositoryImpl @Inject constructor(
@@ -14,22 +14,46 @@ class AddressApiRepositoryImpl @Inject constructor(
         cityName: String,
         streetName: String,
         apiKey: String
-    ): List<String> {
+    ): Resource<List<String>> {
         return try {
-            api.getStreetsList(cityName, streetName, apiKey)
+            val result = api.getStreetsList(cityName, streetName, apiKey)
+            if (result.status) {
+                Resource.Success(
+                    data = result.data,
+                    message = result.message
+                )
+            } else {
+                Resource.Error(
+                    message = result.message
+                )
+            }
         } catch (e: Exception) {
-            emptyList()
+            Resource.Error(
+                message = e.message.toString()
+            )
         }
     }
 
     override suspend fun getCitiesWithName(
         cityName: String,
         apiKey: String
-    ): List<String> {
+    ): Resource<List<String>> {
         return try {
-            api.getCitiesList(cityName, apiKey)
+            val result = api.getCitiesList(cityName, apiKey)
+            if (result.status) {
+                Resource.Success(
+                    data = result.data,
+                    message = result.message
+                )
+            } else {
+                Resource.Error(
+                    message = result.message
+                )
+            }
         } catch (e: Exception) {
-            emptyList()
+            Resource.Error(
+                message = e.message.toString()
+            )
         }
     }
 
@@ -38,15 +62,31 @@ class AddressApiRepositoryImpl @Inject constructor(
         streetName: String,
         houseNumber: String,
         apiKey: String
-    ): Boolean {
+    ): Resource<Boolean> {
         TODO("Not yet implemented")
     }
 
-    //TODO:Rework to resource class
-    override suspend fun getAddresses(cityName: String, streetName: String, apiKey: String): List<AddressFilterElement> {
-        val addresses = api.getAddresses(cityName, streetName, apiKey)
-        return addresses.map {
-            it.toAddressFilterElement()
-        }.flatten()
+    override suspend fun getAddresses(
+        cityName: String,
+        streetName: String,
+        apiKey: String
+    ): Resource<List<AddressFilterElement>> {
+        return try {
+            val addresses = api.getAddresses(cityName, streetName, apiKey)
+            if (addresses.status) {
+                Resource.Success(
+                    data = addresses.data.map { it.toAddressFilterElement() }.flatten(),
+                    message = addresses.message
+                )
+            } else {
+                Resource.Error(
+                    message = addresses.message
+                )
+            }
+        } catch (e: Exception) {
+            Resource.Error(
+                message = e.message.toString()
+            )
+        }
     }
 }

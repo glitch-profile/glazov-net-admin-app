@@ -1,6 +1,9 @@
 package com.example.glazovnetadminapp.presentation.announcements
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +20,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,12 +40,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
+import com.example.glazovnetadminapp.domain.models.posts.PostType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -158,6 +169,9 @@ private fun AddressSearchScreen(
     var city by remember {
         mutableStateOf("")
     }
+    val cityList by remember {
+        mutableStateOf(listOf("Glazov", "Glazov", "Glazov"))
+    }
     var street by remember {
         mutableStateOf("")
     }
@@ -174,26 +188,55 @@ private fun AddressSearchScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            OutlinedTextField(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(0.4f),
-                value = city,
-                onValueChange = {
-                    city = it
-                    onTextChanged.invoke(city, street)
-                },
-                label = {
-                    Text(
-                        text = "City"
-                    )
-                },
-                singleLine = true
-            )
-//            TextFieldWithCompletionDropdown(
-//                onTextChanges = {},
-//                label = "city",
-//                dropdownElements = listOf("123", "345", "678", "343", "334", "3434")
-//            )
+                    .fillMaxWidth(0.4f)
+            ) {
+                val interactionSource = remember { MutableInteractionSource() }
+                val isTextFocused = interactionSource.collectIsFocusedAsState()
+                val focusManager = LocalFocusManager.current
+                var textFieldSize by remember {
+                    mutableStateOf(Size.Zero)
+                }
+                OutlinedTextField(
+                    value = city,
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onGloballyPositioned { coordinates ->
+                            textFieldSize = coordinates.size.toSize()
+                        },
+                    label = {
+                        Text(
+                            text = "Select city"
+                        )
+                    },
+                    interactionSource = interactionSource
+                )
+                DropdownMenu(
+                    expanded = isTextFocused.value,
+                    onDismissRequest = {
+                        focusManager.clearFocus()
+                    },
+                    modifier = Modifier
+                        .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                ) {
+                    cityList.forEachIndexed { index, cityString ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = cityString
+                                )
+                            },
+                            onClick = {
+                                city = cityString
+                                focusManager.clearFocus()
+                            }
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.width(4.dp))
             OutlinedTextField(
                 modifier = Modifier
@@ -211,108 +254,8 @@ private fun AddressSearchScreen(
                 singleLine = true
             )
         }
-//        Spacer(modifier = Modifier.height(4.dp))
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth(),
-//            horizontalArrangement = Arrangement.SpaceBetween
-//        ) {
-//            TextButton(
-//                onClick = {
-//                    city = ""
-//                    street = ""
-//                    houseNumber = ""
-//                }
-//            ) {
-//                Text(text = "Clear all")
-//            }
-//            Button(
-//                onClick = {
-//                    onAddFilter.invoke(
-//                        AddressFilterElement(
-//                            city = city,
-//                            street = street,
-//                            houseNumber = houseNumber.toInt()
-//                        )
-//                    )
-//                }
-//            ) {
-//                Text(text = "Add filter")
-//            }
-//        }
-
     }
 }
-
-//@Composable
-//private fun TextFieldWithCompletionDropdown(
-//    modifier: Modifier = Modifier,
-//    defaultTextFieldValue: String = "",
-//    onTextChanges: (String) -> Unit,
-//    onTextComplete: (String) -> Unit = {},
-//    isEnabled: Boolean = true,
-//    label: String,
-//    singleLine: Boolean = true,
-//    dropdownElements: List<String>
-//) {
-//    var textFieldSize by remember {
-//        mutableStateOf(Size.Zero)
-//    }
-//    var textFieldValue by remember {
-//        mutableStateOf(defaultTextFieldValue)
-//    }
-//    var isDropdownExpanded by remember {
-//        mutableStateOf(false)
-//    }
-//    val interactionSource = remember { MutableInteractionSource() }
-//    val isFocused = interactionSource.collectIsFocusedAsState().value
-//    val focusManager = LocalFocusManager.current
-//
-//    Column(
-//        modifier = modifier
-//    ) {
-//        OutlinedTextField(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .onGloballyPositioned { coordinates ->
-//                    textFieldSize = coordinates.size.toSize()
-//                } ,
-//            value = textFieldValue,
-//            onValueChange = {
-//                textFieldValue = it
-//                onTextChanges.invoke(it)
-//            },
-//            label = {
-//                Text(text = label)
-//            },
-//            singleLine = singleLine,
-//            readOnly = !isEnabled,
-//            interactionSource = interactionSource
-//        )
-//        DropdownMenu(
-//            modifier = Modifier
-//                .width(with(LocalDensity.current) {textFieldSize.width.toDp()} ),
-//            expanded = isFocused && isEnabled,
-//            onDismissRequest = {},
-//            properties = PopupProperties(
-//                focusable = false
-//            )
-//        ) {
-//            dropdownElements.forEach { element ->
-//                DropdownMenuItem(
-//                    text = {
-//                           Text(text = element)
-//                    },
-//                    onClick = {
-//                        textFieldValue = element
-//                        onTextComplete.invoke(element)
-//                        focusManager.clearFocus()
-//                    }
-//                )
-//            }
-//        }
-//    }
-//}
 
 @Composable
 private fun FiltersScreen(

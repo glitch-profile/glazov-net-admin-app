@@ -76,7 +76,7 @@ class AnnouncementsViewModel @Inject constructor(
         }
     }
 
-    fun searchForAddresses(
+    private fun searchForAddresses(
         city: String,
         street: String
     ) {
@@ -84,7 +84,7 @@ class AnnouncementsViewModel @Inject constructor(
             if (city.isNotBlank() && street.isNotBlank()) {
                 Log.i("TAG", "searchForAddresses: Searching now!")
                 val addresses = announcementsUseCase.getAddresses(city, street)
-                _addresses.update { addresses }
+                _addresses.update { addresses.data ?: emptyList() }
             }
             else _addresses.update { emptyList() }
         }
