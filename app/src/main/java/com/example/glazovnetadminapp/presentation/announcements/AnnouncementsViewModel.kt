@@ -11,6 +11,7 @@ import com.example.glazovnetadminapp.presentation.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -28,15 +29,15 @@ class AnnouncementsViewModel @Inject constructor(
     private val announcementsUseCase: AnnouncementsUseCase
 ) : ViewModel() {
 
-    private var _state = MutableStateFlow(ScreenState<AnnouncementModel>())
+    private val _state = MutableStateFlow(ScreenState<AnnouncementModel>())
     val state = _state.asStateFlow()
-    private var _addressesState = MutableStateFlow(ScreenState<AddressFilterElement>())
+    private val _addressesState = MutableStateFlow(ScreenState<AddressFilterElement>())
     val addressesState = _addressesState.asStateFlow()
 
-    private var _announcementToEdit = MutableStateFlow<AnnouncementModel?>(null)
+    private val _announcementToEdit = MutableStateFlow<AnnouncementModel?>(null)
     val announcementToEdit = _announcementToEdit.asStateFlow()
 
-    private var _citiesSearchText = MutableStateFlow("")
+    private val _citiesSearchText = MutableStateFlow("")
     private val citiesSearchJob = _citiesSearchText
         .debounce(500)
         .distinctUntilChanged()
@@ -48,7 +49,10 @@ class AnnouncementsViewModel @Inject constructor(
             )
         }
         .launchIn(viewModelScope)
-    private var _streetsSearchText = MutableStateFlow("")
+    private val _citiesList = MutableStateFlow<List<String>>(emptyList())
+    val citiesList = _citiesList.asStateFlow()
+
+    private val _streetsSearchText = MutableStateFlow("")
     private val streetsSearchJob = _streetsSearchText
         .debounce(500)
         .distinctUntilChanged()
@@ -61,6 +65,10 @@ class AnnouncementsViewModel @Inject constructor(
         }
         .launchIn(viewModelScope)
 
+    init {
+        loadCitiesList()
+    }
+
     fun updateSearch(
         citySearch: String,
         streetSearch: String
@@ -68,6 +76,15 @@ class AnnouncementsViewModel @Inject constructor(
         viewModelScope.launch {
             _citiesSearchText.update { citySearch }
             _streetsSearchText.update { streetSearch }
+        }
+    }
+
+    private fun loadCitiesList() {
+        viewModelScope.launch {
+            val result = announcementsUseCase.getCitiesList("")
+            _citiesList.update {
+                result.data ?: emptyList()
+            }
         }
     }
 

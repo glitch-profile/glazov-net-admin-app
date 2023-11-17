@@ -1,7 +1,6 @@
 package com.example.glazovnetadminapp.presentation.announcements
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -51,7 +50,6 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
-import com.example.glazovnetadminapp.domain.models.posts.PostType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,9 +64,7 @@ fun AddAnnouncementScreen(
     var text by remember {
         mutableStateOf(announcement?.text ?: "")
     }
-    var filters by rememberSaveable {
-        mutableStateOf(announcement?.filters ?: emptyList())
-    }
+    val citiesList = viewModel.citiesList.collectAsState().value
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -144,38 +140,34 @@ fun AddAnnouncementScreen(
             Divider(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(4.dp))
             AddressSearchScreen(
+                citiesList = citiesList,
                 onTextChanged = { citySearch, streetSearch ->
                     viewModel.updateSearch(citySearch, streetSearch)
 
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
-            FiltersScreen(
-                filters = filters,
-                onRemoveFilter = { filter ->
-                    val newFilters = filters.toMutableList()
-                    newFilters.remove(filter)
-                    filters = newFilters
-                }
-            )
+//            FiltersScreen(
+//                filters = filters,
+//                onRemoveFilter = { filter ->
+//                    val newFilters = filters.toMutableList()
+//                    newFilters.remove(filter)
+//                    filters = newFilters
+//                }
+//            )
         }
     }
 }
 
 @Composable
 private fun AddressSearchScreen(
+    citiesList: List<String>,
     onTextChanged: (String, String) -> Unit
 ) {
     var city by remember {
         mutableStateOf("")
     }
-    val cityList by remember {
-        mutableStateOf(listOf("Glazov", "Glazov", "Glazov"))
-    }
     var street by remember {
-        mutableStateOf("")
-    }
-    var houseNumber by remember {
         mutableStateOf("")
     }
     Column(
@@ -222,19 +214,34 @@ private fun AddressSearchScreen(
                     modifier = Modifier
                         .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                 ) {
-                    cityList.forEachIndexed { index, cityString ->
+                    if (citiesList.isEmpty()) {
                         DropdownMenuItem(
                             text = {
                                 Text(
-                                    text = cityString
+                                    text = stringResource(id = R.string.app_text_loading)
                                 )
                             },
                             onClick = {
-                                city = cityString
                                 focusManager.clearFocus()
-                            }
+                            },
+                            enabled = false
                         )
+                    } else {
+                        citiesList.forEach { cityString ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = cityString
+                                    )
+                                },
+                                onClick = {
+                                    city = cityString
+                                    focusManager.clearFocus()
+                                }
+                            )
+                        }
                     }
+
                 }
             }
             Spacer(modifier = Modifier.width(4.dp))
@@ -260,6 +267,7 @@ private fun AddressSearchScreen(
 @Composable
 private fun FiltersScreen(
     filters: List<AddressFilterElement>,
+    onAddFilter: (AddressFilterElement) -> Unit,
     onRemoveFilter: (AddressFilterElement) -> Unit
 ) {
     Column(
