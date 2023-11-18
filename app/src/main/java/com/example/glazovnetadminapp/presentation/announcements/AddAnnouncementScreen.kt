@@ -65,6 +65,7 @@ fun AddAnnouncementScreen(
         mutableStateOf(announcement?.text ?: "")
     }
     val citiesList = viewModel.citiesList.collectAsState().value
+    val addresses = viewModel.addressesState.collectAsState().value
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -147,14 +148,15 @@ fun AddAnnouncementScreen(
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
-//            FiltersScreen(
-//                filters = filters,
-//                onRemoveFilter = { filter ->
-//                    val newFilters = filters.toMutableList()
-//                    newFilters.remove(filter)
-//                    filters = newFilters
-//                }
-//            )
+            AddressesScreen(
+                addresses = addresses.data,
+                onSelectAddress = {
+
+                },
+                onRemoveAddress = {
+
+                }
+            )
         }
     }
 }
@@ -236,6 +238,7 @@ private fun AddressSearchScreen(
                                 },
                                 onClick = {
                                     city = cityString
+                                    onTextChanged.invoke(city, street)
                                     focusManager.clearFocus()
                                 }
                             )
@@ -265,17 +268,17 @@ private fun AddressSearchScreen(
 }
 
 @Composable
-private fun FiltersScreen(
-    filters: List<AddressFilterElement>,
-    onAddFilter: (AddressFilterElement) -> Unit,
-    onRemoveFilter: (AddressFilterElement) -> Unit
+private fun AddressesScreen(
+    addresses: List<AddressFilterElement>,
+    onSelectAddress: (AddressFilterElement) -> Unit,
+    onRemoveAddress: (AddressFilterElement) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
     ) {
-        filters.forEach { filter ->
+        addresses.forEach { addressElement ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -285,14 +288,14 @@ private fun FiltersScreen(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(0.9f),
-                    text = "${filter.city}, ${filter.street}, ${filter.houseNumber}",
+                    text = "${addressElement.city}, ${addressElement.street}, ${addressElement.houseNumber}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 IconButton(
                     modifier = Modifier
                         .size(35.dp),
                     onClick = {
-                        onRemoveFilter.invoke(filter)
+                        onSelectAddress.invoke(addressElement)
                     }
                 ) {
                     Icon(

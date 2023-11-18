@@ -49,7 +49,7 @@ class AnnouncementsViewModel @Inject constructor(
             )
         }
         .launchIn(viewModelScope)
-    private val _citiesList = MutableStateFlow<List<String>>(emptyList())
+    private val _citiesList = MutableStateFlow(ScreenState<String>())
     val citiesList = _citiesList.asStateFlow()
 
     private val _streetsSearchText = MutableStateFlow("")
@@ -81,9 +81,28 @@ class AnnouncementsViewModel @Inject constructor(
 
     private fun loadCitiesList() {
         viewModelScope.launch {
+            _citiesList.update {
+                it.copy(
+                    isLoading = true,
+                    message = null
+                )
+            }
             val result = announcementsUseCase.getCitiesList("")
             _citiesList.update {
-                result.data ?: emptyList()
+                when (result) {
+                    is Resource.Success -> {
+                        it.copy(
+                            data = result.data ?: emptyList(),
+                            isLoading = false
+                        )
+                    }
+                    is Resource.Error -> {
+                        it.copy(
+                            isLoading = false,
+                            message = "Error"
+                        )
+                    }
+                }
             }
         }
     }
