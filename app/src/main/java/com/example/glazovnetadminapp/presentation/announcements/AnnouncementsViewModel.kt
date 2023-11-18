@@ -33,6 +33,8 @@ class AnnouncementsViewModel @Inject constructor(
     val state = _state.asStateFlow()
     private val _addressesState = MutableStateFlow(ScreenState<AddressFilterElement>())
     val addressesState = _addressesState.asStateFlow()
+    private val _selectedAddresses = MutableStateFlow<List<AddressFilterElement>>(emptyList())
+    val selectedAddresses = _selectedAddresses.asStateFlow()
 
     private val _announcementToEdit = MutableStateFlow<AnnouncementModel?>(null)
     val announcementToEdit = _announcementToEdit.asStateFlow()
@@ -123,7 +125,7 @@ class AnnouncementsViewModel @Inject constructor(
                     when (val addresses = announcementsUseCase.getAddresses(city, street)) {
                         is Resource.Success -> {
                             it.copy(
-                                data = addresses.data!!,
+                                data = addresses.data!!.map { checkIfAddressAlreadySelected(it) },
                                 isLoading = false,
                                 message = addresses.message
                             )
@@ -140,13 +142,55 @@ class AnnouncementsViewModel @Inject constructor(
                 }
             } else _addressesState.update {
                 it.copy(
-                    data = emptyList(),
+                    data = selectedAddresses.value.reversed(),
                     isLoading = false,
-                    message = "not enough arguments"
+                    message = "showing selected addresses"
+                )
+            }
+        }
+    }
+
+    private fun checkIfAddressAlreadySelected(
+        address: AddressFilterElement
+    ): AddressFilterElement {
+        val isAddressSelected = selectedAddresses.value.any { selectedAddress ->
+            selectedAddress.city == address.city
+                    && selectedAddress.street == address.street
+                    && selectedAddress.houseNumber == address.houseNumber
+        }
+        return if (isAddressSelected) {
+            address.copy(isSelected = true)
+        } else address
+    }
+
+    fun changeSelectionOfAddressElement(
+        addressFilterElement: AddressFilterElement
+    ) {
+        val addressesList = addressesState.value.data.toMutableList()
+        val addressIndex = addressesList.indexOfFirst { it == addressFilterElement }
+        if (addressIndex != -1) {
+            addressesList[addressIndex] = addressFilterElement.copy(
+                isSelected = !addressFilterElement.isSelected
+            )
+            _addressesState.update { state ->
+                state.copy(
+                    data = addressesList
                 )
             }
         }
 
+        val selectedAddresses = selectedAddresses.value.toMutableList()
+        if (addressFilterElement.isSelected) {
+            selectedAddresses.remove(addressFilterElement)
+        } else {
+            selectedAddresses.add(
+                addressFilterElement.copy(
+                    isSelected = true
+                )
+            )
+        }
+        _selectedAddresses.update {
+            selectedAddresses
+        }
     }
-
 }

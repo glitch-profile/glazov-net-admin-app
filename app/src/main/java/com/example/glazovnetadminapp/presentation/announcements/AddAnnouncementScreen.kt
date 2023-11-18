@@ -1,6 +1,9 @@
 package com.example.glazovnetadminapp.presentation.announcements
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -100,13 +104,13 @@ fun AddAnnouncementScreen(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
                 .padding(values)
-                .padding(horizontal = 16.dp)
         ) {
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
                     .padding(top = 4.dp),
                 label = {
                     Text(
@@ -125,6 +129,7 @@ fun AddAnnouncementScreen(
                 onValueChange = { text = it },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
                     .padding(top = 4.dp),
                 label = {
                     Text(
@@ -141,20 +146,19 @@ fun AddAnnouncementScreen(
             Divider(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(4.dp))
             AddressSearchScreen(
-                citiesList = citiesList,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                citiesList = citiesList.data,
                 onTextChanged = { citySearch, streetSearch ->
                     viewModel.updateSearch(citySearch, streetSearch)
 
                 }
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             AddressesScreen(
                 addresses = addresses.data,
-                onSelectAddress = {
-
-                },
-                onRemoveAddress = {
-
+                onSelectionChange = { addressElement ->
+                    viewModel.changeSelectionOfAddressElement(addressElement)
                 }
             )
         }
@@ -163,6 +167,7 @@ fun AddAnnouncementScreen(
 
 @Composable
 private fun AddressSearchScreen(
+    modifier: Modifier = Modifier,
     citiesList: List<String>,
     onTextChanged: (String, String) -> Unit
 ) {
@@ -173,7 +178,7 @@ private fun AddressSearchScreen(
         mutableStateOf("")
     }
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         Row(
@@ -270,8 +275,7 @@ private fun AddressSearchScreen(
 @Composable
 private fun AddressesScreen(
     addresses: List<AddressFilterElement>,
-    onSelectAddress: (AddressFilterElement) -> Unit,
-    onRemoveAddress: (AddressFilterElement) -> Unit
+    onSelectionChange: (AddressFilterElement) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -279,9 +283,19 @@ private fun AddressesScreen(
             .animateContentSize()
     ) {
         addresses.forEach { addressElement ->
+            val backgroundColor by animateColorAsState(
+                if (addressElement.isSelected) MaterialTheme.colorScheme.primaryContainer
+                else MaterialTheme.colorScheme.background,
+                label = "AddressRowBackgroundColor"
+            )
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .background(backgroundColor)
+                    .fillMaxWidth()
+                    .clickable {
+                        onSelectionChange.invoke(addressElement)
+                    }
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -289,21 +303,8 @@ private fun AddressesScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.9f),
                     text = "${addressElement.city}, ${addressElement.street}, ${addressElement.houseNumber}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyLarge
                 )
-                IconButton(
-                    modifier = Modifier
-                        .size(35.dp),
-                    onClick = {
-                        onSelectAddress.invoke(addressElement)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Clear,
-                        tint = MaterialTheme.colorScheme.primary,
-                        contentDescription = "remove filter"
-                    )
-                }
             }
         }
     }
