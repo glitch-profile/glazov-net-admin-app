@@ -36,7 +36,7 @@ class AnnouncementsViewModel @Inject constructor(
     private val _selectedAddresses = MutableStateFlow<List<AddressFilterElement>>(emptyList())
     val selectedAddresses = _selectedAddresses.asStateFlow()
 
-    private val _announcementToEdit = MutableStateFlow<AnnouncementModel?>(null)
+    private val _announcementToEdit = MutableStateFlow(ScreenState<AnnouncementModel>())
     val announcementToEdit = _announcementToEdit.asStateFlow()
 
     private val _citiesSearchText = MutableStateFlow("")
@@ -191,6 +191,69 @@ class AnnouncementsViewModel @Inject constructor(
         }
         _selectedAddresses.update {
             selectedAddresses
+        }
+    }
+
+    fun createAnnouncement(
+        title: String,
+        text: String,
+    ) {
+        viewModelScope.launch {
+            _announcementToEdit.update {
+                it.copy(
+                    isLoading = true,
+                    message = "getting announcement"
+                )
+            }
+            val announcement = AnnouncementModel(
+                id = "",
+                title = title,
+                text = text,
+                filters = _selectedAddresses.value,
+                creationDate = null
+            )
+            _announcementToEdit.update {
+                it.copy(
+                    message = "uploading announcement"
+                )
+            }
+            val result = announcementsUseCase.createAnnouncement(announcement)
+            if (result.data != null) {
+                val announcementsList = _state.value.data.toMutableList()
+                announcementsList.add(
+                    index = 0,
+                    element = result.data
+                )
+                _state.update {
+                    it.copy(
+                        data = announcementsList
+                    )
+                }
+                _announcementToEdit.update {
+                    it.copy(
+                        isLoading = false,
+                        message = "completed"
+                    )
+                }
+            } else {
+                _announcementToEdit.update {
+                    it.copy(
+                        isLoading = false,
+                        message = result.message ?: "unknown error"
+                    )
+                }
+            }
+        }
+    }
+
+    fun clearSelectedAddresses() {
+        viewModelScope.launch{
+            _selectedAddresses.update { emptyList() }
+            val currentAddressesList = _addressesState.value.data
+            val newAddressesList = currentAddressesList.map { it.copy(isSelected = false) }
+            _addressesState.update {
+                it.copy( data = newAddressesList )
+            }
         }
     }
 }
