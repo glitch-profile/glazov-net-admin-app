@@ -30,7 +30,7 @@ fun AnnouncementModelDto.toAnnouncementModel(): AnnouncementModel {
 }
 
 fun AnnouncementModel.toAnnouncementModelDto(): AnnouncementModelDto {
-    val announcementCreationDate = this.creationDate.format(DateTimeFormatter.ISO_DATE_TIME)
+    val announcementCreationDate = this.creationDate?.format(DateTimeFormatter.ISO_DATE_TIME) ?: ""
     val filtersList = this.filters.map { element ->
         listOf(
             element.city.lowercase(),

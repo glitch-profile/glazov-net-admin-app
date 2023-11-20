@@ -7,5 +7,5 @@ data class AnnouncementModel(
     val filters: List<AddressFilterElement>,
     val title: String,
     val text: String,
-    val creationDate: OffsetDateTime
+    val creationDate: OffsetDateTime? = null
 )
