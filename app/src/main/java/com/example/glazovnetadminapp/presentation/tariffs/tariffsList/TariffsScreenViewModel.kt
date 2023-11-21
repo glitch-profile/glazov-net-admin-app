@@ -150,31 +150,21 @@ class TariffsScreenViewModel @Inject constructor(
         }
     }
 
-    @Deprecated(message = "Use deleteTariff with tariffModel instead", level = DeprecationLevel.WARNING)
     fun removeTariff(
-        tariffId: String
+        tariff: TariffModel
     ) {
         viewModelScope.launch {
-            val result = tariffsUseCase.deleteTariff(tariffId)
+            val result = tariffsUseCase.deleteTariff(tariff.id)
             if (result.data == true) {
-                val tariffIndex = state.value.data.indexOfFirst {
-                    it.id == tariffId
-                }
-                if (tariffIndex == -1) return@launch
-                else {
-                    val newTariffsList = state.value.data.toMutableList()
-                    newTariffsList.removeAt(tariffIndex)
+                val tariffsList = state.value.data.toMutableList()
+                if (tariffsList.remove(tariff)) {
                     _state.update {
-                        it.copy(
-                            data = newTariffsList
-                        )
+                        it.copy(data = tariffsList)
                     }
                 }
             } else {
                 _state.update {
-                    it.copy(
-                        message = result.message
-                    )
+                    it.copy(message = result.message )
                 }
             }
         }

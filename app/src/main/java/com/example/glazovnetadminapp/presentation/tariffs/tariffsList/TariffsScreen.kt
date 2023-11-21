@@ -330,13 +330,11 @@ private fun TariffsCard(
                             }
                             Column(
                                 modifier = Modifier
-
                                     .fillMaxWidth()
                                     .clickable {
                                         isOptionsButtonsExpanded = !isOptionsButtonsExpanded
                                     }
                                     .padding(horizontal = 8.dp)
-
                             ) {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
@@ -374,7 +372,7 @@ private fun TariffsCard(
                                     ) {
                                         TextButton(
                                             onClick = {
-                                                viewModel.removeTariff(tariff.id)
+                                                viewModel.removeTariff(tariff)
                                             }
                                         ) {
                                             Text(
