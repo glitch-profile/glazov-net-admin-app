@@ -66,7 +66,7 @@ fun PostDetailScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        viewModel.deletePost(post!!.postId)
+                        viewModel.deletePost(post!!)
                         showDeleteConfirmationDialog = false
                     }
                 ) {

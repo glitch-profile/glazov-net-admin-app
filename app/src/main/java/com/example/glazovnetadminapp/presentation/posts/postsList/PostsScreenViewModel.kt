@@ -93,25 +93,23 @@ class PostsScreenViewModel @Inject constructor(
     }
 
     fun deletePost(
-        postIdToDelete: String
+        postModel: PostModel
     ) {
-        viewModelScope.launch {
-            val result = postsUseCase.deletePostById(postIdToDelete)
-            //TODO("add state messages")
+        viewModelScope.launch{
+            val result = postsUseCase.deletePostById(postModel.postId)
             if (result.data == true) {
-                val postIndex = state.value.data.indexOfFirst { post ->
-                    post.postId == postIdToDelete }
-                if (postIndex == -1) {
-                    return@launch
-                } else {
-                    val newPostsList = state.value.data.toMutableList()
-                    newPostsList.removeAt(postIndex)
+                val postList = state.value.data.toMutableList()
+                if (postList.remove(postModel)) {
                     _state.update {
-                        it.copy(
-                            data = newPostsList
-                        )
+                        it.copy(data = postList)
                     }
+                }
+                if (openedPostModel.value?.postId == postModel.postId) {
                     setPostToViewDetails(null)
+                }
+            } else {
+                _state.update {
+                    it.copy(message = result.message)
                 }
             }
         }

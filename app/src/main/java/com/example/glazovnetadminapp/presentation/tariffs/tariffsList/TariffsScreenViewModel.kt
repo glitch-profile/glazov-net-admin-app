@@ -150,7 +150,7 @@ class TariffsScreenViewModel @Inject constructor(
         }
     }
 
-    //TODO:(Add data checking inside viewModel)
+    @Deprecated(message = "Use deleteTariff with tariffModel instead", level = DeprecationLevel.WARNING)
     fun removeTariff(
         tariffId: String
     ) {
