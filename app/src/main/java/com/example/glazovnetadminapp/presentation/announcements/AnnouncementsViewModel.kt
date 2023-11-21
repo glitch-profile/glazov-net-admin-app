@@ -71,6 +71,68 @@ class AnnouncementsViewModel @Inject constructor(
         loadCitiesList()
     }
 
+
+    //announcementScreen staff
+    fun getAllAnnouncements() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                    message = null
+                )
+            }
+            val result = announcementsUseCase.getAnnouncements()
+            when (result) {
+                is Resource.Success -> {
+                    _state.update {
+                        if (result.data!!.isNotEmpty()) {
+                            it.copy(
+                                data = result.data,
+                                isLoading = false
+                            )
+                        } else {
+                            it.copy(
+                                isLoading = false,
+                                message = result.message
+                            )
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            message = result.message
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun deleteAnnouncement(
+        announcement: AnnouncementModel
+    ) {
+        viewModelScope.launch {
+            val result = announcementsUseCase.deleteAnnouncement(announcement.id)
+            if (result.data == true) {
+                val announcementsList = state.value.data.toMutableList()
+                if (announcementsList.remove(announcement)) {
+                    _state.update {
+                        it.copy(data = announcementsList)
+                    }
+                }
+            } else {
+                _state.update {
+                    it.copy(
+                        message = result.message
+                    )
+                }
+            }
+        }
+    }
+
+    //AddAnnouncement staff below
     fun updateSearch(
         citySearch: String,
         streetSearch: String
