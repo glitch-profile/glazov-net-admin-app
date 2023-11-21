@@ -2,7 +2,6 @@ package com.example.glazovnetadminapp.domain.repository
 
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.domain.util.Resource
-import com.example.glazovnetadminapp.entity.AddressModelDto
 
 interface AddressApiRepository {
 

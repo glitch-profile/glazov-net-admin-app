@@ -1,9 +1,9 @@
 package com.example.glazovnetadminapp.data.repository
 
+import com.example.glazovnetadminapp.data.mappers.toAddressFilterElement
 import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.domain.repository.AddressApiRepository
-import com.example.glazovnetadminapp.data.mappers.toAddressFilterElement
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
 

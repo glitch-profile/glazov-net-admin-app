@@ -68,12 +68,12 @@ fun PostCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = post.shortDescription ?: post.fullDescription,
                     style = MaterialTheme.typography.bodyMedium,
