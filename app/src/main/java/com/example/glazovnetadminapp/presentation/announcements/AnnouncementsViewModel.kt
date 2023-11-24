@@ -66,6 +66,7 @@ class AnnouncementsViewModel @Inject constructor(
         .launchIn(viewModelScope)
 
     init {
+        getAllAnnouncements()
         loadCitiesList()
     }
 
