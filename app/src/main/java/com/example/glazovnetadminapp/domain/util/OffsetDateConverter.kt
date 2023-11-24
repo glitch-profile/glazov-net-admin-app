@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun OffsetDateTime.convertDaysOffsetToString(
-    daysPattern: String = "dd.MM.yy",
+    daysPattern: String = "dd MMMM yyyy",
     timePattern: String = "HH:mm"
 ): String {
     val zoneCorrectlyDateTime = this.atZoneSameInstant(ZoneId.systemDefault())
