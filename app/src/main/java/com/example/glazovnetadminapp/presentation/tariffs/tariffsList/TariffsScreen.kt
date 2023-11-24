@@ -160,7 +160,11 @@ fun TariffsScreen(
                     item { Spacer(modifier = Modifier.width(16.dp)) }
                 }
             )
-            FilterScreen(viewModel)
+            FilterScreen(
+                onTariffNameTextChanging = {filterString ->
+                    viewModel.updateNameFilter(filterString)
+                }
+            )
             if (state.value.isLoading) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -241,7 +245,7 @@ fun TariffsScreen(
 
 @Composable
 private fun FilterScreen(
-    viewModel: TariffsScreenViewModel
+    onTariffNameTextChanging: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -252,15 +256,20 @@ private fun FilterScreen(
         var isExpanded by remember {
             mutableStateOf(false)
         }
-        val nameFilterText = viewModel.nameFilter.collectAsState()
+        var nameFilterText by remember{
+            mutableStateOf("")
+        }
         AnimatedVisibility(visible = isExpanded) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = nameFilterText.value,
-                    onValueChange = { viewModel.updateNameFilter(it) },
+                    value = nameFilterText,
+                    onValueChange = {
+                        nameFilterText = it
+                        onTariffNameTextChanging.invoke(it)
+                    },
                     singleLine = true,
                     label = {
                         Text(
@@ -294,13 +303,12 @@ private fun TariffsCard(
     tariffType: TariffType,
     viewModel: TariffsScreenViewModel
 ) {
-    val filteredTariffs = tariffs.filter {
-        it.category == tariffType
+    val filteredTariffs = remember(tariffs) {
+        tariffs.filter { it.category == tariffType }
     }
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .animateContentSize()
             .clip(MaterialTheme.shapes.medium)
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
@@ -314,8 +322,9 @@ private fun TariffsCard(
             if (filteredTariffs.isEmpty()) {
                 Text(
                     modifier = Modifier
-                        .padding(vertical = 8.dp),
+                        .padding(8.dp),
                     text = stringResource(id = R.string.tariffs_not_found_text),
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.error
                 )
             } else {
