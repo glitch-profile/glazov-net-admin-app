@@ -57,6 +57,12 @@
     <string name="edit_tariff_max_speed_text">Max speed</string>
     <string name="edit_tariff_cost_text">Cost</string>
 
+    <string name="add_announcement_title_placeholer">Announcement title</string>
+    <string name="add_announcement_text_placeholder">Announcement text</string>
+    <string name="add_announcement_city_placeholder">City</string>
+    <string name="add_announcement_street_placeholder">Street</string>
+    <string name="add_announcement_clear_filters_button">Clear addresses</string>
+    
     <string name="settings_api_key_text">API key</string>
     <string name="settings_api_key_not_found_text">API key not found</string>
     <string name="settings_api_key_description">The API key is needed to increase security. Without it, you will not be able to make changes to the database.</string>

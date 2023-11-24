@@ -11,11 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,7 +29,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.announcements.AnnouncementModel
-import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
 
 @Composable

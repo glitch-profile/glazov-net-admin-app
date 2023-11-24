@@ -52,6 +52,11 @@
     <string name="tariffs_not_found_text">Тарифы не найдены</string>
     <string name="app_delete_button">Удалить</string>
     <string name="app_edit_button">Редактировать</string>
+    <string name="add_announcement_title_placeholer">Заголовок обьявления</string>
+    <string name="add_announcement_text_placeholder">Текст обьявления</string>
+    <string name="add_announcement_city_placeholder">Город</string>
+    <string name="add_announcement_street_placeholder">Улица</string>
+    <string name="add_announcement_clear_filters_button">Очистить адреса</string>
     <string name="settings_api_key_text">API ключ</string>
     <string name="settings_api_key_not_found_text">API ключ не найден</string>
     <string name="settings_api_key_description">АPI ключ нужен для того, что бы увеличить безопасность. Без него вы не сможете вносить изменения в базу данных.</string>

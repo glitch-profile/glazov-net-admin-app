@@ -123,7 +123,7 @@ fun AddAnnouncementScreen(
                         .padding(top = 4.dp),
                     label = {
                         Text(
-                            text = stringResource(id = R.string.edit_tariff_name_text)
+                            text = stringResource(id = R.string.add_announcement_title_placeholer)
                         )
                     },
                     supportingText = {
@@ -142,7 +142,7 @@ fun AddAnnouncementScreen(
                         .padding(top = 4.dp),
                     label = {
                         Text(
-                            text = stringResource(id = R.string.edit_tariff_description_text)
+                            text = stringResource(id = R.string.add_announcement_text_placeholder)
                         )
                     },
                     supportingText = {
@@ -194,7 +194,7 @@ fun AddAnnouncementScreen(
                             viewModel.clearSelectedAddresses()
                         }
                     ) {
-                        Text(text = "Clear selected filters")
+                        Text(text = stringResource(id = R.string.add_announcement_clear_filters_button))
                     }
                     Button(
                         onClick = {
@@ -202,7 +202,7 @@ fun AddAnnouncementScreen(
                         },
                         enabled = title.isNotBlank() && text.isNotBlank() && !state.isLoading
                     ) {
-                        Text(text = "Confirm")
+                        Text(text = stringResource(id = R.string.app_button_dialog_confirm))
                     }
                 }
             }
@@ -253,7 +253,7 @@ private fun AddressSearchScreen(
                         },
                     label = {
                         Text(
-                            text = "Select city"
+                            text = stringResource(id = R.string.add_announcement_city_placeholder)
                         )
                     },
                     interactionSource = interactionSource
@@ -322,7 +322,7 @@ private fun AddressSearchScreen(
                 },
                 label = {
                     Text(
-                        text = "Street"
+                        text = stringResource(id = R.string.add_announcement_street_placeholder)
                     )
                 },
                 trailingIcon = {
@@ -373,7 +373,7 @@ private fun AddressesScreen(
             ) {
                 Text(
                     modifier = Modifier
-                        .fillMaxWidth(0.9f),
+                        .fillMaxWidth(),
                     text = "${addressElement.city}, ${addressElement.street}, ${addressElement.houseNumber}",
                     style = MaterialTheme.typography.bodyLarge
                 )
