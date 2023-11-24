@@ -1,9 +1,12 @@
 package com.example.glazovnetadminapp.domain.repository
 
+import android.content.SharedPreferences
+
 interface LocalSettingsRepository {
 
-    fun getSavedApiKey(): String
+    val preferences: SharedPreferences
 
+    fun getSavedApiKey(): String
     fun setSavedApiKey(apiKey: String?)
 
 }
