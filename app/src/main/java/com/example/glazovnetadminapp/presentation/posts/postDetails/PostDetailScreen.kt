@@ -141,7 +141,7 @@ fun PostDetailScreen(
             if (post != null) {
                 Text(
                     text = post.title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     softWrap = true,
                     maxLines = 2
                 )

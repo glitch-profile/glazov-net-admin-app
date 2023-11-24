@@ -57,7 +57,7 @@ fun PostCard(
             ) {
                 Text(
                     text = post.title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     softWrap = true,
                     maxLines = 2
