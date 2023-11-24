@@ -92,17 +92,15 @@ fun AnnouncementsScreen(
                     textAlign = TextAlign.Center
                 )
             } else {
-                if (state.message != null) {
-                    state.message?.let {
-                        RequestErrorScreen(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            errorText = it,
-                            onActionButtonClick = {
-                                viewModel.getAllAnnouncements()
-                            }
-                        )
-                    }
+                state.message?.let {
+                    RequestErrorScreen(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        errorText = it,
+                        onActionButtonClick = {
+                            viewModel.getAllAnnouncements()
+                        }
+                    )
                 }
                 LazyColumn(
                     modifier = Modifier
@@ -114,7 +112,9 @@ fun AnnouncementsScreen(
                         ) {announcement ->
                             AnnouncementCard(
                                 announcement = announcement,
-                                onDeleteAnnouncement = {}
+                                onDeleteAnnouncement = {
+                                    viewModel.deleteAnnouncement(it)
+                                }
                             )
                         }
                     }
