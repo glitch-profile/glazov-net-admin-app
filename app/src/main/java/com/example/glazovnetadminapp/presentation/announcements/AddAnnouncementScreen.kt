@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -35,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,6 +57,7 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
+import com.example.glazovnetadminapp.presentation.ScreenState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,94 +103,109 @@ fun AddAnnouncementScreen(
             )
         }
     ) { values ->
-        val scrollState = rememberScrollState()
-
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .verticalScroll(scrollState)
                 .padding(values)
+                .fillMaxSize()
         ) {
-            OutlinedTextField(
-                value = title,
-                onValueChange = { title = it },
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 4.dp),
-                label = {
-                    Text(
-                        text = stringResource(id = R.string.edit_tariff_name_text)
-                    )
-                },
-                supportingText = {
-                    Text(
-                        text = stringResource(id = R.string.app_text_field_required)
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 4.dp),
-                label = {
-                    Text(
-                        text = stringResource(id = R.string.edit_tariff_description_text)
-                    )
-                },
-                supportingText = {
-                    Text(
-                        text = stringResource(id = R.string.app_text_field_required)
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Divider(modifier = Modifier.fillMaxWidth())
-            Spacer(modifier = Modifier.height(4.dp))
-            AddressSearchScreen(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
-                citiesList = citiesList.data,
-                onTextChanged = { citySearch, streetSearch ->
-                    viewModel.updateSearch(citySearch, streetSearch)
-
-                }
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
             ) {
-                TextButton(
-                    onClick = {
-                        viewModel.clearSelectedAddresses()
-                    }
-                ) {
-                    Text(text = "Clear selected filters")
-                }
-                Button(
-                    onClick = {
-                        viewModel.createAnnouncement(title, text)
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 4.dp),
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.edit_tariff_name_text)
+                        )
                     },
-                    enabled = title.isNotBlank() && text.isNotBlank() && !state.isLoading
+                    supportingText = {
+                        Text(
+                            text = stringResource(id = R.string.app_text_field_required)
+                        )
+                    }
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 4.dp),
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.edit_tariff_description_text)
+                        )
+                    },
+                    supportingText = {
+                        Text(
+                            text = stringResource(id = R.string.app_text_field_required)
+                        )
+                    }
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Divider(modifier = Modifier.fillMaxWidth())
+                Spacer(modifier = Modifier.height(4.dp))
+                AddressSearchScreen(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp),
+                    citiesList = citiesList,
+                    onTextChanged = { citySearch, streetSearch ->
+                        viewModel.updateSearch(citySearch, streetSearch)
+
+                    }
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                AddressesScreen(
+                    addresses = addresses.data,
+                    onSelectionChange = { addressElement ->
+                        viewModel.changeSelectionOfAddressElement(addressElement)
+                    }
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
+                        shape = RoundedCornerShape(
+                            topStart = 10.dp,
+                            topEnd = 10.dp
+                        )
+                    )
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Confirm")
+                    TextButton(
+                        onClick = {
+                            viewModel.clearSelectedAddresses()
+                        }
+                    ) {
+                        Text(text = "Clear selected filters")
+                    }
+                    Button(
+                        onClick = {
+                            viewModel.createAnnouncement(title, text)
+                        },
+                        enabled = title.isNotBlank() && text.isNotBlank() && !state.isLoading
+                    ) {
+                        Text(text = "Confirm")
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(4.dp))
-            AddressesScreen(
-                addresses = addresses.data,
-                onSelectionChange = { addressElement ->
-                    viewModel.changeSelectionOfAddressElement(addressElement)
-                }
-            )
         }
     }
 }
@@ -194,7 +213,7 @@ fun AddAnnouncementScreen(
 @Composable
 private fun AddressSearchScreen(
     modifier: Modifier = Modifier,
-    citiesList: List<String>,
+    citiesList: ScreenState<String>,
     onTextChanged: (String, String) -> Unit
 ) {
     var city by remember {
@@ -247,7 +266,7 @@ private fun AddressSearchScreen(
                     modifier = Modifier
                         .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                 ) {
-                    if (citiesList.isEmpty()) {
+                    if (citiesList.isLoading) {
                         DropdownMenuItem(
                             text = {
                                 Text(
@@ -260,18 +279,32 @@ private fun AddressSearchScreen(
                             enabled = false
                         )
                     } else {
-                        citiesList.forEach { cityString ->
+                        if (citiesList.data.isNotEmpty()) {
+                            citiesList.data.forEach { cityString ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = cityString
+                                        )
+                                    },
+                                    onClick = {
+                                        city = cityString
+                                        onTextChanged.invoke(city, street)
+                                        focusManager.clearFocus()
+                                    }
+                                )
+                            }
+                        } else {
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        text = cityString
+                                        text = citiesList.message.toString()
                                     )
                                 },
                                 onClick = {
-                                    city = cityString
-                                    onTextChanged.invoke(city, street)
                                     focusManager.clearFocus()
-                                }
+                                },
+                                enabled = false
                             )
                         }
                     }
@@ -346,6 +379,5 @@ private fun AddressesScreen(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(36.dp))
     }
 }
