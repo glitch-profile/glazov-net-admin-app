@@ -37,6 +37,7 @@ class AnnouncementsViewModel @Inject constructor(
     private val _announcementToEdit = MutableStateFlow(ScreenState<AnnouncementModel>())
     val announcementToEdit = _announcementToEdit.asStateFlow()
 
+
     private val _citiesSearchText = MutableStateFlow("")
     private val citiesSearchJob = _citiesSearchText
         .debounce(300)
@@ -258,6 +259,7 @@ class AnnouncementsViewModel @Inject constructor(
     fun createAnnouncement(
         title: String,
         text: String,
+        callback: (result: Boolean) -> Unit
     ) {
         viewModelScope.launch {
             _announcementToEdit.update {
@@ -296,6 +298,7 @@ class AnnouncementsViewModel @Inject constructor(
                         message = "completed"
                     )
                 }
+                callback.invoke(true)
             } else {
                 _announcementToEdit.update {
                     it.copy(
@@ -303,6 +306,7 @@ class AnnouncementsViewModel @Inject constructor(
                         message = result.message ?: "unknown error"
                     )
                 }
+                callback.invoke(false)
             }
         }
     }
@@ -315,6 +319,20 @@ class AnnouncementsViewModel @Inject constructor(
             _addressesState.update {
                 it.copy( data = newAddressesList )
             }
+        }
+    }
+
+    //TODO:Rework function to work properly
+    fun setAnnouncementToEdit(
+        announcement: AnnouncementModel?
+    ) {
+        viewModelScope.launch {
+            _announcementToEdit.update {
+                ScreenState(
+                    data = if (announcement != null) listOf(announcement) else emptyList()
+                )
+            }
+            _selectedAddresses.update { announcement?.filters ?: emptyList()}
         }
     }
 }

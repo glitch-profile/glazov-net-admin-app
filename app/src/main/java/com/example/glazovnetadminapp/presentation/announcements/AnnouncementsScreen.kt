@@ -60,7 +60,10 @@ fun AnnouncementsScreen(
                 },
                 actions = {
                     IconButton(
-                        onClick = { navController.navigate("add_announcement") }
+                        onClick = {
+                            //viewModel.setAnnouncementToEdit(null)
+                            navController.navigate("add_announcement")
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,

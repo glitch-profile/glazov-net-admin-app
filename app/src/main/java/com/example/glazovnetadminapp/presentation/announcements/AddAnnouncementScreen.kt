@@ -1,5 +1,6 @@
 package com.example.glazovnetadminapp.presentation.announcements
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -38,6 +39,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -48,6 +51,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,6 +71,7 @@ import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.presentation.ScreenState
+import kotlinx.coroutines.launch
 import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,6 +91,8 @@ fun AddAnnouncementScreen(
     val addresses = viewModel.addressesState.collectAsState().value
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -111,6 +118,9 @@ fun AddAnnouncementScreen(
                 },
                 scrollBehavior = scrollBehavior
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { values ->
         Column(
@@ -230,7 +240,14 @@ fun AddAnnouncementScreen(
                         }
                         Button(
                             onClick = {
-                                viewModel.createAnnouncement(title, text)
+                                viewModel.createAnnouncement(title, text) { result ->
+                                    coroutineScope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            if (result) "Announcement added"
+                                            else "Error occurred"
+                                        )
+                                    }
+                                }
                             },
                             enabled = title.isNotBlank() && text.isNotBlank() && !state.isLoading
                         ) {
