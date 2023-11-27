@@ -18,7 +18,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -111,6 +113,29 @@ fun HomeScreen(
                     navController.navigate("tariffs")
                 },
                 iconVector = Icons.Default.List
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "Experimental",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(start = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            MenuButton(
+                text = "Clients",
+                isEnable = false,
+                onClick = {
+                },
+                iconVector = Icons.Default.Person
+            )
+            MenuButton(
+                text = "Sandbox",
+                isEnable = false,
+                onClick = {
+                },
+                iconVector = Icons.Default.Warning
             )
 
             Spacer(modifier = Modifier.height(24.dp))
