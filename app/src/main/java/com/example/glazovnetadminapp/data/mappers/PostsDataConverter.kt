@@ -28,7 +28,7 @@ fun PostModelDto.toPostModel(): PostModel {
         postType = postType,
         image = imageModel
     )
-} //Конвертируем Dto в PostModel с корректными данными
+}
 
 fun PostModel.toPostModelDto(): PostModelDto {
     val postCreationDateTime = creationDate.format(DateTimeFormatter.ISO_DATE_TIME)
