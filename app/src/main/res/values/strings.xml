@@ -62,6 +62,11 @@
     <string name="add_announcement_city_placeholder">City</string>
     <string name="add_announcement_street_placeholder">Street</string>
     <string name="add_announcement_clear_filters_button">Clear addresses</string>
+    <plurals name="add_announcement_addresses_counter">
+        <item quantity="one">%d address is selected</item>
+        <item quantity="other">%d addresses are selected</item>
+    </plurals>
+    <string name="add_announcement_instruction_text">Start filtering addresses by selecting a city and start typing the beginning of the desired street</string>
     
     <string name="settings_api_key_text">API key</string>
     <string name="settings_api_key_not_found_text">API key not found</string>

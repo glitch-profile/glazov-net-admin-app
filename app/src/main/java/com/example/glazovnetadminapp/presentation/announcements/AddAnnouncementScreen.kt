@@ -1,7 +1,10 @@
 package com.example.glazovnetadminapp.presentation.announcements
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateRectAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -23,6 +26,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
@@ -31,6 +35,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -46,18 +51,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.presentation.ScreenState
+import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -172,38 +182,60 @@ fun AddAnnouncementScreen(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
             }
+            val selectedAddresses = viewModel.selectedAddresses.collectAsState().value
+            val bottomBarCornerRadius = animateDpAsState(
+                targetValue = if(selectedAddresses.isNotEmpty()) 16.dp else 0.dp,
+                label = "bottomBarCornerRadius"
+            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                         shape = RoundedCornerShape(
-                            topStart = 20.dp,
-                            topEnd = 20.dp
+                            topStart = bottomBarCornerRadius.value,
+                            topEnd = bottomBarCornerRadius.value
                         )
                     )
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        //.padding(horizontal = 16.dp, vertical = 4.dp),
-                        .padding(10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    TextButton(
-                        onClick = {
-                            viewModel.clearSelectedAddresses()
+                Column {
+                    AnimatedVisibility(visible = selectedAddresses.isNotEmpty()) {
+                        Column {
+                            val clampedSelectedAddressesCount = max(selectedAddresses.size, 1)
+                            Text(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                text = pluralStringResource(
+                                    id = R.plurals.add_announcement_addresses_counter,
+                                    count = clampedSelectedAddressesCount,
+                                    formatArgs = arrayOf(clampedSelectedAddressesCount)
+                                ),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Divider(modifier = Modifier.fillMaxWidth())
                         }
-                    ) {
-                        Text(text = stringResource(id = R.string.add_announcement_clear_filters_button))
                     }
-                    Button(
-                        onClick = {
-                            viewModel.createAnnouncement(title, text)
-                        },
-                        enabled = title.isNotBlank() && text.isNotBlank() && !state.isLoading
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = stringResource(id = R.string.app_button_dialog_confirm))
+                        OutlinedButton(
+                            onClick = {
+                                viewModel.clearSelectedAddresses()
+                            }
+                        ) {
+                            Text(text = stringResource(id = R.string.add_announcement_clear_filters_button))
+                        }
+                        Button(
+                            onClick = {
+                                viewModel.createAnnouncement(title, text)
+                            },
+                            enabled = title.isNotBlank() && text.isNotBlank() && !state.isLoading
+                        ) {
+                            Text(text = stringResource(id = R.string.app_button_dialog_confirm))
+                        }
                     }
                 }
             }
@@ -355,6 +387,24 @@ private fun AddressesScreen(
             .fillMaxWidth()
             .animateContentSize()
     ) {
+        AnimatedVisibility(visible = addresses.isEmpty()) {
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Info,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.width(24.dp))
+                Text(
+                    text = stringResource(id = R.string.add_announcement_instruction_text),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
         addresses.forEach { addressElement ->
             val backgroundColor by animateColorAsState(
                 if (addressElement.isSelected) MaterialTheme.colorScheme.primaryContainer

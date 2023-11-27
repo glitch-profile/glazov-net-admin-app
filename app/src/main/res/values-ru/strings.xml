@@ -57,6 +57,11 @@
     <string name="add_announcement_city_placeholder">Город</string>
     <string name="add_announcement_street_placeholder">Улица</string>
     <string name="add_announcement_clear_filters_button">Очистить адреса</string>
+    <plurals name="add_announcement_addresses_counter">
+        <item quantity="one">Выбран %d адрес</item>
+        <item quantity="few">Выбрано %d адреса</item>
+        <item quantity="many">Выбрано %d адресов</item>
+    </plurals>
     <string name="settings_api_key_text">API ключ</string>
     <string name="settings_api_key_not_found_text">API ключ не найден</string>
     <string name="settings_api_key_description">АPI ключ нужен для того, что бы увеличить безопасность. Без него вы не сможете вносить изменения в базу данных.</string>
@@ -71,4 +76,5 @@
     <string name="app_button_close">Закрыть</string>
     <string name="app_button_fix_now">Исправить</string>
     <string name="tariff_cost_text_suffix">руб./мес.</string>
+    <string name="add_announcement_instruction_text">Начните фильтрацию адресов с того, что выберите город и начнёте вводить начало нужной улицы</string>
 </resources>
