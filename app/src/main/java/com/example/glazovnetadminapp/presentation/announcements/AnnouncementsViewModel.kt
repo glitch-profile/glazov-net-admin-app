@@ -39,7 +39,7 @@ class AnnouncementsViewModel @Inject constructor(
 
     private val _citiesSearchText = MutableStateFlow("")
     private val citiesSearchJob = _citiesSearchText
-        .debounce(500)
+        .debounce(300)
         .distinctUntilChanged()
         .flowOn(Dispatchers.IO)
         .onEach {
@@ -54,7 +54,7 @@ class AnnouncementsViewModel @Inject constructor(
 
     private val _streetsSearchText = MutableStateFlow("")
     private val streetsSearchJob = _streetsSearchText
-        .debounce(500)
+        .debounce(300)
         .distinctUntilChanged()
         .flowOn(Dispatchers.IO)
         .onEach {
