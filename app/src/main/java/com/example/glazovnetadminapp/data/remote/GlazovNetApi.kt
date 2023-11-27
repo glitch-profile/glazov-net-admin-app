@@ -3,6 +3,7 @@ package com.example.glazovnetadminapp.data.remote
 import com.example.glazovnetadminapp.entity.AddressModelDto
 import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.announcementsDto.AnnouncementModelDto
+import com.example.glazovnetadminapp.entity.clientsDto.ClientModelDto
 import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
 import com.example.glazovnetadminapp.entity.tariffsDto.TariffModelDto
 import retrofit2.http.Body
@@ -118,4 +119,16 @@ interface GlazovNetApi {
     ): ApiResponseDto<List<AnnouncementModelDto>>
 
     //CLIENTS
+
+    @POST("$CLIENTS_PATH/create")
+    suspend fun createClient(
+        @Query("api_key") apiKey: String,
+        @Body client: ClientModelDto
+    ): ApiResponseDto<ClientModelDto>
+
+    @GET("$CLIENTS_PATH/getall")
+    suspend fun getAllClients(
+        @Query("api_key") apiKey: String
+    ): ApiResponseDto<List<ClientModelDto>>
+
 }
