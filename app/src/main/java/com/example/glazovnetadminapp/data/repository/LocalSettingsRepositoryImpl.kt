@@ -2,7 +2,6 @@ package com.example.glazovnetadminapp.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

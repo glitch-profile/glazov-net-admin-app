@@ -178,15 +178,16 @@ fun AddAnnouncementScreen(
                     .background(
                         color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                         shape = RoundedCornerShape(
-                            topStart = 10.dp,
-                            topEnd = 10.dp
+                            topStart = 20.dp,
+                            topEnd = 20.dp
                         )
                     )
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                        //.padding(horizontal = 16.dp, vertical = 4.dp),
+                        .padding(10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextButton(

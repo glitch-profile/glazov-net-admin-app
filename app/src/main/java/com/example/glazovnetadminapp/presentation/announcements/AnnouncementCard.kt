@@ -113,7 +113,7 @@ fun AnnouncementCard(
                         }
                     ) {
                         Text(
-                            text = "Use as base"
+                            text = stringResource(id = R.string.app_edit_button)
                         )
                     }
                 }

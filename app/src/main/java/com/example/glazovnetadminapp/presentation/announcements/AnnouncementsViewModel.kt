@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.presentation.announcements
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
