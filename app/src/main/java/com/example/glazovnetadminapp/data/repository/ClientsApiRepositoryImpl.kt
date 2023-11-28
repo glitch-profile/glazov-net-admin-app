@@ -8,7 +8,6 @@ import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.clientsDto.ClientModelDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import javax.inject.Inject
@@ -40,7 +39,7 @@ class ClientsApiRepositoryImpl @Inject constructor(
             } else {
                 Resource.Error(message = response.message)
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(message = e.message.toString())
         }
     }

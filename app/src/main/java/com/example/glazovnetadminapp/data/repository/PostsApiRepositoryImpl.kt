@@ -8,7 +8,6 @@ import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -39,7 +38,7 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -62,7 +61,7 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -84,7 +83,7 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -108,7 +107,7 @@ class PostsApiRepositoryImpl @Inject constructor(
                     response.message
                 )
             }
-        } catch (e:ResponseException) {
+        } catch (e:Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -132,7 +131,7 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -155,7 +154,7 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )

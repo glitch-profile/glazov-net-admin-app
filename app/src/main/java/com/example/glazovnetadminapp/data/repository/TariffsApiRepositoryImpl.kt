@@ -8,7 +8,6 @@ import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.tariffsDto.TariffModelDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -38,7 +37,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -62,7 +61,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -85,7 +84,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -109,7 +108,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )

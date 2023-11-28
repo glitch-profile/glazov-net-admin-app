@@ -8,7 +8,6 @@ import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.announcementsDto.AnnouncementModelDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -33,7 +32,7 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
                 data = response.data.map { it.toAnnouncementModel() },
                 message = response.message
             )
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -60,7 +59,7 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -86,7 +85,7 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             Resource.Error(
                 message = e.message.toString()
             )
