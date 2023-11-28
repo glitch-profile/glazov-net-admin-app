@@ -5,26 +5,41 @@ import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.tariffsDto.TariffModelDto
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import javax.inject.Inject
+import javax.inject.Named
+
+private const val PATH = "api/tariffs"
 
 class TariffsApiRepositoryImpl @Inject constructor(
-    private val api: GlazovNetApi
+    @Named("RestApi") private val client: HttpClient
 ): TariffsApiRepository {
     override suspend fun getAllTariffs(): Resource<List<TariffModel>> {
         return try {
-            val result = api.getAllTariffs()
-            if (result.status) {
+            val response: ApiResponseDto<List<TariffModelDto>> = client.get("$PATH/getall").body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data.map{ it.toTariffModel() },
-                    message = result.message
+                    data = response.data.map{ it.toTariffModel() },
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -33,21 +48,22 @@ class TariffsApiRepositoryImpl @Inject constructor(
 
     override suspend fun addTariff(apiKey: String, tariff: TariffModelDto): Resource<TariffModel?> {
         return try {
-            val result = api.addTariff(
-                apiKey = apiKey,
-                newTariff = tariff
-            )
-            if (result.status) {
+            val response: ApiResponseDto<List<TariffModelDto>> = client.post("$PATH/add") {
+                parameter("api_key", apiKey)
+                contentType(ContentType.Application.Json)
+                setBody(tariff)
+            }.body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data.firstOrNull()?.toTariffModel(),
-                    message = result.message
+                    data = response.data.firstOrNull()?.toTariffModel(),
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -56,21 +72,21 @@ class TariffsApiRepositoryImpl @Inject constructor(
 
     override suspend fun deleteTariff(apiKey: String, tariffId: String): Resource<Boolean> {
         return try {
-            val result = api.deleteTariffById(
-                apiKey = apiKey,
-                tariffId = tariffId
-            )
-            if (result.status) {
+            val response: ApiResponseDto<List<TariffModelDto>> = client.delete("$PATH/remove") {
+                parameter("api_key", apiKey)
+                parameter("tariff_id", tariffId)
+            }.body()
+            if (response.status) {
                 Resource.Success(
                     data = true,
-                    message = result.message
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -79,21 +95,22 @@ class TariffsApiRepositoryImpl @Inject constructor(
 
     override suspend fun updateTariff(apiKey: String, tariff: TariffModelDto): Resource<Boolean> {
         return try {
-            val result = api.editTariff(
-                apiKey = apiKey,
-                tariff = tariff
-            )
-            if (result.status) {
+            val response: ApiResponseDto<List<TariffModelDto>> = client.put("$PATH/edit") {
+                parameter("api_key", apiKey)
+                contentType(ContentType.Application.Json)
+                setBody(tariff)
+            }.body()
+            if (response.status) {
                 Resource.Success(
                     data = true,
-                    message = result.message
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )

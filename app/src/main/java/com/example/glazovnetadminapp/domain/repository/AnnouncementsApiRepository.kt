@@ -6,7 +6,9 @@ import com.example.glazovnetadminapp.entity.announcementsDto.AnnouncementModelDt
 
 interface AnnouncementsApiRepository {
 
-    suspend fun getAnnouncements(): Resource<List<AnnouncementModel>>
+    suspend fun getAnnouncements(
+        apiKey: String
+    ): Resource<List<AnnouncementModel>>
 
     suspend fun createAnnouncement(
         apiKey: String,

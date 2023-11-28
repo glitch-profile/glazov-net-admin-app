@@ -5,15 +5,22 @@ import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.clients.ClientModel
 import com.example.glazovnetadminapp.domain.repository.ClientsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.clientsDto.ClientModelDto
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import retrofit2.HttpException
 import javax.inject.Inject
+import javax.inject.Named
+
+private const val PATH = "api/clients"
 
 class ClientsApiRepositoryImpl @Inject constructor(
-    private val api: GlazovNetApi
+    @Named("RestApi") private val client: HttpClient
 ): ClientsApiRepository {
-
-    //TODO:Change return type of ClientModelDto to ClientModel
 
     override suspend fun createClient(
         apiKey: String,
@@ -24,17 +31,19 @@ class ClientsApiRepositoryImpl @Inject constructor(
 
     override suspend fun getClients(apiKey: String): Resource<List<ClientModel>> {
         return try {
-            val result = api.getAllClients(apiKey)
-            if (result.status) {
+            val response: ApiResponseDto<List<ClientModelDto>> = client.get("$PATH/getall") {
+                parameter("api_key", apiKey)
+            }.body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data.map { it.toClientModel() },
-                    message = result.message
+                    data = response.data.map { it.toClientModel() },
+                    message = response.message
                 )
             } else {
-                Resource.Error(message = result.message)
+                Resource.Error(message = response.message)
             }
-        } catch (e: HttpException) {
-            Resource.Error(message = e.code().toString())
+        } catch (e: ResponseException) {
+            Resource.Error(message = e.message.toString())
         }
     }
 
