@@ -5,26 +5,42 @@ import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import javax.inject.Inject
+import javax.inject.Named
+
+private const val PATH = "api/posts"
 
 class PostsApiRepositoryImpl @Inject constructor(
-    private val api: GlazovNetApi
+    @Named("RestApi") private val client: HttpClient
 ): PostsApiRepository {
+
     override suspend fun getAllPosts(): Resource<List<PostModel>> {
         return try {
-            val result = api.getAllPosts()
-            if (result.status) {
+            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/getall").body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data.map { it.toPostModel() },
-                    message = result.message
+                    data = response.data.map { it.toPostModel() },
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -33,18 +49,21 @@ class PostsApiRepositoryImpl @Inject constructor(
 
     override suspend fun getPostsList(limit: Int?, startIndex: Int?): Resource<List<PostModel>> {
         return try {
-            val result = api.getPostsList(limit = limit, startIndex = startIndex)
-            if (result.status) {
+            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/getposts") {
+                parameter("limit", limit)
+                parameter("start_index", startIndex)
+            }.body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data.map { it.toPostModel() },
-                    message = result.message
+                    data = response.data.map { it.toPostModel() },
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -53,18 +72,20 @@ class PostsApiRepositoryImpl @Inject constructor(
 
     override suspend fun getPostById(postId: String): Resource<PostModel?> {
         return try {
-            val result = api.getPostById(postId = postId)
-            if (result.status) {
+            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/get") {
+                parameter("post_id", postId)
+            }.body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data.firstOrNull()?.toPostModel(),
-                    message = result.message
+                    data = response.data.firstOrNull()?.toPostModel(),
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -73,18 +94,22 @@ class PostsApiRepositoryImpl @Inject constructor(
 
     override suspend fun addPost(apiKey: String, postModel: PostModelDto): Resource<PostModel?> {
         return try {
-            val result = api.addPost(postModel = postModel, apiKey = apiKey)
-            if (result.status) {
+            val response: ApiResponseDto<List<PostModelDto>> = client.post("$PATH/add") {
+                parameter("api_key", apiKey)
+                contentType(ContentType.Application.Json)
+                setBody(postModel)
+            }.body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data.firstOrNull()?.toPostModel(),
-                    message = result.message
+                    data = response.data.firstOrNull()?.toPostModel(),
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    result.message
+                    response.message
                 )
             }
-        } catch (e:Exception) {
+        } catch (e:ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -93,18 +118,22 @@ class PostsApiRepositoryImpl @Inject constructor(
 
     override suspend fun editPost(apiKey: String, postModel: PostModelDto): Resource<Boolean> {
         return try {
-            val result = api.editPost(postModel = postModel, apiKey = apiKey)
-            if (result.status) {
+            val response: ApiResponseDto<List<PostModelDto>> = client.put("$PATH/edit") {
+                parameter("api_key", apiKey)
+                contentType(ContentType.Application.Json)
+                setBody(postModel)
+            }.body()
+            if (response.status) {
                 Resource.Success(
                     data = true,
-                    message = result.message
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -113,18 +142,21 @@ class PostsApiRepositoryImpl @Inject constructor(
 
     override suspend fun deletePostById(apiKey: String, postId: String): Resource<Boolean> {
         return try {
-            val result = api.deletePostById(apiKey = apiKey, postId = postId)
-            if (result.status) {
+            val response: ApiResponseDto<List<PostModelDto>> = client.delete("$PATH/delete") {
+                parameter("api_key", apiKey)
+                parameter("post_id", postId)
+            }.body()
+            if (response.status) {
                 Resource.Success(
                     data = true,
-                    message = result.message
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
