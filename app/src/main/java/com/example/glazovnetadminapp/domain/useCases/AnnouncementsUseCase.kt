@@ -16,7 +16,10 @@ class AnnouncementsUseCase @Inject constructor(
 ) {
 
     suspend fun getAnnouncements(): Resource<List<AnnouncementModel>> {
-        return announcementsApiRepository.getAnnouncements()
+        val apiKey = localSettingsRepository.getSavedApiKey()
+        return announcementsApiRepository.getAnnouncements(
+            apiKey = apiKey
+        )
     }
 
     suspend fun createAnnouncement(
