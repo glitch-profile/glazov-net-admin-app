@@ -5,20 +5,36 @@ import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.announcements.AnnouncementModel
 import com.example.glazovnetadminapp.domain.repository.AnnouncementsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.announcementsDto.AnnouncementModelDto
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import javax.inject.Inject
+import javax.inject.Named
+
+private const val PATH = "api/announcements"
 
 class AnnouncementsApiRepositoryImpl @Inject constructor(
-    private val api: GlazovNetApi
+    @Named("RestApi") private val client: HttpClient
 ): AnnouncementsApiRepository {
-    override suspend fun getAnnouncements(): Resource<List<AnnouncementModel>> {
+    override suspend fun getAnnouncements(apiKey: String): Resource<List<AnnouncementModel>> {
         return try {
-            val result = api.getAnnouncements()
+            val response: ApiResponseDto<List<AnnouncementModelDto>> = client.get("$PATH/getall") {
+                parameter("api_key", apiKey)
+            }.body()
             Resource.Success(
-                data = result.data.map { it.toAnnouncementModel() },
-                message = result.message
+                data = response.data.map { it.toAnnouncementModel() },
+                message = response.message
             )
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -30,21 +46,22 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
         newAnnouncement: AnnouncementModelDto
     ): Resource<AnnouncementModel?> {
         return try {
-            val result = api.createNewAnnouncement(
-                apiKey,
-                newAnnouncement
-            )
-            if (result.status) {
+            val response: ApiResponseDto<List<AnnouncementModelDto>> = client.post("$PATH/create") {
+                parameter("api_key", apiKey)
+                contentType(ContentType.Application.Json)
+                setBody(newAnnouncement)
+            }.body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data.firstOrNull()?.toAnnouncementModel(),
-                    message = result.message
+                    data = response.data.firstOrNull()?.toAnnouncementModel(),
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -56,21 +73,21 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
         announcementId: String
     ): Resource<Boolean> {
         return try {
-            val result = api.deleteAnnouncement(
-                apiKey,
-                announcementId
-            )
-            if (result.status) {
+            val response: ApiResponseDto<List<AnnouncementModelDto>> = client.delete("$PATH/delete") {
+                parameter("api_key", apiKey)
+                parameter("id", announcementId)
+            }.body()
+            if (response.status) {
                 Resource.Success(
                     data = true,
-                    message = result.message
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )

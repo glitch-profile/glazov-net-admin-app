@@ -5,10 +5,20 @@ import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.domain.repository.AddressApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.entity.AddressModelDto
+import com.example.glazovnetadminapp.entity.ApiResponseDto
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import javax.inject.Inject
+import javax.inject.Named
+
+private const val PATH = "api/addressinfo"
 
 class AddressApiRepositoryImpl @Inject constructor(
-    private val api: GlazovNetApi
+    @Named("RestApi") private val client: HttpClient
 ): AddressApiRepository {
     override suspend fun getStreetsWithName(
         cityName: String,
@@ -16,18 +26,22 @@ class AddressApiRepositoryImpl @Inject constructor(
         apiKey: String
     ): Resource<List<String>> {
         return try {
-            val result = api.getStreetsList(cityName, streetName, apiKey)
-            if (result.status) {
+            val response: ApiResponseDto<List<String>> = client.get("$PATH/geetstreetslist") {
+                parameter("api_key", apiKey)
+                parameter("city", cityName)
+                parameter("street", streetName)
+            }.body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data,
-                    message = result.message
+                    data = response.data,
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -39,18 +53,21 @@ class AddressApiRepositoryImpl @Inject constructor(
         apiKey: String
     ): Resource<List<String>> {
         return try {
-            val result = api.getCitiesList(cityName, apiKey)
-            if (result.status) {
+            val response: ApiResponseDto<List<String>> = client.get("$PATH/getcitieslist") {
+                parameter("api_key", apiKey)
+                parameter("city", cityName)
+            }.body()
+            if (response.status) {
                 Resource.Success(
-                    data = result.data,
-                    message = result.message
+                    data = response.data,
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = result.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
@@ -72,18 +89,22 @@ class AddressApiRepositoryImpl @Inject constructor(
         apiKey: String
     ): Resource<List<AddressFilterElement>> {
         return try {
-            val addresses = api.getAddresses(cityName, streetName, apiKey)
-            if (addresses.status) {
+            val response: ApiResponseDto<List<AddressModelDto>> = client.get("$PATH/getaddresses") {
+                parameter("api_key", apiKey)
+                parameter("city", cityName)
+                parameter("street", streetName)
+            }.body()
+            if (response.status) {
                 Resource.Success(
-                    data = addresses.data.map { it.toAddressFilterElement() }.flatten(),
-                    message = addresses.message
+                    data = response.data.map { it.toAddressFilterElement() }.flatten(),
+                    message = response.message
                 )
             } else {
                 Resource.Error(
-                    message = addresses.message
+                    message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
                 message = e.message.toString()
             )
