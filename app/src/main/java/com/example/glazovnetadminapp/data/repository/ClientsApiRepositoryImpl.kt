@@ -1,7 +1,6 @@
 package com.example.glazovnetadminapp.data.repository
 
 import com.example.glazovnetadminapp.data.mappers.toClientModel
-import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.clients.ClientModel
 import com.example.glazovnetadminapp.domain.repository.ClientsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
@@ -12,7 +11,6 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Named
 

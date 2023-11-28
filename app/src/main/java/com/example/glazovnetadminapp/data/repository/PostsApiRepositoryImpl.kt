@@ -1,7 +1,6 @@
 package com.example.glazovnetadminapp.data.repository
 
 import com.example.glazovnetadminapp.data.mappers.toPostModel
-import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource

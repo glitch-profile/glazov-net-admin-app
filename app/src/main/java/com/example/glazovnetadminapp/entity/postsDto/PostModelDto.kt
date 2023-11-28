@@ -2,7 +2,6 @@ package com.example.glazovnetadminapp.entity.postsDto
 
 import androidx.annotation.Keep
 import com.example.glazovnetadminapp.entity.ImageModelDto
-import com.squareup.moshi.Json
 import kotlinx.serialization.Serializable
 
 @Serializable

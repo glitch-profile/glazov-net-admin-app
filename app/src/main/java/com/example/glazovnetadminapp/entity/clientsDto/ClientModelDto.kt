@@ -1,7 +1,6 @@
 package com.example.glazovnetadminapp.entity.clientsDto
 
 import androidx.annotation.Keep
-import com.squareup.moshi.Json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 

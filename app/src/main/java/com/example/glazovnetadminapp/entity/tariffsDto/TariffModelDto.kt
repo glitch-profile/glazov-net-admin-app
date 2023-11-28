@@ -1,7 +1,6 @@
 package com.example.glazovnetadminapp.entity.tariffsDto
 
 import androidx.annotation.Keep
-import com.squareup.moshi.Json
 import kotlinx.serialization.Serializable
 
 @Serializable

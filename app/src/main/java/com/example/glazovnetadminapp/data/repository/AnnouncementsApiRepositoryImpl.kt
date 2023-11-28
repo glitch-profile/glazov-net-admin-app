@@ -1,7 +1,6 @@
 package com.example.glazovnetadminapp.data.repository
 
 import com.example.glazovnetadminapp.data.mappers.toAnnouncementModel
-import com.example.glazovnetadminapp.data.remote.GlazovNetApi
 import com.example.glazovnetadminapp.domain.models.announcements.AnnouncementModel
 import com.example.glazovnetadminapp.domain.repository.AnnouncementsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
