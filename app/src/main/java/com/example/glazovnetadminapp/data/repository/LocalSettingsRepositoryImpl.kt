@@ -8,7 +8,6 @@ import javax.inject.Inject
 
 private const val PREFERENCE_NAME = "GlazovNetPreferences"
 private const val API_KEY_NAME = "GlazovNetApiKey"
-private const val THEME_COLOR_CODE = "ThemeColorCode"
 
 class LocalSettingsRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context

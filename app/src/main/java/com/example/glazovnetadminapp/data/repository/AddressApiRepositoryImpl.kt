@@ -17,7 +17,7 @@ import javax.inject.Named
 private const val PATH = "api/addressinfo"
 
 class AddressApiRepositoryImpl @Inject constructor(
-    @Named("RestApi") private val client: HttpClient
+    @Named("RestClient") private val client: HttpClient
 ): AddressApiRepository {
     override suspend fun getStreetsWithName(
         cityName: String,

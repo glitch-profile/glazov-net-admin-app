@@ -23,7 +23,7 @@ import javax.inject.Named
 private const val PATH = "api/tariffs"
 
 class TariffsApiRepositoryImpl @Inject constructor(
-    @Named("RestApi") private val client: HttpClient
+    @Named("RestClient") private val client: HttpClient
 ): TariffsApiRepository {
     override suspend fun getAllTariffs(): Resource<List<TariffModel>> {
         return try {

@@ -23,7 +23,7 @@ import javax.inject.Named
 private const val PATH = "api/posts"
 
 class PostsApiRepositoryImpl @Inject constructor(
-    @Named("RestApi") private val client: HttpClient
+    @Named("RestClient") private val client: HttpClient
 ): PostsApiRepository {
 
     override suspend fun getAllPosts(): Resource<List<PostModel>> {

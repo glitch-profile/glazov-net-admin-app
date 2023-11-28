@@ -17,7 +17,7 @@ import javax.inject.Named
 private const val PATH = "api/clients"
 
 class ClientsApiRepositoryImpl @Inject constructor(
-    @Named("RestApi") private val client: HttpClient
+    @Named("RestClient") private val client: HttpClient
 ): ClientsApiRepository {
 
     override suspend fun createClient(

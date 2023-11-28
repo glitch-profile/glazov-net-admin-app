@@ -22,7 +22,7 @@ import javax.inject.Named
 private const val PATH = "api/announcements"
 
 class AnnouncementsApiRepositoryImpl @Inject constructor(
-    @Named("RestApi") private val client: HttpClient
+    @Named("RestClient") private val client: HttpClient
 ): AnnouncementsApiRepository {
     override suspend fun getAnnouncements(apiKey: String): Resource<List<AnnouncementModel>> {
         return try {
