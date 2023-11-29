@@ -1,10 +1,8 @@
 package com.example.glazovnetadminapp.domain.useCases
 
 import com.example.glazovnetadminapp.data.mappers.toAnnouncementModelDto
-import com.example.glazovnetadminapp.data.repository.AddressApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
-import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.domain.models.announcements.AnnouncementModel
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject

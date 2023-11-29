@@ -2,7 +2,6 @@ package com.example.glazovnetadminapp.presentation.posts.postsList
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
