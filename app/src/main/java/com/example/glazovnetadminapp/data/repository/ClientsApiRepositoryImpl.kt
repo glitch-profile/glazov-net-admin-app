@@ -10,6 +10,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -21,9 +25,29 @@ class ClientsApiRepositoryImpl @Inject constructor(
 
     override suspend fun createClient(
         apiKey: String,
-        client: ClientModelDto
+        newClient: ClientModelDto
     ): Resource<ClientModel?> {
-        TODO("Not yet implemented")
+        return try {
+            val response: ApiResponseDto<List<ClientModelDto>> = client.post("$PATH/create") {
+                parameter("api_key", apiKey)
+                contentType(ContentType.Application.Json)
+                setBody(newClient)
+            }.body()
+            if (response.status) {
+                Resource.Success(
+                    data = response.data.firstOrNull()?.toClientModel(),
+                    message = response.message
+                )
+            } else {
+                Resource.Error(
+                    message = response.message
+                )
+            }
+        } catch (e: Exception) {
+            Resource.Error(
+                message = e.localizedMessage ?: "unknown error"
+            )
+        }
     }
 
     override suspend fun getClients(apiKey: String): Resource<List<ClientModel>> {
@@ -40,7 +64,7 @@ class ClientsApiRepositoryImpl @Inject constructor(
                 Resource.Error(message = response.message)
             }
         } catch (e: Exception) {
-            Resource.Error(message = e.message.toString())
+            Resource.Error(message = e.localizedMessage ?: "unknown error")
         }
     }
 

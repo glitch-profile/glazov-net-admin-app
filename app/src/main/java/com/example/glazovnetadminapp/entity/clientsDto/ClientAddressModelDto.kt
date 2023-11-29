@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Keep
 data class ClientAddressModelDto(
-    val city: String,
-    val street: String,
+    val cityName: String,
+    val streetName: String,
     val houseNumber: String,
     val roomNumber: String
 )

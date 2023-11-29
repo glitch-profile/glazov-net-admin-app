@@ -17,6 +17,7 @@ data class ClientModelDto(
     val middleName: String? = null,
     val address: ClientAddressModelDto,
     val balance: Double,
+    //val accountCreationDate: String,
     val debitDate: String,
     val isAccountActive: Boolean,
     val connectedServices: List<String>
