@@ -65,7 +65,7 @@ fun AnnouncementCard(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "${announcement.creationDate!!.convertDaysOffsetToString()}, ID: ${announcement.id}", //Конвертируем к локальному времени
+                text = announcement.creationDate!!.convertDaysOffsetToString(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
