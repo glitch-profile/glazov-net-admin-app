@@ -28,13 +28,13 @@ class PostsScreenViewModel @Inject constructor(
     private val postsUseCase: PostsUseCase
 ) : ViewModel() {
 
-    private var _state = MutableStateFlow(ScreenState<PostModel>())
+    private val _state = MutableStateFlow(ScreenState<PostModel>())
     val state = _state.asStateFlow()
 
-    private var _editPostState = MutableStateFlow(EditPostScreenState())
+    private val _editPostState = MutableStateFlow(EditPostScreenState())
     val editPostState = _editPostState.asStateFlow()
 
-    private var _openedPostState = MutableStateFlow<PostModel?>(null)
+    private val _openedPostState = MutableStateFlow<PostModel?>(null)
     val openedPostModel = _openedPostState.asStateFlow()
 
     init {
@@ -63,7 +63,6 @@ class PostsScreenViewModel @Inject constructor(
                     message = null
                 )
             }
-            Log.i("TAG", "getAllPosts: now loading")
             when (val result = postsUseCase.getAllPosts()) {
                 is Resource.Success -> {
                     _state.update {
