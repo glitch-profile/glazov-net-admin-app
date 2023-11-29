@@ -74,7 +74,7 @@ fun AddAnnouncementScreen(
     navController: NavController,
     viewModel: AnnouncementsViewModel
 ) {
-    var state = viewModel.announcementToEdit.collectAsState().value
+    val state = viewModel.announcementToEdit.collectAsState().value
     var title by remember {
         mutableStateOf(state.data.firstOrNull()?.title ?: "")
     }

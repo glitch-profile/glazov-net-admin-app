@@ -20,6 +20,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.glazovnetadminapp.presentation.announcements.AddAnnouncementScreen
 import com.example.glazovnetadminapp.presentation.announcements.AnnouncementsScreen
 import com.example.glazovnetadminapp.presentation.announcements.AnnouncementsViewModel
+import com.example.glazovnetadminapp.presentation.clients.AddClientScreen
+import com.example.glazovnetadminapp.presentation.clients.ClientsScreen
+import com.example.glazovnetadminapp.presentation.clients.ClientsViewModel
 import com.example.glazovnetadminapp.presentation.home.HomeScreen
 import com.example.glazovnetadminapp.presentation.posts.editPost.EditPostScreen
 import com.example.glazovnetadminapp.presentation.posts.postDetails.PostDetailScreen
@@ -114,6 +117,25 @@ class MainActivity : ComponentActivity() {
                                 EditTariffScreen(
                                     navController,
                                     viewModel
+                                )
+                            }
+                        }
+                        navigation(
+                            startDestination = "clients_list",
+                            route = "clients"
+                        ) {
+                            composable("clients_list") {
+                                val sharedViewModel = it.sharedViewModel<ClientsViewModel>(navController = navController)
+                                ClientsScreen(
+                                    navController = navController,
+                                    viewModel = sharedViewModel
+                                )
+                            }
+                            composable("add_client") {
+                                val sharedViewModel = it.sharedViewModel<ClientsViewModel>(navController = navController)
+                                AddClientScreen(
+                                    navController = navController,
+                                    viewModel = sharedViewModel
                                 )
                             }
                         }
