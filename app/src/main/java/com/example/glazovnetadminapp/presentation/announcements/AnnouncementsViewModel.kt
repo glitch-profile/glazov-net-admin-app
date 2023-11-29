@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.domain.models.announcements.AnnouncementModel
+import com.example.glazovnetadminapp.domain.useCases.AddressesUseCase
 import com.example.glazovnetadminapp.domain.useCases.AnnouncementsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.presentation.ScreenState
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class AnnouncementsViewModel @Inject constructor(
-    private val announcementsUseCase: AnnouncementsUseCase
+    private val announcementsUseCase: AnnouncementsUseCase,
+    private val addressesUseCase: AddressesUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ScreenState<AnnouncementModel>())
@@ -151,7 +153,7 @@ class AnnouncementsViewModel @Inject constructor(
                     message = null
                 )
             }
-            val result = announcementsUseCase.getCitiesList("")
+            val result = addressesUseCase.getCitiesList("")
             _citiesList.update {
                 when (result) {
                     is Resource.Success -> {
@@ -184,7 +186,7 @@ class AnnouncementsViewModel @Inject constructor(
                     )
                 }
                 _addressesState.update {
-                    when (val addresses = announcementsUseCase.getAddresses(city, street)) {
+                    when (val addresses = addressesUseCase.getAddresses(city, street)) {
                         is Resource.Success -> {
                             it.copy(
                                 data = addresses.data!!.map { checkIfAddressAlreadySelected(it) },

@@ -11,7 +11,6 @@ import javax.inject.Inject
 
 class AnnouncementsUseCase @Inject constructor(
     private val announcementsApiRepository: AnnouncementsApiRepositoryImpl,
-    private val addressApiRepository: AddressApiRepositoryImpl,
     private val localSettingsRepository: LocalSettingsRepositoryImpl
 ) {
 
@@ -41,43 +40,6 @@ class AnnouncementsUseCase @Inject constructor(
             apiKey = apiKey,
             announcementId = announcementId
         )
-    }
-
-    suspend fun getCitiesList(
-        cityName: String
-    ): Resource<List<String>> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
-        return addressApiRepository.getCitiesWithName(
-            cityName = cityName,
-            apiKey = apiKey
-        )
-    }
-
-    suspend fun getStreetsList(
-        cityName: String,
-        streetName: String
-    ): Resource<List<String>> {
-        return if (cityName.isNotBlank() && streetName.isNotBlank()) {
-            val apiKey = localSettingsRepository.getSavedApiKey()
-            addressApiRepository.getStreetsWithName(
-                cityName = cityName,
-                streetName = streetName,
-                apiKey = apiKey
-            )
-        } else {
-            Resource.Success(
-                data = emptyList(),
-                message = "not enough arguments"
-            )
-        }
-    }
-
-    suspend fun getAddresses(
-        cityName: String,
-        streetName: String
-    ): Resource<List<AddressFilterElement>> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
-        return addressApiRepository.getAddresses(cityName, streetName, apiKey)
     }
 
 }
