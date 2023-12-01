@@ -13,8 +13,8 @@ import kotlinx.serialization.json.Json
 import javax.inject.Named
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://82.179.120.205:8080/" //notebook
-//private const val BASE_URL = "http://146.120.105.211:8080/" //computer
+//private const val BASE_URL = "http://82.179.120.205:8080/" //notebook
+private const val BASE_URL = "http://146.120.105.211:8080/" //computer
 
 @Module
 @InstallIn(SingletonComponent::class)

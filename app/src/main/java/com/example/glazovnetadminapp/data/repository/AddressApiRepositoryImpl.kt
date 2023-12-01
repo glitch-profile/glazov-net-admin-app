@@ -24,7 +24,7 @@ class AddressApiRepositoryImpl @Inject constructor(
         apiKey: String
     ): Resource<List<String>> {
         return try {
-            val response: ApiResponseDto<List<String>> = client.get("$PATH/geetstreetslist") {
+            val response: ApiResponseDto<List<String>> = client.get("$PATH/getstreetslist") {
                 parameter("api_key", apiKey)
                 parameter("city", cityName)
                 parameter("street", streetName)

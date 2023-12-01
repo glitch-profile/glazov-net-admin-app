@@ -12,6 +12,12 @@ fun ClientModelDto.toClientModel(): ClientModel {
         this.debitDate,
         DateTimeFormatter.ISO_DATE
     )
+    val formattedAddress = with(this.address) {
+        this.copy(
+            cityName = this.cityName.replaceFirstChar { it.uppercaseChar() },
+            streetName = this.streetName.replaceFirstChar { it.uppercaseChar() }
+        )
+    }
     val nextDebitDateOffset = Period.between(debitDate, LocalDate.now(ZoneId.systemDefault()))
     return ClientModel(
         id = this.id,
@@ -21,7 +27,7 @@ fun ClientModelDto.toClientModel(): ClientModel {
         lastName = this.lastName,
         firstName = this.firstName,
         middleName = this.middleName,
-        address = this.address,
+        address = formattedAddress,
         balance = this.balance,
         debitDate = debitDate,
         nextDebitDateOffset = nextDebitDateOffset.days,
