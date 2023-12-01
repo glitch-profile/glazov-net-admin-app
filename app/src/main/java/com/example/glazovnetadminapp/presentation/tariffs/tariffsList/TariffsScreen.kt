@@ -57,6 +57,7 @@ import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
 import com.example.glazovnetadminapp.presentation.RequestErrorScreen
+import com.example.glazovnetadminapp.presentation.components.SelectionChipButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -128,34 +129,12 @@ fun TariffsScreen(
             LazyRow(
                 content = {
                     items(TariffType.values().size) { index ->
-                        val backgroundColor by animateColorAsState(
-                            if (selectedCategoryIndex == index) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.primaryContainer,
-                            label = "TariffTypeButtonBackgroundColor"
+                        Spacer(modifier = Modifier.width(16.dp))
+                        SelectionChipButton(
+                            text = stringResource(id = TariffType.values()[index].stringResourceId),
+                            onClick = { selectedCategoryIndex = index },
+                            isSelected = selectedCategoryIndex == index
                         )
-                        val textColor by animateColorAsState(
-                            if (selectedCategoryIndex == index) MaterialTheme.colorScheme.onPrimary
-                            else MaterialTheme.colorScheme.onPrimaryContainer,
-                            label = "TariffTypeButtonTextColor"
-                        )
-                        Box(
-                            modifier = Modifier
-                                .padding(start = 16.dp)
-                                .widthIn(min = 100.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                                .clickable {
-                                    selectedCategoryIndex = index
-                                }
-                                .background(backgroundColor)
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = stringResource(id = TariffType.values()[index].stringResourceId),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = textColor
-                            )
-                        }
                     }
                     item { Spacer(modifier = Modifier.width(16.dp)) }
                 }
