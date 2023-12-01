@@ -76,5 +76,5 @@
     <string name="app_button_close">Закрыть</string>
     <string name="app_button_fix_now">Исправить</string>
     <string name="tariff_cost_text_suffix">руб./мес.</string>
-    <string name="add_announcement_instruction_text">Начните фильтрацию адресов с того, что выберите город и начнёте вводить начало нужной улицы</string>
+    <string name="add_announcement_instruction_text">Начните фильтрацию адресов с того, что выберите город и начните вводить начало нужной улицы</string>
 </resources>

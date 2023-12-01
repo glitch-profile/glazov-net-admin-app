@@ -188,7 +188,7 @@ fun AddAnnouncementScreen(
             }
             val selectedAddresses = viewModel.selectedAddresses.collectAsState().value
             val bottomBarCornerRadius = animateDpAsState(
-                targetValue = if(selectedAddresses.isNotEmpty()) 16.dp else 0.dp,
+                targetValue = if (selectedAddresses.isNotEmpty()) 16.dp else 0.dp,
                 label = "bottomBarCornerRadius"
             )
             Box(
