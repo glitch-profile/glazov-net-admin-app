@@ -75,8 +75,7 @@ fun ClientCard(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "${client.lastName} ${client.firstName}"
-                                + if (client.middleName != null) " ${client.middleName}" else "",
+                        text = "${client.lastName} ${client.firstName} ${client.middleName}",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         maxLines = 1,
