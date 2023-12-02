@@ -7,6 +7,8 @@ import com.example.glazovnetadminapp.domain.models.clients.ClientModel
 import com.example.glazovnetadminapp.domain.useCases.AddressesUseCase
 import com.example.glazovnetadminapp.domain.useCases.ClientsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
+import com.example.glazovnetadminapp.entity.AddressModelDto
+import com.example.glazovnetadminapp.entity.clientsDto.ClientAddressModelDto
 import com.example.glazovnetadminapp.presentation.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -124,10 +126,87 @@ class ClientsViewModel @Inject constructor(
     }
 
     fun createClient(
-        clientModel: ClientModel
+        accountNumber: String,
+        login: String,
+        password: String,
+        lastName: String,
+        firstName: String,
+        middleName: String,
+        cityName: String,
+        streetName: String,
+        houseNumber: String,
+        roomNumber: String,
+        callback: (status: Boolean, message: String) -> Unit
     ) {
         viewModelScope.launch {
-
+            if (accountNumber.length != 4 || login.isBlank()
+                || password.isBlank() || lastName.isBlank()
+                || firstName.isBlank() || middleName.isBlank()
+                || cityName.isBlank() || streetName.isBlank()
+                || houseNumber.isBlank() || roomNumber.toIntOrNull() == null
+            ) {
+                callback.invoke(
+                    false,
+                    "Input data incorrect"
+                    )
+            } else {
+                _addClientScreenState.update {
+                    it.copy(
+                        isLoading = true,
+                        message = null
+                    )
+                }
+                val address = ClientAddressModelDto(
+                    cityName = cityName,
+                    streetName = streetName,
+                    houseNumber = houseNumber,
+                    roomNumber = roomNumber
+                )
+                val client = ClientModel(
+                    id = "",
+                    accountNumber = accountNumber,
+                    login = login,
+                    password = password,
+                    firstName = firstName,
+                    lastName = lastName,
+                    middleName = middleName,
+                    address = address
+                )
+                val result = clientsUseCase.addNewClient(client)
+                if (result.data != null) {
+                    val clientsList = clientsScreenState.value.data.toMutableList()
+                    clientsList.add(
+                        index = 0,
+                        element = result.data
+                    )
+                    _clientsScreenState.update {
+                        it.copy(
+                            data = clientsList
+                        )
+                    }
+                    _addClientScreenState.update {
+                        it.copy(
+                            isLoading = false,
+                            message = result.message
+                        )
+                    }
+                    callback.invoke(
+                        true,
+                        "completed"
+                    )
+                } else {
+                    _addClientScreenState.update {
+                        it.copy(
+                            isLoading = false,
+                            message = result.message
+                        )
+                    }
+                    callback.invoke(
+                        false,
+                        result.message ?: "unknown error"
+                    )
+                }
+            }
         }
     }
 

@@ -28,14 +28,14 @@ class ClientsApiRepositoryImpl @Inject constructor(
         newClient: ClientModelDto
     ): Resource<ClientModel?> {
         return try {
-            val response: ApiResponseDto<List<ClientModelDto>> = client.post("$PATH/create") {
+            val response: ApiResponseDto<ClientModelDto?> = client.post("$PATH/create") {
                 parameter("api_key", apiKey)
                 contentType(ContentType.Application.Json)
                 setBody(newClient)
             }.body()
             if (response.status) {
                 Resource.Success(
-                    data = response.data.firstOrNull()?.toClientModel(),
+                    data = response.data?.toClientModel(),
                     message = response.message
                 )
             } else {

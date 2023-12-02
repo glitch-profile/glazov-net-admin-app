@@ -14,7 +14,7 @@ data class ClientModelDto(
     val password: String,
     val firstName: String,
     val lastName: String,
-    val middleName: String? = null,
+    val middleName: String,
     val address: ClientAddressModelDto,
     val balance: Double,
     //val accountCreationDate: String,

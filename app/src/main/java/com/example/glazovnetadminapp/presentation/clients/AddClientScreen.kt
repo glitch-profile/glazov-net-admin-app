@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.presentation.clients
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,11 +7,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -38,17 +36,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.domain.models.posts.PostType.Companion.toPostTypeCode
-import com.example.glazovnetadminapp.presentation.components.SelectionChipButton
 import com.example.glazovnetadminapp.presentation.components.TextFieldWithCompleteSuggestions
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,6 +54,7 @@ fun AddClientScreen(
     navController: NavController,
     viewModel: ClientsViewModel
 ) {
+    val state = viewModel.addClientScreenState.collectAsState().value
     val citiesInteractionSource = remember { MutableInteractionSource() }
     val streetsInteractionSource = remember { MutableInteractionSource() }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -97,7 +96,7 @@ fun AddClientScreen(
         var lastName by remember { mutableStateOf("") }
         var firstName by remember { mutableStateOf("") }
         var middleName by remember { mutableStateOf("") }
-        var cityname by remember { mutableStateOf("") }
+        var cityName by remember { mutableStateOf("") }
         var streetName by remember { mutableStateOf("") }
         var houseNumber by remember { mutableStateOf("") }
         var roomNumber by remember { mutableStateOf("") }
@@ -123,7 +122,7 @@ fun AddClientScreen(
                     )
                 },
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next)
             )
             Divider(Modifier.fillMaxWidth())
             OutlinedTextField(
@@ -137,7 +136,8 @@ fun AddClientScreen(
                         text = "last name"
                     )
                 },
-                singleLine = true
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
             OutlinedTextField(
                 value = firstName,
@@ -150,7 +150,8 @@ fun AddClientScreen(
                         text = "First name"
                     )
                 },
-                singleLine = true
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
             OutlinedTextField(
                 value = middleName,
@@ -163,7 +164,8 @@ fun AddClientScreen(
                         text = "Middle name"
                     )
                 },
-                singleLine = true
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
             Divider(Modifier.fillMaxWidth())
             OutlinedTextField(
@@ -177,7 +179,8 @@ fun AddClientScreen(
                         text = "Login"
                     )
                 },
-                singleLine = true
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
             OutlinedTextField(
                 value = password,
@@ -190,18 +193,20 @@ fun AddClientScreen(
                         text = "Password"
                     )
                 },
-                singleLine = true
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
             Divider(Modifier.fillMaxWidth())
             TextFieldWithCompleteSuggestions(
-                text = cityname,
+                text = cityName,
                 onTextChanges = {
-                    cityname = it
+                    cityName = it
                     viewModel.updateCitiesSearch(it)
                 },
                 suggestions = citiesList.value,
                 label = "City",
-                interactionSource = citiesInteractionSource
+                interactionSource = citiesInteractionSource,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
             TextFieldWithCompleteSuggestions(
                 text = streetName,
@@ -211,7 +216,8 @@ fun AddClientScreen(
                 },
                 suggestions = streetsList.value,
                 label = "Street",
-                interactionSource = streetsInteractionSource
+                interactionSource = streetsInteractionSource,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
             Row(
                 modifier = Modifier
@@ -229,7 +235,8 @@ fun AddClientScreen(
                             text = "House number"
                         )
                     },
-                    singleLine = true
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 OutlinedTextField(
@@ -248,12 +255,12 @@ fun AddClientScreen(
             }
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 OutlinedButton(
                     onClick = {
-
                         fun clearInputData() {
                             accountNumber = ""
                             login = ""
@@ -261,7 +268,7 @@ fun AddClientScreen(
                             lastName = ""
                             firstName = ""
                             middleName = ""
-                            cityname = ""
+                            cityName = ""
                             streetName = ""
                             houseNumber = ""
                             roomNumber = ""
@@ -276,12 +283,31 @@ fun AddClientScreen(
                 }
                 Button(
                     onClick = {
-
+                        viewModel.createClient(
+                            accountNumber = accountNumber,
+                            login = login,
+                            password = password,
+                            lastName = lastName,
+                            firstName = firstName,
+                            middleName = middleName,
+                            cityName = cityName,
+                            streetName = streetName,
+                            houseNumber = houseNumber,
+                            roomNumber = roomNumber,
+                            callback = { status, message ->
+                                coroutineScope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        if (status) "Completed"
+                                        else message
+                                    )
+                                }
+                            }
+                        )
                     },
                     enabled = (
-                            accountNumber.isNotBlank() && login.isNotBlank()
+                            !state.isLoading && accountNumber.isNotBlank() && login.isNotBlank()
                                     && password.isNotBlank() && lastName.isNotBlank()
-                                    && firstName.isNotBlank() && cityname.isNotBlank()
+                                    && firstName.isNotBlank() && cityName.isNotBlank()
                                     && streetName.isNotBlank() && houseNumber.isNotBlank()
                                     && roomNumber.isNotBlank()
                             )
