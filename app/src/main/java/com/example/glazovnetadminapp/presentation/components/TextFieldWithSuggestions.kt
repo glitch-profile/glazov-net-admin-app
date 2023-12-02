@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +31,9 @@ fun TextFieldWithCompleteSuggestions(
     suggestions: List<String>,
     label: String,
     focusManager: FocusManager = LocalFocusManager.current,
-    interactionSource: MutableInteractionSource = MutableInteractionSource()
+    interactionSource: MutableInteractionSource = MutableInteractionSource(),
+    keyboardOptions: KeyboardOptions = KeyboardOptions(),
+    keyboardActions: KeyboardActions = KeyboardActions()
 ) {
     Column(
         modifier = modifier
@@ -47,7 +51,9 @@ fun TextFieldWithCompleteSuggestions(
                 )
             },
             singleLine = true,
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions
         )
         val isTextFieldFocused = interactionSource.collectIsFocusedAsState().value
         AnimatedVisibility(
