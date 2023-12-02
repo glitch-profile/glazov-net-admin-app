@@ -31,7 +31,7 @@ class AnnouncementsViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(ScreenState<AnnouncementModel>())
     val state = _state.asStateFlow()
-    private val _addressesState = MutableStateFlow(ScreenState<AddressFilterElement>())
+    private val _addressesState = MutableStateFlow<List<AddressFilterElement>>(emptyList())
     val addressesState = _addressesState.asStateFlow()
     private val _selectedAddresses = MutableStateFlow<List<AddressFilterElement>>(emptyList())
     val selectedAddresses = _selectedAddresses.asStateFlow()
@@ -180,36 +180,15 @@ class AnnouncementsViewModel @Inject constructor(
         viewModelScope.launch {
             if (city.isNotBlank() && street.isNotBlank()) {
                 _addressesState.update {
-                    it.copy(
-                        isLoading = true,
-                        message = null
-                    )
-                }
-                _addressesState.update {
                     when (val addresses = addressesUseCase.getAddresses(city, street)) {
-                        is Resource.Success -> {
-                            it.copy(
-                                data = addresses.data!!.map { checkIfAddressAlreadySelected(it) },
-                                isLoading = false,
-                                message = addresses.message
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            it.copy(
-                                data = emptyList(),
-                                isLoading = false,
-                                message = addresses.message
-                            )
-                        }
+                        is Resource.Success ->
+                            addresses.data!!.map { checkIfAddressAlreadySelected(it) }
+                        is Resource.Error ->
+                            emptyList()
                     }
                 }
             } else _addressesState.update {
-                it.copy(
-                    data = selectedAddresses.value.reversed(),
-                    isLoading = false,
-                    message = "showing selected addresses"
-                )
+                selectedAddresses.value.reversed()
             }
         }
     }
@@ -230,17 +209,13 @@ class AnnouncementsViewModel @Inject constructor(
     fun changeSelectionOfAddressElement(
         addressFilterElement: AddressFilterElement
     ) {
-        val addressesList = addressesState.value.data.toMutableList()
+        val addressesList = addressesState.value.toMutableList()
         val addressIndex = addressesList.indexOfFirst { it == addressFilterElement }
         if (addressIndex != -1) {
             addressesList[addressIndex] = addressFilterElement.copy(
                 isSelected = !addressFilterElement.isSelected
             )
-            _addressesState.update { state ->
-                state.copy(
-                    data = addressesList
-                )
-            }
+            _addressesState.update { addressesList }
         }
 
         val selectedAddresses = selectedAddresses.value.toMutableList()
@@ -315,11 +290,9 @@ class AnnouncementsViewModel @Inject constructor(
 
     fun clearSelectedAddresses() {
         _selectedAddresses.update { emptyList() }
-        val currentAddressesList = _addressesState.value.data
+        val currentAddressesList = _addressesState.value
         val newAddressesList = currentAddressesList.map { it.copy(isSelected = false) }
-        _addressesState.update {
-            it.copy( data = newAddressesList )
-        }
+        _addressesState.update { newAddressesList }
     }
 
     fun setAnnouncementToEdit(
@@ -333,14 +306,10 @@ class AnnouncementsViewModel @Inject constructor(
         if (announcement != null) {
             val filtersList = announcement.filters.map { it.copy(isSelected = true) }
             _selectedAddresses.update { filtersList }
-            _addressesState.update {
-                ScreenState(
-                    data = filtersList
-                )
-            }
+            _addressesState.update { filtersList }
         } else {
             _selectedAddresses.update { emptyList() }
-            _addressesState.update { ScreenState() }
+            _addressesState.update { emptyList() }
         }
     }
 }

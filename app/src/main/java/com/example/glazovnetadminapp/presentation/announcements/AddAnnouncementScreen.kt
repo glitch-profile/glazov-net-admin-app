@@ -179,7 +179,7 @@ fun AddAnnouncementScreen(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 AddressesScreen(
-                    addresses = addresses.data,
+                    addresses = addresses,
                     onSelectionChange = { addressElement ->
                         viewModel.changeSelectionOfAddressElement(addressElement)
                     }
