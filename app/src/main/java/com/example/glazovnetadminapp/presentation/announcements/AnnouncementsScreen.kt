@@ -61,7 +61,7 @@ fun AnnouncementsScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            //viewModel.setAnnouncementToEdit(null)
+                            viewModel.setAnnouncementToEdit(null)
                             navController.navigate("add_announcement")
                         }
                     ) {
@@ -117,6 +117,10 @@ fun AnnouncementsScreen(
                                 announcement = announcement,
                                 onDeleteAnnouncement = {
                                     viewModel.deleteAnnouncement(it)
+                                },
+                                onEditAnnouncement = {
+                                    viewModel.setAnnouncementToEdit(it)
+                                    navController.navigate("add_announcement")
                                 }
                             )
                         }

@@ -36,6 +36,7 @@ fun AnnouncementCard(
     modifier: Modifier = Modifier,
     announcement: AnnouncementModel,
     onDeleteAnnouncement: (AnnouncementModel) -> Unit,
+    onEditAnnouncement: (AnnouncementModel) -> Unit
 ) {
     var isOptionsButtonsExpanded by remember {
         mutableStateOf(false)
@@ -107,9 +108,8 @@ fun AnnouncementCard(
                         )
                     }
                     TextButton(
-                        enabled = false,
                         onClick = {
-
+                            onEditAnnouncement.invoke(announcement)
                         }
                     ) {
                         Text(

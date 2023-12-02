@@ -314,27 +314,33 @@ class AnnouncementsViewModel @Inject constructor(
     }
 
     fun clearSelectedAddresses() {
-        viewModelScope.launch{
-            _selectedAddresses.update { emptyList() }
-            val currentAddressesList = _addressesState.value.data
-            val newAddressesList = currentAddressesList.map { it.copy(isSelected = false) }
-            _addressesState.update {
-                it.copy( data = newAddressesList )
-            }
+        _selectedAddresses.update { emptyList() }
+        val currentAddressesList = _addressesState.value.data
+        val newAddressesList = currentAddressesList.map { it.copy(isSelected = false) }
+        _addressesState.update {
+            it.copy( data = newAddressesList )
         }
     }
 
-    //TODO:Rework function to work properly
     fun setAnnouncementToEdit(
         announcement: AnnouncementModel?
     ) {
-        viewModelScope.launch {
-            _announcementToEdit.update {
+        _announcementToEdit.update {
+            ScreenState(
+                data = if (announcement != null) listOf(announcement) else emptyList()
+            )
+        }
+        if (announcement != null) {
+            val filtersList = announcement.filters.map { it.copy(isSelected = true) }
+            _selectedAddresses.update { filtersList }
+            _addressesState.update {
                 ScreenState(
-                    data = if (announcement != null) listOf(announcement) else emptyList()
+                    data = filtersList
                 )
             }
-            _selectedAddresses.update { announcement?.filters ?: emptyList()}
+        } else {
+            _selectedAddresses.update { emptyList() }
+            _addressesState.update { ScreenState() }
         }
     }
 }
