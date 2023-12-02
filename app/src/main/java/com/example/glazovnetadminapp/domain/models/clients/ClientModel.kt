@@ -2,7 +2,6 @@ package com.example.glazovnetadminapp.domain.models.clients
 
 import com.example.glazovnetadminapp.entity.clientsDto.ClientAddressModelDto
 import java.time.LocalDate
-import java.time.ZoneId
 
 data class ClientModel(
     val id: String,

@@ -7,7 +7,6 @@ import com.example.glazovnetadminapp.domain.models.clients.ClientModel
 import com.example.glazovnetadminapp.domain.useCases.AddressesUseCase
 import com.example.glazovnetadminapp.domain.useCases.ClientsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
-import com.example.glazovnetadminapp.entity.AddressModelDto
 import com.example.glazovnetadminapp.entity.clientsDto.ClientAddressModelDto
 import com.example.glazovnetadminapp.presentation.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
