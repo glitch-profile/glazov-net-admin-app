@@ -304,7 +304,7 @@ class AnnouncementsViewModel @Inject constructor(
             )
         }
         if (announcement != null) {
-            val filtersList = announcement.filters.map { it.copy(isSelected = true) }
+            val filtersList = announcement.filters.reversed().map { it.copy(isSelected = true) }
             _selectedAddresses.update { filtersList }
             _addressesState.update { filtersList }
         } else {
