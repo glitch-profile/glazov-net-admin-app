@@ -42,4 +42,15 @@ class AnnouncementsUseCase @Inject constructor(
         )
     }
 
+    suspend fun updateAnnouncement(
+        newAnnouncement: AnnouncementModel
+    ): Resource<Boolean> {
+        val apiKey = localSettingsRepository.getSavedApiKey()
+        val announcementDto = newAnnouncement.toAnnouncementModelDto()
+        return announcementsApiRepository.updateRepository(
+            apiKey = apiKey,
+            newAnnouncement = announcementDto
+        )
+    }
+
 }

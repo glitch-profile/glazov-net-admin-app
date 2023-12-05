@@ -234,18 +234,26 @@ fun AddAnnouncementScreen(
                         }
                         Button(
                             onClick = {
-                                viewModel.createAnnouncement(title, text) { result ->
-                                    coroutineScope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            if (result) "Announcement added"
-                                            else "Error occurred"
-                                        )
+                                if (state.data.isEmpty()) {
+                                    viewModel.createAnnouncement(title, text) { _, message ->
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar(message)
+                                        }
+                                    }
+                                } else {
+                                    viewModel.updateAnnouncement(title, text) { _, message ->
+                                        coroutineScope.launch { 
+                                            snackbarHostState.showSnackbar(message)
+                                        }
                                     }
                                 }
                             },
                             enabled = title.isNotBlank() && text.isNotBlank() && !state.isLoading
                         ) {
-                            Text(text = stringResource(id = R.string.app_button_dialog_confirm))
+                            Text(
+                                text = if (state.data.isEmpty()) stringResource(id = R.string.app_button_dialog_confirm)
+                                else stringResource(id = R.string.app_edit_button)
+                            )
                         }
                     }
                 }

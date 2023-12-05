@@ -8,10 +8,13 @@ import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.announcementsDto.AnnouncementModelDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -59,9 +62,14 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.toString()
+            )
+        }
+        catch (e: Exception) {
+            Resource.Error(
+                message = "unknown error"
             )
         }
     }
@@ -85,10 +93,47 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.toString()
             )
         }
+        catch (e: Exception) {
+            Resource.Error(
+                message = "unknown error"
+            )
+        }
+    }
+
+    override suspend fun updateRepository(
+        apiKey: String,
+        newAnnouncement: AnnouncementModelDto
+    ): Resource<Boolean> {
+        return try {
+            val response: ApiResponseDto<Boolean> = client.put("$PATH/edit") {
+                parameter("api_key", apiKey)
+                contentType(ContentType.Application.Json)
+                setBody(newAnnouncement)
+            }.body()
+            if (response.status) {
+                Resource.Success(
+                    data = response.data,
+                    message = response.message
+                )
+            } else {
+                Resource.Error(
+                    message = response.message
+                )
+            }
+        } catch (e: ResponseException) {
+            Resource.Error(
+                message = e.response.toString()
+            )
+        } catch (e: Exception) {
+            Resource.Error(
+                message = "unknown error"
+            )
+        }
+
     }
 }

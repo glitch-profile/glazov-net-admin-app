@@ -236,7 +236,7 @@ class AnnouncementsViewModel @Inject constructor(
     fun createAnnouncement(
         title: String,
         text: String,
-        callback: (result: Boolean) -> Unit
+        callback: (result: Boolean, message: String) -> Unit
     ) {
         viewModelScope.launch {
             _announcementToEdit.update {
@@ -249,7 +249,7 @@ class AnnouncementsViewModel @Inject constructor(
                 id = "",
                 title = title,
                 text = text,
-                filters = _selectedAddresses.value,
+                filters = selectedAddresses.value,
                 creationDate = null
             )
             _announcementToEdit.update {
@@ -275,7 +275,7 @@ class AnnouncementsViewModel @Inject constructor(
                         message = "completed"
                     )
                 }
-                callback.invoke(true)
+                callback.invoke(true, "announcement created")
             } else {
                 _announcementToEdit.update {
                     it.copy(
@@ -283,7 +283,54 @@ class AnnouncementsViewModel @Inject constructor(
                         message = result.message ?: "unknown error"
                     )
                 }
-                callback.invoke(false)
+                callback.invoke(false, result.message!!)
+            }
+        }
+    }
+
+    fun updateAnnouncement(
+        title: String,
+        text: String,
+        callback: (result: Boolean, message: String) -> Unit
+    ) {
+        viewModelScope.launch {
+            _announcementToEdit.update {
+                it.copy(
+                    isLoading = true, message = "getting announcement"
+                )
+            }
+            val currentAnnouncement = announcementToEdit.value.data.single()
+            val announcementToInsert = currentAnnouncement.copy(
+                title = title,
+                text = text,
+                filters = selectedAddresses.value
+            )
+            _announcementToEdit.update {
+                it.copy(message = "uploading announcement")
+            }
+            val result = announcementsUseCase.updateAnnouncement(announcementToInsert)
+            if (result.data == true) {
+                val announcementsList = state.value.data.toMutableList()
+                val announcementIndex = announcementsList.indexOfFirst { it.id == announcementToInsert.id }
+                if (announcementIndex > 0) {
+                    announcementsList[announcementIndex] = announcementToInsert
+                    _state.update { it.copy(data = announcementsList) }
+                }
+                _announcementToEdit.update {
+                    it.copy(
+                        isLoading = false,
+                        message = "completed"
+                    )
+                }
+                callback.invoke(true, result.message ?: "announcement updated")
+            } else {
+                _announcementToEdit.update {
+                    it.copy(
+                        isLoading = false,
+                        message = result.message
+                    )
+                }
+                callback.invoke(false, result.message!!)
             }
         }
     }

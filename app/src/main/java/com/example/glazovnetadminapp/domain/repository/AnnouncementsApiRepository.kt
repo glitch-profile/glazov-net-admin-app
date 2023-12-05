@@ -20,4 +20,9 @@ interface AnnouncementsApiRepository {
         announcementId: String
     ): Resource<Boolean>
 
+    suspend fun updateRepository(
+        apiKey: String,
+        newAnnouncement: AnnouncementModelDto
+    ): Resource<Boolean>
+
 }
