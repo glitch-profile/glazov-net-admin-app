@@ -312,7 +312,7 @@ class AnnouncementsViewModel @Inject constructor(
             if (result.data == true) {
                 val announcementsList = state.value.data.toMutableList()
                 val announcementIndex = announcementsList.indexOfFirst { it.id == announcementToInsert.id }
-                if (announcementIndex > 0) {
+                if (announcementIndex > -1) {
                     announcementsList[announcementIndex] = announcementToInsert
                     _state.update { it.copy(data = announcementsList) }
                 }
