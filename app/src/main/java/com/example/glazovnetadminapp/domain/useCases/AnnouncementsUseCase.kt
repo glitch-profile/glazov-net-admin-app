@@ -4,12 +4,14 @@ import com.example.glazovnetadminapp.data.mappers.toAnnouncementModelDto
 import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.announcements.AnnouncementModel
+import com.example.glazovnetadminapp.domain.repository.AnnouncementsApiRepository
+import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
 
 class AnnouncementsUseCase @Inject constructor(
-    private val announcementsApiRepository: AnnouncementsApiRepositoryImpl,
-    private val localSettingsRepository: LocalSettingsRepositoryImpl
+    private val announcementsApiRepository: AnnouncementsApiRepository,
+    private val localSettingsRepository: LocalSettingsRepository
 ) {
 
     suspend fun getAnnouncements(): Resource<List<AnnouncementModel>> {

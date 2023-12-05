@@ -4,12 +4,14 @@ import com.example.glazovnetadminapp.data.mappers.toPostModelDto
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
+import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
+import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
 
 class PostsUseCase @Inject constructor(
-    private val postsApiRepository: PostsApiRepositoryImpl,
-    private val localSettingsRepositoryImpl: LocalSettingsRepositoryImpl
+    private val postsApiRepository: PostsApiRepository,
+    private val localSettingsRepositoryImpl: LocalSettingsRepository
 ) {
 
     suspend fun getAllPosts(): Resource<List<PostModel>> {

@@ -6,6 +6,12 @@ import com.example.glazovnetadminapp.data.repository.ClientsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.TariffsApiRepositoryImpl
+import com.example.glazovnetadminapp.domain.repository.AddressApiRepository
+import com.example.glazovnetadminapp.domain.repository.AnnouncementsApiRepository
+import com.example.glazovnetadminapp.domain.repository.ClientsApiRepository
+import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
+import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
+import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository
 import com.example.glazovnetadminapp.domain.useCases.AddressesUseCase
 import com.example.glazovnetadminapp.domain.useCases.AnnouncementsUseCase
 import com.example.glazovnetadminapp.domain.useCases.ClientsUseCase
@@ -24,8 +30,8 @@ object UseCasesAppModule {
     @Provides
     @Singleton
     fun providePostsUseCase(
-        postsApiRepository: PostsApiRepositoryImpl,
-        localSettingsRepository: LocalSettingsRepositoryImpl
+        postsApiRepository: PostsApiRepository,
+        localSettingsRepository: LocalSettingsRepository
     ): PostsUseCase {
         return PostsUseCase(
             postsApiRepository,
@@ -36,8 +42,8 @@ object UseCasesAppModule {
     @Provides
     @Singleton
     fun provideTariffsUseCase(
-        tariffsApiRepository: TariffsApiRepositoryImpl,
-        localSettingsRepository: LocalSettingsRepositoryImpl
+        tariffsApiRepository: TariffsApiRepository,
+        localSettingsRepository: LocalSettingsRepository
     ): TariffsUseCase {
         return TariffsUseCase(
             tariffsApiRepository,
@@ -48,8 +54,8 @@ object UseCasesAppModule {
     @Provides
     @Singleton
     fun provideAnnouncementsUseCase(
-        announcementsApiRepository: AnnouncementsApiRepositoryImpl,
-        localSettingsRepository: LocalSettingsRepositoryImpl
+        announcementsApiRepository: AnnouncementsApiRepository,
+        localSettingsRepository: LocalSettingsRepository
     ): AnnouncementsUseCase {
         return AnnouncementsUseCase(
             announcementsApiRepository,
@@ -60,8 +66,8 @@ object UseCasesAppModule {
     @Provides
     @Singleton
     fun provideAddressesUseCase(
-        addressApiRepository: AddressApiRepositoryImpl,
-        localSettingsRepository: LocalSettingsRepositoryImpl
+        addressApiRepository: AddressApiRepository,
+        localSettingsRepository: LocalSettingsRepository
     ): AddressesUseCase {
         return AddressesUseCase(
             addressApiRepository,
@@ -72,8 +78,8 @@ object UseCasesAppModule {
     @Provides
     @Singleton
     fun provideClientsUseCase(
-        localSettingsRepository: LocalSettingsRepositoryImpl,
-        clientsApiRepository: ClientsApiRepositoryImpl
+        localSettingsRepository: LocalSettingsRepository,
+        clientsApiRepository: ClientsApiRepository
     ): ClientsUseCase {
         return ClientsUseCase(
             localSettingsRepository,

@@ -4,14 +4,16 @@ import com.example.glazovnetadminapp.data.mappers.ToTariffModelDto
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.TariffsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
+import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
+import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import javax.inject.Inject
 
 private const val API_KEY = "test_api_key_123"
 
 class TariffsUseCase @Inject constructor(
-    private val tariffsApiRepository: TariffsApiRepositoryImpl,
-    private val localSettingsRepositoryImpl: LocalSettingsRepositoryImpl
+    private val tariffsApiRepository: TariffsApiRepository,
+    private val localSettingsRepositoryImpl: LocalSettingsRepository
 ) {
     suspend fun getTariffs(): Resource<List<TariffModel>> {
         return tariffsApiRepository.getAllTariffs()

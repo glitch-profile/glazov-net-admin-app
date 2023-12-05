@@ -8,7 +8,7 @@ interface ClientsApiRepository {
 
     suspend fun createClient(
         apiKey: String,
-        client: ClientModelDto
+        newClient: ClientModelDto
     ): Resource<ClientModel?>
 
     suspend fun getClients(

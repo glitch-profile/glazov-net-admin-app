@@ -3,11 +3,13 @@ package com.example.glazovnetadminapp.domain.useCases
 import com.example.glazovnetadminapp.data.repository.AddressApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
+import com.example.glazovnetadminapp.domain.repository.AddressApiRepository
+import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 
 class AddressesUseCase(
-    private val addressApiRepository: AddressApiRepositoryImpl,
-    private val localSettingsRepository: LocalSettingsRepositoryImpl
+    private val addressApiRepository: AddressApiRepository,
+    private val localSettingsRepository: LocalSettingsRepository
 ) {
 
     suspend fun getCitiesList(
