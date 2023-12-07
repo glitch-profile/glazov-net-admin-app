@@ -12,6 +12,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
@@ -29,16 +30,18 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
     override suspend fun getAnnouncements(apiKey: String): Resource<List<AnnouncementModel>> {
         return try {
             val response: ApiResponseDto<List<AnnouncementModelDto>> = client.get("$PATH/getall") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
             }.body()
             Resource.Success(
                 data = response.data.map { it.toAnnouncementModel() },
                 message = response.message
             )
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
@@ -48,7 +51,7 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
     ): Resource<AnnouncementModel?> {
         return try {
             val response: ApiResponseDto<List<AnnouncementModelDto>> = client.post("$PATH/create") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 contentType(ContentType.Application.Json)
                 setBody(newAnnouncement)
             }.body()
@@ -64,13 +67,10 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
             }
         } catch (e: ResponseException) {
             Resource.Error(
-                message = e.response.toString()
+                message = e.response.status.toString()
             )
-        }
-        catch (e: Exception) {
-            Resource.Error(
-                message = "unknown error"
-            )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
@@ -80,7 +80,7 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
     ): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<AnnouncementModelDto>> = client.delete("$PATH/delete") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 parameter("id", announcementId)
             }.body()
             if (response.status) {
@@ -95,13 +95,10 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
             }
         } catch (e: ResponseException) {
             Resource.Error(
-                message = e.response.toString()
+                message = e.response.status.toString()
             )
-        }
-        catch (e: Exception) {
-            Resource.Error(
-                message = "unknown error"
-            )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
@@ -111,7 +108,7 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
     ): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<Boolean> = client.put("$PATH/edit") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 contentType(ContentType.Application.Json)
                 setBody(newAnnouncement)
             }.body()
@@ -127,14 +124,10 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
             }
         } catch (e: ResponseException) {
             Resource.Error(
-                message = e.response.toString()
+                message = e.response.status.toString()
             )
         } catch (e: Exception) {
-            Resource.Error(
-                message = "unknown error"
-            )
+            Resource.Error(message = e.message ?: "unknown error")
         }
-
     }
 }
-//TODO: rework exceptions handling. This always throw an Exception or content transformation exception

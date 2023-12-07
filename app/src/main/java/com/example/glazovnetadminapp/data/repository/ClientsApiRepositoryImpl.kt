@@ -8,7 +8,9 @@ import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.clientsDto.ClientModelDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -29,7 +31,7 @@ class ClientsApiRepositoryImpl @Inject constructor(
     ): Resource<ClientModel?> {
         return try {
             val response: ApiResponseDto<ClientModelDto?> = client.post("$PATH/create") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 contentType(ContentType.Application.Json)
                 setBody(newClient)
             }.body()
@@ -43,17 +45,19 @@ class ClientsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.localizedMessage ?: "unknown error"
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
     override suspend fun getClients(apiKey: String): Resource<List<ClientModel>> {
         return try {
             val response: ApiResponseDto<List<ClientModelDto>> = client.get("$PATH/getall") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
             }.body()
             if (response.status) {
                 Resource.Success(
@@ -63,8 +67,12 @@ class ClientsApiRepositoryImpl @Inject constructor(
             } else {
                 Resource.Error(message = response.message)
             }
+        } catch (e: ResponseException) {
+            Resource.Error(
+                message = e.response.status.toString()
+            )
         } catch (e: Exception) {
-            Resource.Error(message = e.localizedMessage ?: "unknown error")
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 

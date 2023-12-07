@@ -8,8 +8,10 @@ import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
@@ -38,10 +40,12 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
@@ -61,18 +65,18 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
     override suspend fun getPostById(postId: String): Resource<PostModel?> {
         return try {
-            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/get") {
-                parameter("post_id", postId)
-            }.body()
+            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/$postId").body()
             if (response.status) {
                 Resource.Success(
                     data = response.data.firstOrNull()?.toPostModel(),
@@ -83,17 +87,19 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
     override suspend fun addPost(apiKey: String, postModel: PostModelDto): Resource<PostModel?> {
         return try {
             val response: ApiResponseDto<List<PostModelDto>> = client.post("$PATH/add") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 contentType(ContentType.Application.Json)
                 setBody(postModel)
             }.body()
@@ -107,17 +113,19 @@ class PostsApiRepositoryImpl @Inject constructor(
                     response.message
                 )
             }
-        } catch (e:Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
     override suspend fun editPost(apiKey: String, postModel: PostModelDto): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<PostModelDto>> = client.put("$PATH/edit") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 contentType(ContentType.Application.Json)
                 setBody(postModel)
             }.body()
@@ -131,17 +139,19 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
     override suspend fun deletePostById(apiKey: String, postId: String): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<PostModelDto>> = client.delete("$PATH/delete") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 parameter("post_id", postId)
             }.body()
             if (response.status) {
@@ -154,10 +164,12 @@ class PostsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 }

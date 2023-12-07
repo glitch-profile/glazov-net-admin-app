@@ -8,8 +8,10 @@ import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.tariffsDto.TariffModelDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
@@ -37,17 +39,19 @@ class TariffsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
     override suspend fun addTariff(apiKey: String, tariff: TariffModelDto): Resource<TariffModel?> {
         return try {
             val response: ApiResponseDto<List<TariffModelDto>> = client.post("$PATH/add") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 contentType(ContentType.Application.Json)
                 setBody(tariff)
             }.body()
@@ -61,17 +65,19 @@ class TariffsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
     override suspend fun deleteTariff(apiKey: String, tariffId: String): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<TariffModelDto>> = client.delete("$PATH/remove") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 parameter("tariff_id", tariffId)
             }.body()
             if (response.status) {
@@ -84,17 +90,19 @@ class TariffsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
     override suspend fun updateTariff(apiKey: String, tariff: TariffModelDto): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<TariffModelDto>> = client.put("$PATH/edit") {
-                parameter("api_key", apiKey)
+                header("api_key", apiKey)
                 contentType(ContentType.Application.Json)
                 setBody(tariff)
             }.body()
@@ -108,10 +116,12 @@ class TariffsApiRepositoryImpl @Inject constructor(
                     message = response.message
                 )
             }
-        } catch (e: Exception) {
+        } catch (e: ResponseException) {
             Resource.Error(
-                message = e.message.toString()
+                message = e.response.status.toString()
             )
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
         }
     }
 }
