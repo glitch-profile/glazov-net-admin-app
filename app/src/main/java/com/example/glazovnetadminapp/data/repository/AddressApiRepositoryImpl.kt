@@ -8,6 +8,7 @@ import com.example.glazovnetadminapp.entity.AddressModelDto
 import com.example.glazovnetadminapp.entity.ApiResponseDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -109,9 +110,9 @@ class AddressApiRepositoryImpl @Inject constructor(
                 )
             }
         } catch (e: ResponseException) {
-            Resource.Error(
-                message = e.response.status.toString()
-            )
+            Resource.Error(message = e.response.status.toString())
+        } catch (e: ConnectTimeoutException) {
+            Resource.Error(message = "server not available")
         } catch (e: Exception) {
             Resource.Error(message = e.message ?: "unknown error")
         }

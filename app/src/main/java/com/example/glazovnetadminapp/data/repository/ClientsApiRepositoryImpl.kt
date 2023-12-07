@@ -8,6 +8,7 @@ import com.example.glazovnetadminapp.entity.ApiResponseDto
 import com.example.glazovnetadminapp.entity.clientsDto.ClientModelDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -46,9 +47,9 @@ class ClientsApiRepositoryImpl @Inject constructor(
                 )
             }
         } catch (e: ResponseException) {
-            Resource.Error(
-                message = e.response.status.toString()
-            )
+            Resource.Error(message = e.response.status.toString())
+        } catch (e: ConnectTimeoutException) {
+            Resource.Error(message = "server not available")
         } catch (e: Exception) {
             Resource.Error(message = e.message ?: "unknown error")
         }
@@ -68,9 +69,9 @@ class ClientsApiRepositoryImpl @Inject constructor(
                 Resource.Error(message = response.message)
             }
         } catch (e: ResponseException) {
-            Resource.Error(
-                message = e.response.status.toString()
-            )
+            Resource.Error(message = e.response.status.toString())
+        } catch (e: ConnectTimeoutException) {
+            Resource.Error(message = "server not available")
         } catch (e: Exception) {
             Resource.Error(message = e.message ?: "unknown error")
         }
