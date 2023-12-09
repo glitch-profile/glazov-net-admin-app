@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
-import com.example.glazovnetadminapp.presentation.RequestErrorScreen
+import com.example.glazovnetadminapp.presentation.components.RequestErrorScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

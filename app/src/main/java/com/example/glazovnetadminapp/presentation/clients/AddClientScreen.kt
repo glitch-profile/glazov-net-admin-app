@@ -65,7 +65,7 @@ fun AddClientScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Create client"
+                        text = stringResource(id = R.string.app_add_clients_screen_name)
                     )
                 },
                 navigationIcon = {
@@ -115,7 +115,7 @@ fun AddClientScreen(
                     .padding(horizontal = 16.dp),
                 label = {
                     Text(
-                        text = "Account number"
+                        text = stringResource(id = R.string.add_client_account_number_placeholder)
                     )
                 },
                 singleLine = true,
@@ -130,7 +130,7 @@ fun AddClientScreen(
                     .padding(horizontal = 16.dp),
                 label = {
                     Text(
-                        text = "last name"
+                        text = stringResource(id = R.string.add_client_lastname_placeholder)
                     )
                 },
                 singleLine = true,
@@ -144,7 +144,7 @@ fun AddClientScreen(
                     .padding(horizontal = 16.dp),
                 label = {
                     Text(
-                        text = "First name"
+                        text = stringResource(id = R.string.add_client_firstname_placeholder)
                     )
                 },
                 singleLine = true,
@@ -158,7 +158,7 @@ fun AddClientScreen(
                     .padding(horizontal = 16.dp),
                 label = {
                     Text(
-                        text = "Middle name"
+                        text = stringResource(id = R.string.add_client_middlename_placeholder)
                     )
                 },
                 singleLine = true,
@@ -173,7 +173,7 @@ fun AddClientScreen(
                     .padding(horizontal = 16.dp),
                 label = {
                     Text(
-                        text = "Login"
+                        text = stringResource(id = R.string.add_client_login_placeholder)
                     )
                 },
                 singleLine = true,
@@ -187,7 +187,7 @@ fun AddClientScreen(
                     .padding(horizontal = 16.dp),
                 label = {
                     Text(
-                        text = "Password"
+                        text = stringResource(id = R.string.add_client_password_placeholder)
                     )
                 },
                 singleLine = true,
@@ -201,7 +201,7 @@ fun AddClientScreen(
                     viewModel.updateCitiesSearch(it)
                 },
                 suggestions = citiesList.value,
-                label = "City",
+                label = stringResource(id = R.string.add_client_city_placeholder),
                 interactionSource = citiesInteractionSource,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
@@ -212,7 +212,7 @@ fun AddClientScreen(
                     viewModel.updateStreetsSearch(it)
                 },
                 suggestions = streetsList.value,
-                label = "Street",
+                label = stringResource(id = R.string.add_client_street_placeholder),
                 interactionSource = streetsInteractionSource,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
@@ -229,7 +229,7 @@ fun AddClientScreen(
                         .weight(1f),
                     label = {
                         Text(
-                            text = "House number"
+                            text = stringResource(id = R.string.add_client_house_number_placeholder)
                         )
                     },
                     singleLine = true,
@@ -243,7 +243,7 @@ fun AddClientScreen(
                         .weight(1f),
                     label = {
                         Text(
-                            text = "Room number"
+                            text = stringResource(id = R.string.add_client_room_number_placeholder)
                         )
                     },
                     singleLine = true,
@@ -309,7 +309,7 @@ fun AddClientScreen(
                                     && roomNumber.isNotBlank()
                             )
                 ) {
-                    Text(text = stringResource(id = R.string.add_post_screen_confirm_button))
+                    Text(text = stringResource(id = R.string.app_button_dialog_confirm))
                 }
             }
         }

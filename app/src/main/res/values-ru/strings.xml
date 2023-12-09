@@ -44,8 +44,9 @@
     <string name="tariff_type_archive">Архив</string>
     <string name="menu_posts_title_text">Посты</string>
     <string name="menu_tariffs_title_text">Тарифы</string>
+    <string name="menu_clients_title_text">Клиенты</string>
     <string name="menu_details_title_text">Подробности</string>
-    <string name="app_tariffs_list_screen_name">Список тарифов</string>
+    <string name="app_tariffs_list_screen_name">Тарифы</string>
     <string name="tariff_name_filter_placeholder">Наименование тарифа</string>
     <string name="app_show_filters_button">Показать фильтры</string>
     <string name="app_hide_filters_button">Спрятать фильтры</string>
@@ -62,6 +63,16 @@
         <item quantity="few">Выбрано %d адреса</item>
         <item quantity="many">Выбрано %d адресов</item>
     </plurals>
+    <string name="add_client_account_number_placeholder">Лицевой счёт</string>
+    <string name="add_client_firstname_placeholder">Фамилия</string>
+    <string name="add_client_lastname_placeholder">Имя</string>
+    <string name="add_client_middlename_placeholder">Отчество</string>
+    <string name="add_client_login_placeholder">Логин</string>
+    <string name="add_client_password_placeholder">Пароль</string>
+    <string name="add_client_city_placeholder">Населенный пункт</string>
+    <string name="add_client_street_placeholder">Улица</string>
+    <string name="add_client_house_number_placeholder">Номер дома</string>
+    <string name="add_client_room_number_placeholder">Номер квартиры</string>
     <string name="settings_api_key_text">API ключ</string>
     <string name="settings_api_key_not_found_text">API ключ не найден</string>
     <string name="settings_api_key_description">АPI ключ нужен для того, что бы увеличить безопасность. Без него вы не сможете вносить изменения в базу данных.</string>
@@ -77,4 +88,9 @@
     <string name="app_button_fix_now">Исправить</string>
     <string name="tariff_cost_text_suffix">руб./мес.</string>
     <string name="add_announcement_instruction_text">Начните фильтрацию адресов с того, что выберите город и начните вводить начало нужной улицы</string>
+    <string name="menu_experimental_title_text">Экспериментальное</string>
+    <string name="app_clients_screen_name">Клиенты</string>
+    <string name="app_add_clients_screen_name">Добавить клиента</string>
+    <string name="app_chat_request_screen_name">Запросы в поддержку</string>
+    <string name="app_edit_announcement_screen_name">Редактировать обьявление</string>
 </resources>

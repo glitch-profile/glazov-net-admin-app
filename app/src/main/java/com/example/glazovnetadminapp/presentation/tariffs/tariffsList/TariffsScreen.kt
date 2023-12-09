@@ -53,7 +53,7 @@ import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffType
-import com.example.glazovnetadminapp.presentation.RequestErrorScreen
+import com.example.glazovnetadminapp.presentation.components.RequestErrorScreen
 import com.example.glazovnetadminapp.presentation.components.SelectionChipButton
 
 @OptIn(ExperimentalMaterial3Api::class)

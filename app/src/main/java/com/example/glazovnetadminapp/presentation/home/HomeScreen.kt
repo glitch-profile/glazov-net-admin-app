@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
@@ -84,13 +85,13 @@ fun HomeScreen(
                     screenRouteToOpen = "settings"
                 )
             }
-            Text(
-                text = stringResource(id = R.string.menu_posts_title_text),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .padding(start = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+//            Text(
+//                text = stringResource(id = R.string.menu_posts_title_text),
+//                style = MaterialTheme.typography.titleMedium,
+//                modifier = Modifier
+//                    .padding(start = 16.dp)
+//            )
+//            Spacer(modifier = Modifier.height(8.dp))
             MenuButton(
                 text = stringResource(id = R.string.app_posts_screen_name),
                 onClick = {
@@ -106,13 +107,13 @@ fun HomeScreen(
                 iconVector = Icons.Default.List
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = stringResource(id = R.string.menu_tariffs_title_text),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .padding(start = 16.dp)
-            )
+//            Spacer(modifier = Modifier.height(24.dp))
+//            Text(
+//                text = stringResource(id = R.string.menu_tariffs_title_text),
+//                style = MaterialTheme.typography.titleMedium,
+//                modifier = Modifier
+//                    .padding(start = 16.dp)
+//            )
             Spacer(modifier = Modifier.height(8.dp))
             MenuButton(
                 text = stringResource(id = R.string.app_tariffs_list_screen_name),
@@ -121,38 +122,30 @@ fun HomeScreen(
                 },
                 iconVector = Icons.Default.List
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "Experimental",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .padding(start = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
             MenuButton(
-                text = "Clients",
+                text = stringResource(id = R.string.app_clients_screen_name),
                 onClick = {
                     navController.navigate("clients")
                 },
                 iconVector = Icons.Default.Person
             )
             MenuButton(
-                text = "Sandbox",
+                text = stringResource(id = R.string.app_chat_request_screen_name),
                 isEnable = false,
                 onClick = {
+                /*TODO*/
                 },
-                iconVector = Icons.Default.Warning
+                iconVector = Icons.Default.MailOutline
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = stringResource(id = R.string.menu_details_title_text),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .padding(start = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+//            Spacer(modifier = Modifier.height(24.dp))
+//            Text(
+//                text = stringResource(id = R.string.menu_details_title_text),
+//                style = MaterialTheme.typography.titleMedium,
+//                modifier = Modifier
+//                    .padding(start = 16.dp)
+//            )
+//            Spacer(modifier = Modifier.height(8.dp))
             MenuButton(
                 text = stringResource(id = R.string.app_settings_screen_name),
                 onClick = {
@@ -161,6 +154,21 @@ fun HomeScreen(
                 iconVector = Icons.Default.Settings
             )
 
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = stringResource(id = R.string.menu_experimental_title_text),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(start = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            MenuButton(
+                text = "Sandbox",
+                isEnable = false,
+                onClick = {
+                },
+                iconVector = Icons.Default.Warning
+            )
         }
     }
 }

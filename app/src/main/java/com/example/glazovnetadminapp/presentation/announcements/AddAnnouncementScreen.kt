@@ -94,9 +94,15 @@ fun AddAnnouncementScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = stringResource(id = R.string.app_add_announcement_screen_name)
-                    )
+                    if (state.data.isEmpty()) {
+                        Text(
+                            text = stringResource(id = R.string.app_add_announcement_screen_name)
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(id = R.string.app_edit_announcement_screen_name)
+                        )
+                    }
                 },
                 navigationIcon = {
                     IconButton(

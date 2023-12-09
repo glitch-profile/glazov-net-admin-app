@@ -3,7 +3,9 @@
 
     <string name="menu_posts_title_text">Posts</string>
     <string name="menu_tariffs_title_text">Tariffs</string>
+    <string name="menu_clients_title_text">Clients</string>
     <string name="menu_details_title_text">Details</string>
+    <string name="menu_experimental_title_text">Experimental</string>
 
     <string name="post_card_source_text">Source</string>
 
@@ -11,12 +13,16 @@
     <string name="app_add_post_screen_name">Add new post</string>
     <string name="app_post_detail_screen_name">Post details</string>
     <string name="app_edit_post_screen_name">Edit post</string>
-    <string name="app_tariffs_list_screen_name">Tariffs list</string>
+    <string name="app_tariffs_list_screen_name">Tariffs</string>
     <string name="app_settings_screen_name">Settings</string>
     <string name="app_add_tariff_screen_name">New tariff</string>
     <string name="app_edit_tariff_screen_name">Edit tariff</string>
     <string name="app_announcements_screen_name">Announcements</string>
     <string name="app_add_announcement_screen_name">Add announcement</string>
+    <string name="app_edit_announcement_screen_name">Edit announcement</string>
+    <string name="app_clients_screen_name">Clients</string>
+    <string name="app_add_clients_screen_name">Add client</string>
+    <string name="app_chat_request_screen_name">Support requests</string>
 
     <string name="add_post_screen_title">Title</string>
     <string name="add_post_screen_short_description">Short description</string>
@@ -67,6 +73,17 @@
         <item quantity="other">%d addresses are selected</item>
     </plurals>
     <string name="add_announcement_instruction_text">Start filtering addresses by selecting a city and start typing the beginning of the desired street</string>
+    
+    <string name="add_client_account_number_placeholder">Account number</string>
+    <string name="add_client_firstname_placeholder">Last name</string>
+    <string name="add_client_lastname_placeholder">First name</string>
+    <string name="add_client_middlename_placeholder">Middle name</string>
+    <string name="add_client_login_placeholder">Login</string>
+    <string name="add_client_password_placeholder">Password</string>
+    <string name="add_client_city_placeholder">City</string>
+    <string name="add_client_street_placeholder">Street</string>
+    <string name="add_client_house_number_placeholder">House number</string>
+    <string name="add_client_room_number_placeholder">Room number</string>
     
     <string name="settings_api_key_text">API key</string>
     <string name="settings_api_key_not_found_text">API key not found</string>
