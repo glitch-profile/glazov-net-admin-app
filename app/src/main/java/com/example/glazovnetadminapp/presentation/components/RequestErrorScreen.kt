@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.presentation
+package com.example.glazovnetadminapp.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
