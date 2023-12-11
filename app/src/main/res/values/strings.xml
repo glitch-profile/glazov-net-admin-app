@@ -75,8 +75,8 @@
     <string name="add_announcement_instruction_text">Start filtering addresses by selecting a city and start typing the beginning of the desired street</string>
     
     <string name="add_client_account_number_placeholder">Account number</string>
-    <string name="add_client_firstname_placeholder">Last name</string>
-    <string name="add_client_lastname_placeholder">First name</string>
+    <string name="add_client_firstname_placeholder">First name</string>
+    <string name="add_client_lastname_placeholder">Last name</string>
     <string name="add_client_middlename_placeholder">Middle name</string>
     <string name="add_client_login_placeholder">Login</string>
     <string name="add_client_password_placeholder">Password</string>

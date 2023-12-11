@@ -64,8 +64,8 @@
         <item quantity="many">Выбрано %d адресов</item>
     </plurals>
     <string name="add_client_account_number_placeholder">Лицевой счёт</string>
-    <string name="add_client_firstname_placeholder">Фамилия</string>
-    <string name="add_client_lastname_placeholder">Имя</string>
+    <string name="add_client_firstname_placeholder">Имя</string>
+    <string name="add_client_lastname_placeholder">Фамилия</string>
     <string name="add_client_middlename_placeholder">Отчество</string>
     <string name="add_client_login_placeholder">Логин</string>
     <string name="add_client_password_placeholder">Пароль</string>
