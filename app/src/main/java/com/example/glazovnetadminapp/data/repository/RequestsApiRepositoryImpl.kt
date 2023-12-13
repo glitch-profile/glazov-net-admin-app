@@ -62,7 +62,7 @@ class RequestsApiRepositoryImpl(
         }
     }
 
-    override suspend fun addRequest(newRequest: SupportRequestDto): Resource<SupportRequestModel> {
+    override suspend fun addRequest(newRequest: SupportRequestDto): Resource<SupportRequestModel?> {
         return try {
             val response: ApiResponseDto<SupportRequestDto> = client.post("$PATH/createrequest") {
                 contentType(ContentType.Application.Json)
@@ -86,18 +86,21 @@ class RequestsApiRepositoryImpl(
         return try {
             socket = wsClient.webSocketSession {
                 url("$PATH/requests-socket")
+                header("memberId", memberId)
             }
             if (socket?.isActive == true) {
                 Resource.Success(data = Unit)
             } else {
                 Resource.Error(message = "couldn't establish a connection")
             }
+        } catch (e: ResponseException) {
+            Resource.Error(e.response.status.toString())
         } catch (e: Exception) {
             Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
-    override fun observerRequests(memberId: String): Flow<SupportRequestModel> {
+    override fun observeRequests(): Flow<SupportRequestModel> {
         return try {
             socket?.incoming
                 ?.receiveAsFlow()

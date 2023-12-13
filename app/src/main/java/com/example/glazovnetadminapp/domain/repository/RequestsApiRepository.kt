@@ -9,11 +9,11 @@ interface RequestsApiRepository {
 
     suspend fun getAllRequests(apiKey: String): Resource<List<SupportRequestModel>>
 
-    suspend fun addRequest(newRequest: SupportRequestDto): Resource<SupportRequestModel>
+    suspend fun addRequest(newRequest: SupportRequestDto): Resource<SupportRequestModel?>
 
     suspend fun initSocket(memberId: String): Resource<Unit>
 
-    fun observerRequests(memberId: String): Flow<SupportRequestModel>
+    fun observeRequests(): Flow<SupportRequestModel>
 
     suspend fun closeConnection()
 
