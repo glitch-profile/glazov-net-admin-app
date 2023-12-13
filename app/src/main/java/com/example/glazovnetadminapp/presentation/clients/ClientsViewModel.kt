@@ -110,7 +110,6 @@ class ClientsViewModel @Inject constructor(
                             )
                         }
                     }
-                    Log.i("TAG", "getAllClients: request successful")
                 }
                 is Resource.Error -> {
                     _clientsScreenState.update {
