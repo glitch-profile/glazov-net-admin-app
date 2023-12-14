@@ -30,11 +30,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.isActive
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 import javax.inject.Named
 
 private const val PATH = "api/requests"
 
-class RequestsApiRepositoryImpl(
+class RequestsApiRepositoryImpl @Inject constructor(
     @Named("RestClient") private val client: HttpClient,
     @Named("WsClient") private val wsClient: HttpClient
 ): RequestsApiRepository {
