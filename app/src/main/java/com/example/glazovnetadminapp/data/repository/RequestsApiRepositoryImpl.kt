@@ -33,7 +33,7 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Named
 
-private const val PATH = "api/requests"
+private const val PATH = "api/support"
 
 class RequestsApiRepositoryImpl @Inject constructor(
     @Named("RestClient") private val client: HttpClient,
@@ -96,6 +96,8 @@ class RequestsApiRepositoryImpl @Inject constructor(
             }
         } catch (e: ResponseException) {
             Resource.Error(e.response.status.toString())
+        } catch (e: ConnectTimeoutException) {
+            Resource.Error(e.message.toString())
         } catch (e: Exception) {
             Resource.Error(message = e.message ?: "unknown error")
         }
