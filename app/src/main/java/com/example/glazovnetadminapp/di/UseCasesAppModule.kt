@@ -11,11 +11,13 @@ import com.example.glazovnetadminapp.domain.repository.AnnouncementsApiRepositor
 import com.example.glazovnetadminapp.domain.repository.ClientsApiRepository
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
+import com.example.glazovnetadminapp.domain.repository.RequestsApiRepository
 import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository
 import com.example.glazovnetadminapp.domain.useCases.AddressesUseCase
 import com.example.glazovnetadminapp.domain.useCases.AnnouncementsUseCase
 import com.example.glazovnetadminapp.domain.useCases.ClientsUseCase
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
+import com.example.glazovnetadminapp.domain.useCases.RequestsUseCase
 import com.example.glazovnetadminapp.domain.useCases.TariffsUseCase
 import dagger.Module
 import dagger.Provides
@@ -87,4 +89,15 @@ object UseCasesAppModule {
         )
     }
 
+    @Provides
+    @Singleton
+    fun provideRequestsUseCase(
+        localSettingsRepository: LocalSettingsRepository,
+        requestsApiRepository: RequestsApiRepository
+    ): RequestsUseCase {
+        return RequestsUseCase(
+            localSettingsRepository,
+            requestsApiRepository
+        )
+    }
 }

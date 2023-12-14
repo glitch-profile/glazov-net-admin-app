@@ -5,12 +5,14 @@ import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryI
 import com.example.glazovnetadminapp.data.repository.ClientsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
+import com.example.glazovnetadminapp.data.repository.RequestsApiRepositoryImpl
 import com.example.glazovnetadminapp.data.repository.TariffsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.repository.AddressApiRepository
 import com.example.glazovnetadminapp.domain.repository.AnnouncementsApiRepository
 import com.example.glazovnetadminapp.domain.repository.ClientsApiRepository
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
+import com.example.glazovnetadminapp.domain.repository.RequestsApiRepository
 import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository
 import dagger.Binds
 import dagger.Module
@@ -57,4 +59,10 @@ abstract class RepositoryModule {
     abstract fun bindClientsApiRepository(
         clientsApiRepositoryImpl: ClientsApiRepositoryImpl
     ): ClientsApiRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRequestsRepository(
+        requestsApiRepositoryImpl: RequestsApiRepositoryImpl
+    ): RequestsApiRepository
 }
