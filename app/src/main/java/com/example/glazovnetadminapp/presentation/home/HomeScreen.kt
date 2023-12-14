@@ -131,9 +131,8 @@ fun HomeScreen(
             )
             MenuButton(
                 text = stringResource(id = R.string.app_chat_request_screen_name),
-                isEnable = false,
                 onClick = {
-                /*TODO*/
+                    navController.navigate("requests_list")
                 },
                 iconVector = Icons.Default.MailOutline
             )

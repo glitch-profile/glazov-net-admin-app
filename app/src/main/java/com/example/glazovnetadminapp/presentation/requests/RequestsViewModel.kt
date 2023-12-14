@@ -27,6 +27,10 @@ class RequestsViewModel @Inject constructor(
     private val _state = MutableStateFlow(ScreenState<SupportRequestModel>())
     val state = _state.asStateFlow()
 
+    init {
+        connectToSocket()
+    }
+
     fun getAllRequests() {
         viewModelScope.launch {
             _state.update {
@@ -90,7 +94,14 @@ class RequestsViewModel @Inject constructor(
         }
     }
 
+    fun disconnect() {
+        viewModelScope.launch {
+            requestsUseCase.disconnect()
+        }
+    }
+
     override fun onCleared() {
+        disconnect()
         super.onCleared()
     }
 
