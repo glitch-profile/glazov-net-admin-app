@@ -11,5 +11,5 @@ data class SupportRequestDto(
     val description: String,
 //    val messages: List<MessageModelDto>,
     val creationDate: Long,
-    val isSolved: Boolean
+    val status: Int
 )

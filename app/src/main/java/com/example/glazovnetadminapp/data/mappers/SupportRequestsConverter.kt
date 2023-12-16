@@ -18,7 +18,7 @@ fun SupportRequestDto.toSupportRequest(): SupportRequestModel {
         title = this.title,
         description = this.description,
         creationDate = creationTime,
-        isSolved = isSolved
+        status = this.status
     )
 }
 
@@ -31,6 +31,6 @@ fun SupportRequestModel.toSupportRequestDto(): SupportRequestDto {
         title = this.title,
         description = this.description,
         creationDate = creationTimeLong,
-        isSolved = this.isSolved
+        status = this.status
     )
 }

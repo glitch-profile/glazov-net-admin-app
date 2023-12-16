@@ -27,10 +27,6 @@ class RequestsViewModel @Inject constructor(
     private val _state = MutableStateFlow(ScreenState<SupportRequestModel>())
     val state = _state.asStateFlow()
 
-    init {
-        connectToSocket()
-    }
-
     fun getAllRequests() {
         viewModelScope.launch {
             _state.update {
