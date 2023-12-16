@@ -1,8 +1,6 @@
 package com.example.glazovnetadminapp.domain.useCases
 
 import com.example.glazovnetadminapp.data.mappers.toPostModelDto
-import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
-import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.repository.PostsApiRepository

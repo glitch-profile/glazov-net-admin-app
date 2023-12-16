@@ -1,8 +1,6 @@
 package com.example.glazovnetadminapp.domain.useCases
 
 import com.example.glazovnetadminapp.data.mappers.toClientModelDto
-import com.example.glazovnetadminapp.data.repository.ClientsApiRepositoryImpl
-import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.clients.ClientModel
 import com.example.glazovnetadminapp.domain.repository.ClientsApiRepository
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository

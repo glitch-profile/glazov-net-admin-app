@@ -101,8 +101,8 @@ class RequestsViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        disconnect()
         super.onCleared()
+        disconnect()
     }
 
 }

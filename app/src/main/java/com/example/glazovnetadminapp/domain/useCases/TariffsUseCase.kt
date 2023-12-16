@@ -1,8 +1,6 @@
 package com.example.glazovnetadminapp.domain.useCases
 
 import com.example.glazovnetadminapp.data.mappers.ToTariffModelDto
-import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
-import com.example.glazovnetadminapp.data.repository.TariffsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.tariffs.TariffModel
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository

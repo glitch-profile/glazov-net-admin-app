@@ -1,5 +1,7 @@
 package com.example.glazovnetadminapp.presentation.requests
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,18 +31,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.presentation.components.RequestErrorScreen
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun RequestScreen(
     navController: NavController,
@@ -151,6 +150,10 @@ fun RequestScreen(
                                         }
                                     ) {requestModel ->
                                         RequestCard(
+                                            modifier = Modifier
+                                                .animateItemPlacement(
+                                                    animationSpec = tween(durationMillis = 300)
+                                                ),
                                             requestModel = requestModel,
                                             onClick = {
 //                                                navController.navigate("request_chat")

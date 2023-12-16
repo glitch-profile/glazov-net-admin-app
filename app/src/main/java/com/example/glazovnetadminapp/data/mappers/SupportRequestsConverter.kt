@@ -1,8 +1,6 @@
 package com.example.glazovnetadminapp.data.mappers
 
-import com.example.glazovnetadminapp.domain.models.support.MessageModel
 import com.example.glazovnetadminapp.domain.models.support.SupportRequestModel
-import com.example.glazovnetadminapp.entity.supportsDto.MessageModelDto
 import com.example.glazovnetadminapp.entity.supportsDto.SupportRequestDto
 import java.time.Instant
 import java.time.OffsetDateTime

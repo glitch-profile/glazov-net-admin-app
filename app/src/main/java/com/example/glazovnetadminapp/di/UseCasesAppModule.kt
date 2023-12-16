@@ -1,11 +1,5 @@
 package com.example.glazovnetadminapp.di
 
-import com.example.glazovnetadminapp.data.repository.AddressApiRepositoryImpl
-import com.example.glazovnetadminapp.data.repository.AnnouncementsApiRepositoryImpl
-import com.example.glazovnetadminapp.data.repository.ClientsApiRepositoryImpl
-import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
-import com.example.glazovnetadminapp.data.repository.PostsApiRepositoryImpl
-import com.example.glazovnetadminapp.data.repository.TariffsApiRepositoryImpl
 import com.example.glazovnetadminapp.domain.repository.AddressApiRepository
 import com.example.glazovnetadminapp.domain.repository.AnnouncementsApiRepository
 import com.example.glazovnetadminapp.domain.repository.ClientsApiRepository

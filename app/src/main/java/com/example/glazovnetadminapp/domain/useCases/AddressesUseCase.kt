@@ -1,7 +1,5 @@
 package com.example.glazovnetadminapp.domain.useCases
 
-import com.example.glazovnetadminapp.data.repository.AddressApiRepositoryImpl
-import com.example.glazovnetadminapp.data.repository.LocalSettingsRepositoryImpl
 import com.example.glazovnetadminapp.domain.models.announcements.AddressFilterElement
 import com.example.glazovnetadminapp.domain.repository.AddressApiRepository
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
