@@ -23,7 +23,6 @@ import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -86,7 +85,7 @@ class RequestsApiRepositoryImpl @Inject constructor(
     override suspend fun initSocket(memberId: String): Resource<Unit> {
         return try {
             socket = wsClient.webSocketSession {
-                url("$PATH/requests-socket")
+                url(port = 8080, path = "$PATH/requests-socket")
                 header("memberId", memberId)
             }
             if (socket?.isActive == true) {
@@ -109,8 +108,11 @@ class RequestsApiRepositoryImpl @Inject constructor(
                 ?.receiveAsFlow()
                 ?.filter { it is Frame.Text }
                 ?.map {
-                    val json = (it as? Frame.Text)?.readText() ?: ""
-                    val requestDto = Json.decodeFromString<SupportRequestDto>(json)
+                    val stringRequests = (it as? Frame.Text)?.readText() ?: ""
+                    val json = Json {
+                        ignoreUnknownKeys = true
+                    }
+                    val requestDto = json.decodeFromString<SupportRequestDto>(stringRequests)
                     requestDto.toSupportRequest()
                 } ?: flow{}
         } catch (e: Exception) {
