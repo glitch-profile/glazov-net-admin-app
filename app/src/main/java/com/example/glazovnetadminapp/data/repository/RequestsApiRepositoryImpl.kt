@@ -1,10 +1,13 @@
 package com.example.glazovnetadminapp.data.repository
 
+import android.util.Log
 import com.example.glazovnetadminapp.data.mappers.toSupportRequest
+import com.example.glazovnetadminapp.domain.models.support.MessageModel
 import com.example.glazovnetadminapp.domain.models.support.SupportRequestModel
 import com.example.glazovnetadminapp.domain.repository.RequestsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.entity.ApiResponseDto
+import com.example.glazovnetadminapp.entity.supportsDto.MessageModelDto
 import com.example.glazovnetadminapp.entity.supportsDto.SupportRequestDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -28,6 +31,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.isActive
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Named
@@ -39,7 +43,8 @@ class RequestsApiRepositoryImpl @Inject constructor(
     @Named("WsClient") private val wsClient: HttpClient
 ): RequestsApiRepository {
 
-    private var socket: WebSocketSession? = null
+    private var requestsSocket: WebSocketSession? = null
+    private var chatSocket: WebSocketSession? = null
 
     override suspend fun getAllRequests(apiKey: String): Resource<List<SupportRequestModel>> {
         return try {
@@ -52,6 +57,30 @@ class RequestsApiRepositoryImpl @Inject constructor(
                 )
             } else {
                 Resource.Error(message = response.message)
+            }
+        } catch (e: ResponseException) {
+            Resource.Error(message = e.response.status.toString())
+        } catch (e: ConnectTimeoutException) {
+            Resource.Error(message = "server not available")
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
+        }
+    }
+
+    override suspend fun getRequestById(
+        requestId: String,
+        memberId: String
+    ): Resource<SupportRequestModel?> {
+        return try {
+            val response: ApiResponseDto<SupportRequestDto> = client.get("$PATH/request/$requestId") {
+                header("member_id", memberId)
+            }.body()
+            if (response.status) {
+                Resource.Success(
+                    data = response.data.toSupportRequest()
+                )
+            } else {
+                Resource.Error(response.message)
             }
         } catch (e: ResponseException) {
             Resource.Error(message = e.response.status.toString())
@@ -82,13 +111,13 @@ class RequestsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun initSocket(memberId: String): Resource<Unit> {
+    override suspend fun initRequestsSocket(memberId: String): Resource<Unit> {
         return try {
-            socket = wsClient.webSocketSession {
+            requestsSocket = wsClient.webSocketSession {
                 url(port = 8080, path = "$PATH/requests-socket")
-                header("memberId", memberId)
+                header("member_id", memberId)
             }
-            if (socket?.isActive == true) {
+            if (requestsSocket?.isActive == true) {
                 Resource.Success(data = Unit)
             } else {
                 Resource.Error(message = "couldn't establish a connection")
@@ -96,15 +125,62 @@ class RequestsApiRepositoryImpl @Inject constructor(
         } catch (e: ResponseException) {
             Resource.Error(e.response.status.toString())
         } catch (e: ConnectTimeoutException) {
-            Resource.Error(e.message.toString())
+            Resource.Error("server not available")
         } catch (e: Exception) {
             Resource.Error(message = e.message ?: "unknown error")
         }
     }
 
+    override suspend fun initChatSocket(requestId: String, memberId: String): Resource<Unit> {
+        return try {
+            chatSocket = wsClient.webSocketSession {
+                url(port = 8080, path = "$PATH/requests/$requestId/chat-socket")
+                header("member_id", memberId)
+            }
+            if (chatSocket?.isActive == true) {
+                Resource.Success(Unit)
+            } else {
+                Resource.Error("couldn't establish a connection")
+            }
+        } catch (e: ResponseException) {
+            Resource.Error(e.response.status.toString())
+        } catch (e: ConnectTimeoutException) {
+            Resource.Error("server not available")
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
+        }
+    }
+
+    override suspend fun sendMessage(messageText: String): Resource<Unit> {
+        return try {
+            chatSocket?.send(Frame.Text(messageText))
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message ?: "unknown error")
+        }
+    }
+
+    override fun observeMessages(): Flow<MessageModel> {
+        return try {
+            chatSocket?.incoming
+                ?.receiveAsFlow()
+                ?.filter { it is Frame.Text }
+                ?.map {
+                    val encodedMessage = (it as? Frame.Text)?.readText() ?: ""
+                    val json = Json { ignoreUnknownKeys = true }
+                    val messageDto = json.decodeFromString<MessageModelDto>(encodedMessage)
+                    messageDto.toMessageModel()
+                } ?: flow{}
+        } catch (e: Exception) {
+            e.printStackTrace()
+            flow { }
+        }
+    }
+
     override fun observeRequests(): Flow<SupportRequestModel> {
         return try {
-            socket?.incoming
+            requestsSocket?.incoming
                 ?.receiveAsFlow()
                 ?.filter { it is Frame.Text }
                 ?.map {
@@ -121,8 +197,11 @@ class RequestsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun closeConnection() {
-        socket?.close()
+    override suspend fun closeRequestsConnection() {
+        requestsSocket?.close()
     }
 
+    override suspend fun closeChatConnection() {
+        chatSocket?.close()
+    }
 }

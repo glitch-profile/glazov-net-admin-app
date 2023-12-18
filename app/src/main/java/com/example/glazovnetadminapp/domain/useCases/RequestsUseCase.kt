@@ -20,10 +20,10 @@ class RequestsUseCase @Inject constructor(
     //TODO(Add memberId from user auth data)
     suspend fun initRequestsSocket(): Resource<Unit> {
 //        val memberId = localSettingsRepository...
-        return requestsApiRepository.initSocket("123456")
+        return requestsApiRepository.initRequestsSocket("123456")
     }
 
-    fun observeMessages() = requestsApiRepository.observeRequests()
+    fun observeRequests() = requestsApiRepository.observeRequests()
 
     suspend fun addRequest(newRequestModel: SupportRequestModel): Resource<SupportRequestModel?> {
         val requestDto = newRequestModel.toSupportRequestDto()
@@ -31,6 +31,6 @@ class RequestsUseCase @Inject constructor(
     }
 
     suspend fun disconnect() {
-        requestsApiRepository.closeConnection()
+        requestsApiRepository.closeRequestsConnection()
     }
 }
