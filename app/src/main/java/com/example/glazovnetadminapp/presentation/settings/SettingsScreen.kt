@@ -37,7 +37,8 @@ fun SettingsScreen(
 ) {
     val nestedScroll = TopAppBarDefaults.pinnedScrollBehavior()
 
-    val apiKeyState = viewModel.apiKey.collectAsState().value
+    val apiKeyState = viewModel.apiKey.collectAsState()
+    val memberIdState = viewModel.memberId.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -81,7 +82,7 @@ fun SettingsScreen(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
-                value = apiKeyState,
+                value = apiKeyState.value,
                 onValueChange = {
                     viewModel.updateApiKeyString(it)
                 },
@@ -90,11 +91,27 @@ fun SettingsScreen(
                         text = stringResource(id = R.string.settings_api_key_text)
                     )
                 },
-                maxLines = 3
+                singleLine = true
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                value = memberIdState.value,
+                onValueChange = {
+                    viewModel.updateMemberIdString(it)
+                },
+                label = {
+                    Text(
+                        text = "Member ID"
+                    )
+                },
+                singleLine = true
             )
             Spacer(modifier = Modifier.height(24.dp))
             Button(
-                onClick = { viewModel.saveApiKey() },
+                onClick = { viewModel.saveDataToPreferences() },
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(horizontal = 16.dp)

@@ -9,4 +9,6 @@ interface LocalSettingsRepository {
     fun getSavedApiKey(): String
     fun setSavedApiKey(apiKey: String?)
 
+    fun getMemberId(): String
+    fun setMemberId(memberId: String)
 }
