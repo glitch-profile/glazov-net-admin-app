@@ -13,6 +13,8 @@ interface RequestsApiRepository {
 
     suspend fun getRequestById(requestId: String, memberId: String): Resource<SupportRequestModel?>
 
+    suspend fun getMessagesForRequest(requestId: String, memberId: String): Resource<List<MessageModel>>
+
     suspend fun addRequest(newRequest: SupportRequestDto): Resource<SupportRequestModel?>
 
     suspend fun initRequestsSocket(memberId: String): Resource<Unit>

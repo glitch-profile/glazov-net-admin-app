@@ -8,7 +8,8 @@ import java.time.ZoneId
 
 @Serializable
 data class MessageModelDto(
-    val senderName: String,
+    val id: String,
+    val senderId: String,
     val text: String,
     val timestamp: Long
 ) {
@@ -18,7 +19,8 @@ data class MessageModelDto(
             ZoneId.systemDefault()
         )
         return MessageModel(
-            senderName = this.senderName,
+            id = this.id,
+            senderName = this.senderId,
             text = this.text,
             timestamp = sendDateTime
         )

@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.glazovnetadminapp.data.mappers.toSupportRequest
 import com.example.glazovnetadminapp.domain.models.support.MessageModel
 import com.example.glazovnetadminapp.domain.models.support.SupportRequestModel
+import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.repository.RequestsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.entity.ApiResponseDto
@@ -40,7 +41,8 @@ private const val PATH = "api/support"
 
 class RequestsApiRepositoryImpl @Inject constructor(
     @Named("RestClient") private val client: HttpClient,
-    @Named("WsClient") private val wsClient: HttpClient
+    @Named("WsClient") private val wsClient: HttpClient,
+    private val localSettingsRepository: LocalSettingsRepository
 ): RequestsApiRepository {
 
     private var requestsSocket: WebSocketSession? = null
@@ -72,12 +74,40 @@ class RequestsApiRepositoryImpl @Inject constructor(
         memberId: String
     ): Resource<SupportRequestModel?> {
         return try {
-            val response: ApiResponseDto<SupportRequestDto> = client.get("$PATH/request/$requestId") {
+            val response: ApiResponseDto<SupportRequestDto> = client.get("$PATH/requests/$requestId") {
                 header("member_id", memberId)
             }.body()
             if (response.status) {
                 Resource.Success(
                     data = response.data.toSupportRequest()
+                )
+            } else {
+                Resource.Error(response.message)
+            }
+        } catch (e: ResponseException) {
+            Resource.Error(message = e.response.status.toString())
+        } catch (e: ConnectTimeoutException) {
+            Resource.Error(message = "server not available")
+        } catch (e: Exception) {
+            Resource.Error(message = e.message ?: "unknown error")
+        }
+    }
+
+    //TODO(Rework the definition of users own message)
+    override suspend fun getMessagesForRequest(
+        requestId: String,
+        memberId: String
+    ): Resource<List<MessageModel>> {
+        return try {
+            val response: ApiResponseDto<List<MessageModelDto>> = client.get("$PATH/requests/$requestId/messages") {
+                header("member_id", memberId)
+            }.body()
+            if (response.status) {
+                val messagesList = response.data.map { it.toMessageModel() }
+                Resource.Success(
+                    data = messagesList.map { message ->
+                        message.copy(isOwnMessage = message.senderName == localSettingsRepository.getMemberId())
+                    }
                 )
             } else {
                 Resource.Error(response.message)
@@ -161,6 +191,7 @@ class RequestsApiRepositoryImpl @Inject constructor(
         }
     }
 
+    //TODO(Rework the definition of users own message)
     override fun observeMessages(): Flow<MessageModel> {
         return try {
             chatSocket?.incoming
@@ -170,7 +201,8 @@ class RequestsApiRepositoryImpl @Inject constructor(
                     val encodedMessage = (it as? Frame.Text)?.readText() ?: ""
                     val json = Json { ignoreUnknownKeys = true }
                     val messageDto = json.decodeFromString<MessageModelDto>(encodedMessage)
-                    messageDto.toMessageModel()
+                    val message = messageDto.toMessageModel()
+                    message.copy(isOwnMessage = message.senderName == localSettingsRepository.getMemberId())
                 } ?: flow{}
         } catch (e: Exception) {
             e.printStackTrace()
