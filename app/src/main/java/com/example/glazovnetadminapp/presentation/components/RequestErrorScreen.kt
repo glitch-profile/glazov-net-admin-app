@@ -19,11 +19,11 @@ import com.example.glazovnetadminapp.R
 fun RequestErrorScreen(
     modifier: Modifier = Modifier,
     errorText: String,
+    onActionButtonClick: () -> Unit,
     errorTextColor: Color = MaterialTheme.colorScheme.error,
     errorTextStyle: TextStyle = MaterialTheme.typography.bodySmall,
     actionButtonText: String = stringResource(id = R.string.app_buttom_try_again),
-    actionButtonPadding: Dp = 8.dp,
-    onActionButtonClick: () -> Unit,
+    actionButtonPadding: Dp = 8.dp
 ) {
     Column(
         modifier = modifier

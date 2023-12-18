@@ -96,7 +96,8 @@
     <string name="app_show_filters_button">Show filters</string>
     <string name="app_hide_filters_button">Hide filters</string>
     <string name="app_button_dialog_confirm">Confirm</string>
-    <string name="app_button_dialog_cancel">Cancel</string>
+    <string name="app_button_dialog_cancel">Cancel</string>\
+    <string name="app_button_back">Back</string>
     <string name="app_buttom_try_again">Try again</string>
     <string name="app_button_close">Close</string>
     <string name="app_button_fix_now">Fix now</string>

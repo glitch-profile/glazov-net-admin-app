@@ -13,10 +13,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.glazovnetadminapp.presentation.announcements.AddAnnouncementScreen
 import com.example.glazovnetadminapp.presentation.announcements.AnnouncementsScreen
 import com.example.glazovnetadminapp.presentation.announcements.AnnouncementsViewModel
@@ -150,10 +152,18 @@ class MainActivity : ComponentActivity() {
                                     navController = navController
                                 )
                             }
-                            composable("request_chat") {
+                            composable(
+                                route = "request/{request_id}",
+                                arguments = listOf(
+                                    navArgument("request_id") {
+                                        type = NavType.StringType
+                                    }
+                                )
+                            ) {
+                                val requestId = it.arguments?.getString("request_id") ?: ""
                                 RequestChatScreen(
                                     navController = navController,
-                                    requestId = ""
+                                    requestId = requestId
                                 )
                             }
                         }

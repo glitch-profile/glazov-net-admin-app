@@ -11,6 +11,7 @@ import com.example.glazovnetadminapp.domain.useCases.AddressesUseCase
 import com.example.glazovnetadminapp.domain.useCases.AnnouncementsUseCase
 import com.example.glazovnetadminapp.domain.useCases.ClientsUseCase
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
+import com.example.glazovnetadminapp.domain.useCases.RequestChatUseCase
 import com.example.glazovnetadminapp.domain.useCases.RequestsUseCase
 import com.example.glazovnetadminapp.domain.useCases.TariffsUseCase
 import dagger.Module
@@ -90,6 +91,18 @@ object UseCasesAppModule {
         requestsApiRepository: RequestsApiRepository
     ): RequestsUseCase {
         return RequestsUseCase(
+            localSettingsRepository,
+            requestsApiRepository
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideRequestChatUseCase(
+        localSettingsRepository: LocalSettingsRepository,
+        requestsApiRepository: RequestsApiRepository
+    ): RequestChatUseCase {
+        return RequestChatUseCase(
             localSettingsRepository,
             requestsApiRepository
         )

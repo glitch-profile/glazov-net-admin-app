@@ -75,7 +75,7 @@ fun RequestScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(id = R.string.app_clients_screen_name)
+                        text = "Support requests"
                     )
                 },
                 navigationIcon = {
@@ -130,7 +130,7 @@ fun RequestScreen(
                             .fillMaxSize()
                             .padding(horizontal = 16.dp),
                         errorText = state.message,
-                        actionButtonText = "Back",
+                        actionButtonText = stringResource(id = R.string.app_button_back),
                         onActionButtonClick = {
                             navController.popBackStack()
                         }
@@ -143,7 +143,7 @@ fun RequestScreen(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            onClick = { /*TODO*/ },
+                            onClick = { TODO() },
                             enabled = false,
                         ) {
                             Row(
@@ -175,7 +175,7 @@ fun RequestScreen(
                                                 ),
                                             requestModel = requestModel,
                                             onClick = {
-//                                                navController.navigate("request_chat")
+                                                navController.navigate("request/${requestModel.id}")
                                             }
                                         )
                                     }
