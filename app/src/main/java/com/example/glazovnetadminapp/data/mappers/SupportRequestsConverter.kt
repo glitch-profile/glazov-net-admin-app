@@ -17,6 +17,7 @@ fun SupportRequestDto.toSupportRequest(): SupportRequestModel {
         associatedSupportId = this.associatedSupportId,
         title = this.title,
         description = this.description,
+        messages = this.messages.map { it.toMessageModel() },
         creationDate = creationTime,
         status = this.status
     )
@@ -30,6 +31,7 @@ fun SupportRequestModel.toSupportRequestDto(): SupportRequestDto {
         associatedSupportId = this.associatedSupportId,
         title = this.title,
         description = this.description,
+        messages = this.messages.map { it.toMessageModelDto() },
         creationDate = creationTimeLong,
         status = this.status
     )

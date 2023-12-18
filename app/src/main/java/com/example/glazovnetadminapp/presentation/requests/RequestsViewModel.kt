@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.presentation.requests
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.support.SupportRequestModel
@@ -69,7 +68,7 @@ class RequestsViewModel @Inject constructor(
             val result = requestsUseCase.initRequestsSocket()
             when (result) {
                 is Resource.Success -> {
-                    requestsUseCase.observeMessages()
+                    requestsUseCase.observeRequests()
                         .onEach {request ->
                             val newRequestsList = state.value.data.toMutableList().apply {
                                 add(0, request)
@@ -81,9 +80,7 @@ class RequestsViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _state.update {
-                        it.copy(message = result.message).also {
-                            Log.e(TAG, "connectToSocket: cant init session", )
-                        }
+                        it.copy(message = result.message)
                     }
                 }
             }

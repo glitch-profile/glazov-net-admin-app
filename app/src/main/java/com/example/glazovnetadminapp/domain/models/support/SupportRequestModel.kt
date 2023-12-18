@@ -8,7 +8,7 @@ data class SupportRequestModel(
     val associatedSupportId: String? = null,
     val title: String,
     val description: String,
-//    val messages: List<MessageModel> = emptyList(),
+    val messages: List<MessageModel> = emptyList(),
     val creationDate: OffsetDateTime? = null,
     val status: Int = 0
 )
