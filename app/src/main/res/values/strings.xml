@@ -105,4 +105,5 @@
     <string name="app_button_reset_data">Reset</string>
     <string name="app_delete_button">Delete</string>
     <string name="app_edit_button">Edit</string>
+    <string name="app_chat_senderName_self">You</string>
 </resources>

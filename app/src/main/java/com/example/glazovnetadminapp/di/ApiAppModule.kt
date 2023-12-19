@@ -14,8 +14,8 @@ import kotlinx.serialization.json.Json
 import javax.inject.Named
 import javax.inject.Singleton
 
-// private const val BASE_URL = "82.179.120.110" //notebook
-private const val BASE_URL = "146.120.105.211" //computer
+private const val BASE_URL = "82.179.120.175" //notebook
+//private const val BASE_URL = "146.120.105.211" //computer
 
 private const val PORT = 8080
 
@@ -51,7 +51,8 @@ object ApiAppModule {
         }
         install(WebSockets)
         install(DefaultRequest) {
-            url("ws://$BASE_URL")
+            url("ws://$BASE_URL:$PORT")
+
         }
     }
 

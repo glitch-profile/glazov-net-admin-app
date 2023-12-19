@@ -94,4 +94,5 @@
     <string name="app_add_clients_screen_name">Добавить клиента</string>
     <string name="app_chat_request_screen_name">Запросы в поддержку</string>
     <string name="app_edit_announcement_screen_name">Редактировать обьявление</string>
+    <string name="app_chat_senderName_self">Вы</string>
 </resources>

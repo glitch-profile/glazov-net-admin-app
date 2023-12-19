@@ -114,7 +114,7 @@ fun HomeScreen(
 //                modifier = Modifier
 //                    .padding(start = 16.dp)
 //            )
-            Spacer(modifier = Modifier.height(8.dp))
+//            Spacer(modifier = Modifier.height(8.dp))
             MenuButton(
                 text = stringResource(id = R.string.app_tariffs_list_screen_name),
                 onClick = {
@@ -191,7 +191,8 @@ private fun MenuButton(
             modifier = modifier
                 .fillMaxWidth()
                 .clickable(enabled = isEnable, onClick = onClick)
-                .padding(horizontal = horizontalPadding, vertical = verticalPadding)
+                .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             if (iconVector !== null) {
                 Icon(
@@ -207,7 +208,10 @@ private fun MenuButton(
                 color = textColor
             )
         }
-        Divider(modifier = Modifier.fillMaxWidth())
+        Divider(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+        )
     }
 }
 
