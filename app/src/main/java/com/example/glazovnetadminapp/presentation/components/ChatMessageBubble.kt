@@ -15,9 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
 import java.time.OffsetDateTime
 
@@ -43,13 +45,12 @@ fun ChatMessageBubble(
                 .padding(8.dp)
                 .widthIn(max = maxBubbleWidth)
         ) {
-            if (!isOwnMessage) {
-                Text(
-                    text = senderName,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = textColor
-                )
-            }
+            Text(
+                text = if (!isOwnMessage) senderName
+                else stringResource(id = R.string.app_chat_senderName_self),
+                style = MaterialTheme.typography.titleSmall,
+                color = textColor
+            )
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,
