@@ -141,7 +141,6 @@ fun RequestChatScreen(
                             navController.popBackStack()
                         }
                     )
-                    Log.e("TAG", "RequestChatScreen: ${requestState.message}", )
                 } else {
                     if (requestState.data.isNotEmpty()) {
                         requestState.data.single().let {request ->
@@ -195,7 +194,7 @@ private fun ChatScreen(
 
     LaunchedEffect(messages.size) {
         coroutineScope.launch {
-            if (lazyListState.firstVisibleItemIndex < 3) {
+            if (lazyListState.firstVisibleItemIndex <= 3) {
                 lazyListState.animateScrollToItem(0)
             }
         }
@@ -235,8 +234,7 @@ private fun ChatScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
-                        .padding(horizontal = 8.dp),
+                        .weight(1f),
                     reverseLayout = true,
                     state = lazyListState,
                     content = {
@@ -246,7 +244,7 @@ private fun ChatScreen(
                         ) {message ->
                             ChatMessageBubble(
                                 modifier = Modifier
-                                    .padding(bottom = 4.dp)
+                                    .padding(start = 16.dp, end = 16.dp, bottom = 4.dp)
                                     .fillMaxWidth()
                                     .animateItemPlacement(
                                         animationSpec = tween(durationMillis = 300)
@@ -255,7 +253,7 @@ private fun ChatScreen(
                                 text = message.text,
                                 timestamp = message.timestamp!!,
                                 isOwnMessage = message.isOwnMessage,
-                                maxBubbleWidth = 250.dp
+                                maxBubbleWidth = 280.dp
                             )
                         }
                     }
