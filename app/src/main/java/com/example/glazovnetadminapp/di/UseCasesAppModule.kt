@@ -7,6 +7,7 @@ import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.repository.PostsApiRepository
 import com.example.glazovnetadminapp.domain.repository.RequestsApiRepository
 import com.example.glazovnetadminapp.domain.repository.TariffsApiRepository
+import com.example.glazovnetadminapp.domain.repository.UtilsApiRepository
 import com.example.glazovnetadminapp.domain.useCases.AddressesUseCase
 import com.example.glazovnetadminapp.domain.useCases.AnnouncementsUseCase
 import com.example.glazovnetadminapp.domain.useCases.ClientsUseCase
@@ -14,6 +15,7 @@ import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import com.example.glazovnetadminapp.domain.useCases.RequestChatUseCase
 import com.example.glazovnetadminapp.domain.useCases.RequestsUseCase
 import com.example.glazovnetadminapp.domain.useCases.TariffsUseCase
+import com.example.glazovnetadminapp.domain.useCases.UtilsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -105,6 +107,18 @@ object UseCasesAppModule {
         return RequestChatUseCase(
             localSettingsRepository,
             requestsApiRepository
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideUtilsUseCase(
+        utilsApiRepository: UtilsApiRepository,
+        localSettingsRepository: LocalSettingsRepository
+    ): UtilsUseCase {
+        return UtilsUseCase(
+            utilsApiRepository = utilsApiRepository,
+            localSettingsRepository = localSettingsRepository
         )
     }
 }
