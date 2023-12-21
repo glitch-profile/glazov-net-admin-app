@@ -30,7 +30,7 @@ class PostsApiRepositoryImpl @Inject constructor(
 
     override suspend fun getAllPosts(): Resource<List<PostModel>> {
         return try {
-            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/getall").body()
+            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/").body()
             if (response.status) {
                 Resource.Success(
                     data = response.data.map { it.toPostModel() },
@@ -52,7 +52,7 @@ class PostsApiRepositoryImpl @Inject constructor(
 
     override suspend fun getPostsList(limit: Int?, startIndex: Int?): Resource<List<PostModel>> {
         return try {
-            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/getposts") {
+            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/list") {
                 parameter("limit", limit)
                 parameter("start_index", startIndex)
             }.body()

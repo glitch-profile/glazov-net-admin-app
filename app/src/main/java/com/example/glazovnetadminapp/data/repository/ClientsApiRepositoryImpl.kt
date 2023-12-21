@@ -56,7 +56,7 @@ class ClientsApiRepositoryImpl @Inject constructor(
 
     override suspend fun getClients(apiKey: String): Resource<List<ClientModel>> {
         return try {
-            val response: ApiResponseDto<List<ClientModelDto>> = client.get("$PATH/getall") {
+            val response: ApiResponseDto<List<ClientModelDto>> = client.get("$PATH/") {
                 header("api_key", apiKey)
             }.body()
             if (response.status) {

@@ -16,7 +16,7 @@ import io.ktor.client.request.parameter
 import javax.inject.Inject
 import javax.inject.Named
 
-private const val PATH = "api/addressinfo"
+private const val PATH = "api/address-info"
 
 class AddressApiRepositoryImpl @Inject constructor(
     @Named("RestClient") private val client: HttpClient
@@ -27,7 +27,7 @@ class AddressApiRepositoryImpl @Inject constructor(
         apiKey: String
     ): Resource<List<String>> {
         return try {
-            val response: ApiResponseDto<List<String>> = client.get("$PATH/getstreetslist") {
+            val response: ApiResponseDto<List<String>> = client.get("$PATH/streets-list") {
                 header("api_key", apiKey)
                 parameter("city", cityName)
                 parameter("street", streetName)
@@ -56,7 +56,7 @@ class AddressApiRepositoryImpl @Inject constructor(
         apiKey: String
     ): Resource<List<String>> {
         return try {
-            val response: ApiResponseDto<List<String>> = client.get("$PATH/getcitieslist") {
+            val response: ApiResponseDto<List<String>> = client.get("$PATH/cities-list") {
                 header("api_key", apiKey)
                 parameter("city", cityName)
             }.body()
@@ -94,7 +94,7 @@ class AddressApiRepositoryImpl @Inject constructor(
         apiKey: String
     ): Resource<List<AddressFilterElement>> {
         return try {
-            val response: ApiResponseDto<List<AddressModelDto>> = client.get("$PATH/getaddresses") {
+            val response: ApiResponseDto<List<AddressModelDto>> = client.get("$PATH/addresses") {
                 header("api_key", apiKey)
                 parameter("city", cityName)
                 parameter("street", streetName)

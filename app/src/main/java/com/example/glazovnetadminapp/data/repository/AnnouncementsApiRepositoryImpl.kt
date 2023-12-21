@@ -29,7 +29,7 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
 ): AnnouncementsApiRepository {
     override suspend fun getAnnouncements(apiKey: String): Resource<List<AnnouncementModel>> {
         return try {
-            val response: ApiResponseDto<List<AnnouncementModelDto>> = client.get("$PATH/getall") {
+            val response: ApiResponseDto<List<AnnouncementModelDto>> = client.get("$PATH/") {
                 header("api_key", apiKey)
             }.body()
             Resource.Success(

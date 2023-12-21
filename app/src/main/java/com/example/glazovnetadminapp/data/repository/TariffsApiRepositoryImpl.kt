@@ -29,7 +29,7 @@ class TariffsApiRepositoryImpl @Inject constructor(
 ): TariffsApiRepository {
     override suspend fun getAllTariffs(): Resource<List<TariffModel>> {
         return try {
-            val response: ApiResponseDto<List<TariffModelDto>> = client.get("$PATH/getall").body()
+            val response: ApiResponseDto<List<TariffModelDto>> = client.get("$PATH/").body()
             if (response.status) {
                 Resource.Success(
                     data = response.data.map{ it.toTariffModel() },

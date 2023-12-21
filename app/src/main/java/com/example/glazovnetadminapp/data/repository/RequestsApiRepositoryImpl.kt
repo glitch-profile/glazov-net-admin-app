@@ -123,7 +123,7 @@ class RequestsApiRepositoryImpl @Inject constructor(
 
     override suspend fun addRequest(newRequest: SupportRequestDto): Resource<SupportRequestModel?> {
         return try {
-            val response: ApiResponseDto<SupportRequestDto> = client.post("$PATH/createrequest") {
+            val response: ApiResponseDto<SupportRequestDto> = client.post("$PATH/create-request") {
                 contentType(ContentType.Application.Json)
                 setBody(newRequest)
             }.body()
