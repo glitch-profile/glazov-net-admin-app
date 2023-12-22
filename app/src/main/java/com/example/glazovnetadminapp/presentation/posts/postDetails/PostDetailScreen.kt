@@ -158,7 +158,7 @@ fun PostDetailScreen(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = post.fullDescription,
+                    text = post.text,
                     style = MaterialTheme.typography.bodyMedium,
                     softWrap = true,
                     overflow = TextOverflow.Ellipsis
@@ -176,16 +176,6 @@ fun PostDetailScreen(
                             .aspectRatio(imageAspectRatio),
                         contentScale = ContentScale.Crop,
                         filterQuality = FilterQuality.Medium
-                    )
-                    Text(
-                        textAlign = TextAlign.End,
-                        text = "${stringResource(id = R.string.post_card_source_text)}: ${image.imageUrl}",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .fillMaxWidth()
                     )
                 }
             } else {

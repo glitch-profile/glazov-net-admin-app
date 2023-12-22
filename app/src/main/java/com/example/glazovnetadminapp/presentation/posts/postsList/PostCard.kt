@@ -31,15 +31,15 @@ import com.example.glazovnetadminapp.domain.util.convertDaysOffsetToString
 
 @Composable
 fun PostCard(
+    modifier: Modifier = Modifier,
     postModel: PostModel,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onClick: () -> Unit
 ) {
     postModel.let { post ->
         val descriptionMaxLines = if (post.image == null) 10
         else 2
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .padding(bottom = 8.dp)
                 .fillMaxWidth()
                 .clip(MaterialTheme.shapes.medium)
@@ -49,7 +49,7 @@ fun PostCard(
                 .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .wrapContentHeight()
                     .fillMaxWidth()
                     .padding(8.dp),
@@ -75,7 +75,7 @@ fun PostCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = post.shortDescription ?: post.fullDescription,
+                    text = post.text,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     softWrap = true,
@@ -94,16 +94,6 @@ fun PostCard(
                             .aspectRatio(imageAspectRatio),
                         contentScale = ContentScale.Crop,
                         filterQuality = FilterQuality.Medium
-                    )
-                    Text(
-                        textAlign = TextAlign.End,
-                        text = "${stringResource(id = R.string.post_card_source_text)}: ${image.imageUrl}",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .fillMaxWidth()
                     )
                 }
             }

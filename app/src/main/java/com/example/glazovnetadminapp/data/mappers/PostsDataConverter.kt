@@ -23,8 +23,7 @@ fun PostModelDto.toPostModel(): PostModel {
         postId = id,
         title = title,
         creationDate = postCreationDateTime,
-        shortDescription = shortDescription,
-        fullDescription = fullDescription,
+        text = text,
         postType = postType,
         image = imageModel
     )
@@ -44,9 +43,8 @@ fun PostModel.toPostModelDto(): PostModelDto {
         id = postId,
         title = title,
         creationDate = postCreationDateTime,
-        shortDescription = shortDescription,
-        fullDescription = fullDescription,
+        text = text,
         postTypeCode = postTypeCode,
         image = imageModelDto
     )
-} //Конвертируем PostModel в Dto с примитивными данными
+}

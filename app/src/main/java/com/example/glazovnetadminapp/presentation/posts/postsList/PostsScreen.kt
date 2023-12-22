@@ -89,7 +89,6 @@ fun PostsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(values)
-                .padding(horizontal = 16.dp)
         ) {
             if (state.isLoading) {
                 CircularProgressIndicator(
@@ -107,7 +106,8 @@ fun PostsScreen(
                 state.message?.let {
                     RequestErrorScreen(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
                         errorText = it,
                         onActionButtonClick = {
                             viewModel.getAllPosts()
@@ -121,6 +121,8 @@ fun PostsScreen(
                 content = {
                     items(state.data) {
                         PostCard(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
                             postModel = it,
                             onClick = {
                                 viewModel.setPostToViewDetails(it)

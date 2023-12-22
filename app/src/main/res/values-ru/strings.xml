@@ -8,7 +8,7 @@
     <string name="add_post_screen_title">Заголовок</string>
     <string name="add_post_screen_short_description">Короткое описание записи</string>
     <string name="add_post_screen_full_description">Текст записи</string>
-    <string name="add_post_screen_post_type">Выберите тип записи</string>
+    <string name="add_post_screen_post_type">Тип записи</string>
     <string name="add_post_screen_image_url">Ссылка на изображение</string>
     <string name="tariff_type_limited">Помегабайтный</string>
     <string name="tariff_type_unlimited">Безлимитный</string>
