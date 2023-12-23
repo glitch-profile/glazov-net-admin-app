@@ -1,6 +1,7 @@
 package com.example.glazovnetadminapp.domain.useCases
 
 import android.content.Context
+import android.net.Uri
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.repository.UtilsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource

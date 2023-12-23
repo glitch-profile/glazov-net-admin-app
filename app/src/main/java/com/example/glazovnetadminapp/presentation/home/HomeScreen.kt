@@ -168,7 +168,7 @@ fun HomeScreen(
             MenuButton(
                 text = "Sandbox",
                 onClick = {
-                    viewModel.testUploadFile()
+
                 },
                 iconVector = Icons.Default.Warning
             )

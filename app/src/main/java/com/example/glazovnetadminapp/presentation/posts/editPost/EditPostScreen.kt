@@ -1,6 +1,8 @@
 package com.example.glazovnetadminapp.presentation.posts.editPost
 
 import android.content.Context
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.clickable
@@ -30,9 +32,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -46,6 +50,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
@@ -67,12 +72,9 @@ fun EditPostScreen(
         mutableStateOf(post?.title ?: "")
     }
     var fullDescription by remember {
-        mutableStateOf(post?.fullDescription ?: "")
+        mutableStateOf(post?.text ?: "")
     }
-    var shortDescription by remember {
-        mutableStateOf(post?.shortDescription ?: "")
-    }
-    var imageUrl by remember {
+    var imageUri by remember {
         mutableStateOf(post?.image?.imageUrl ?: "")
     }
     var isDropdownExpanded by remember {
@@ -89,15 +91,19 @@ fun EditPostScreen(
     var textFieldSize by remember {
         mutableStateOf(Size.Zero)
     }
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
+        println("original uri - $it")
+        imageUri = it?.toString() ?: imageUri
+    }
 
     fun checkDataTheSame(): Boolean {
-        return ((titleText == post?.title) && (fullDescription == post.fullDescription)
-                    && (shortDescription == (post.shortDescription ?: ""))
-                    && (imageUrl == (post.image?.imageUrl ?: ""))
+        return ((titleText == post?.title) && (fullDescription == post.text)
+                    && (imageUri == (post.image?.imageUrl ?: ""))
                     && (selectedPostTypeCode == post.postType.toPostTypeCode()))
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -228,31 +234,34 @@ fun EditPostScreen(
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = shortDescription,
-                onValueChange = { shortDescription = it },
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-                label = {
-                    Text(
-                        text = stringResource(id = R.string.add_post_screen_short_description)
-                    )
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextButton(
+                    onClick = { imageUri = "" }
+                ) {
+                    Text(text = "Remove image")
                 }
-            )
+                Spacer(modifier = Modifier.width(4.dp))
+                Button(
+                    onClick = { launcher.launch("image/*") }
+                ) {
+                    Text(text = "Select image")
+                }
+            }
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField(
-                value = imageUrl,
-                onValueChange = { imageUrl = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
+            Text(
+                text = if (imageUri.isNotBlank()) {
+                    "Image - $imageUri"
+                } else {
+                    "No image attached"
+                },
                 maxLines = 2,
-                label = {
-                    Text(
-                        text = stringResource(id = R.string.add_post_screen_image_url)
-                    )
-                }
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(
@@ -265,10 +274,9 @@ fun EditPostScreen(
 
                         fun clearInputData() {
                             titleText = post?.title ?: ""
-                            fullDescription = post?.fullDescription ?: ""
-                            shortDescription = post?.shortDescription ?: ""
+                            fullDescription = post?.text ?: ""
                             selectedPostTypeCode = post?.postType?.toPostTypeCode() ?: 0
-                            imageUrl = post?.image?.imageUrl ?: ""
+                            imageUri = post?.image?.imageUrl ?: ""
                             isDropdownExpanded = false
                         }
 
@@ -285,24 +293,17 @@ fun EditPostScreen(
                             viewModel.addNewPost(
                                 context,
                                 titleText,
-                                shortDescription,
                                 fullDescription,
                                 selectedPostTypeCode,
-                                imageUrl
+                                imageUri
                             )
                         } else {
                             viewModel.editPost(
                                 context,
-                                imageUrl !== (post.image?.imageUrl ?: ""),
-                                post.postId,
                                 titleText,
-                                post.creationDate,
                                 fullDescription,
-                                shortDescription,
                                 selectedPostTypeCode,
-                                imageUrl,
-                                post.image?.imageWidth,
-                                post.image?.imageHeight
+                                imageUri,
                             )
                         }
                     },

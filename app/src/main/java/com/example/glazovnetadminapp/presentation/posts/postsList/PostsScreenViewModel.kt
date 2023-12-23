@@ -1,30 +1,34 @@
 package com.example.glazovnetadminapp.presentation.posts.postsList
 
 import android.content.Context
-import android.graphics.drawable.Drawable
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.ImageLoader
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import com.example.glazovnetadminapp.domain.models.ImageModel
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
 import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
+import com.example.glazovnetadminapp.domain.useCases.UtilsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.presentation.ScreenState
 import com.example.glazovnetadminapp.presentation.posts.editPost.EditPostScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 import java.time.OffsetDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class PostsScreenViewModel @Inject constructor(
-    private val postsUseCase: PostsUseCase
+    private val postsUseCase: PostsUseCase,
+    private val utilsUseCase: UtilsUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ScreenState<PostModel>())
@@ -115,18 +119,12 @@ class PostsScreenViewModel @Inject constructor(
 
     fun editPost(
         context: Context,
-        isNeedToUpdateImage: Boolean,
-        postId: String,
         postTitle: String,
-        postCreationDate: OffsetDateTime,
-        postFullDescription: String,
-        postShortDescription: String,
-        postTypeCode: Int,
-        postImageUrl: String,
-        postImageWidth: Int? = null,
-        postImageHeight: Int? = null
+        postText: String,
+        postType: Int,
+        imageUri: String,
     ) {
-
+        val currentPost = editPostState.value.post!!
         viewModelScope.launch {
             _editPostState.update {
                 it.copy(
@@ -134,33 +132,24 @@ class PostsScreenViewModel @Inject constructor(
                     message = "getting post data..."
                 )
             }
-            val imageModel = if (isNeedToUpdateImage) {
-                if (postImageUrl.isNotBlank()) {
-                    val image = loadImage(context, postImageUrl)
-                    image?.let {
-                        ImageModel(
-                            postImageUrl,
-                            it.intrinsicWidth,
-                            it.intrinsicHeight
-                        )
-                    }
-                } else null
+            val imageModel = if (imageUri !== (currentPost.image?.imageUrl ?: "")) {
+                if (imageUri.isNotBlank()) uploadImageToServer(context, imageUri)
+                else null
             } else {
-                if (postImageUrl.isNotBlank()) {
+                if (imageUri.isNotBlank()) {
                     ImageModel(
-                        imageUrl = postImageUrl,
-                        imageWidth = postImageWidth!!,
-                        imageHeight = postImageHeight!!
+                        imageUrl = imageUri,
+                        imageWidth = currentPost.image!!.imageWidth,
+                        imageHeight = currentPost.image!!.imageHeight
                     )
                 } else null
             }
             val post = PostModel(
-                postId = postId,
+                postId = currentPost.postId,
                 title = postTitle,
-                creationDate = postCreationDate,
-                shortDescription = postShortDescription.ifBlank { null },
-                fullDescription = postFullDescription,
-                postType = PostType.fromPostTypeCode(postTypeCode),
+                creationDate = currentPost.creationDate,
+                text = postText,
+                postType = PostType.fromPostTypeCode(postType),
                 image = imageModel
             )
             _editPostState.update {
@@ -171,7 +160,7 @@ class PostsScreenViewModel @Inject constructor(
             val status = postsUseCase.updatePost(post)
             if (status.data == true) {
                 val postIndex = state.value.data.indexOfFirst {
-                    it.postId == postId
+                    it.postId == currentPost.postId
                 }
                 if (postIndex == -1) {
                     _editPostState.update {
@@ -207,10 +196,9 @@ class PostsScreenViewModel @Inject constructor(
     fun addNewPost(
         context: Context,
         title: String,
-        shortDescription: String,
-        fullDescription: String,
+        text: String,
         postType: Int,
-        imageUrl: String
+        imageUri: String
     ) {
         viewModelScope.launch {
             _editPostState.update {
@@ -220,28 +208,19 @@ class PostsScreenViewModel @Inject constructor(
                 )
             }
             val currentTime = OffsetDateTime.now()
-            val imageModel = if (imageUrl.isNotBlank()) {
-                val image = loadImage(context, imageUrl)
-                image?.let {
-                    ImageModel(
-                        imageUrl = imageUrl,
-                        imageWidth = it.intrinsicWidth,
-                        imageHeight = it.intrinsicHeight
-                    )
-                }
-            } else null
+            val imageModel = if (imageUri.isNotBlank()) uploadImageToServer(context, imageUri)
+            else null
             val post = PostModel(
                 postId = "",
                 title = title,
                 creationDate = currentTime,
-                shortDescription = shortDescription.ifBlank { null },
-                fullDescription = fullDescription,
+                text = text,
                 postType = PostType.fromPostTypeCode(postType),
                 image = imageModel
             )
             _editPostState.update {
                 it.copy(
-                    message = "saving post..."
+                    message = "uploading post..."
                 )
             }
             val status = postsUseCase.addPost(post)
@@ -274,18 +253,37 @@ class PostsScreenViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadImage(context: Context, url: String): Drawable? {
+    private suspend fun uploadImageToServer(context: Context, imageUriString: String): ImageModel? {
         _editPostState.update {
             it.copy(
-                message = "calculating image size..."
+                message = "uploading image..."
             )
         }
-        val imageLoader = ImageLoader(context)
-        val imageRequest = ImageRequest.Builder(context)
-            .data(url)
-            .diskCachePolicy(CachePolicy.READ_ONLY)
-            .build()
-        val imageResult = imageLoader.execute(imageRequest)
-        return imageResult.drawable
+        val fileBites = context.contentResolver.openInputStream(Uri.parse(imageUriString))?.use {
+            it.readBytes()
+        }
+        val fileName = imageUriString.takeLast(imageUriString.reversed().indexOf("/"))
+        val file = File(context.cacheDir, fileName)
+        withContext(Dispatchers.IO) {
+            FileOutputStream(file).use {
+                it.write(fileBites)
+            }
+        }
+        val imageModel = when (val uploadResult = utilsUseCase.uploadFile(file)) {
+            is Resource.Success -> {
+            val imageUrl = uploadResult.data!!.singleOrNull()
+            if (imageUrl != null) {
+                val imageBitmap = BitmapFactory.decodeFile(file.absolutePath)
+                ImageModel(
+                    imageUrl = imageUrl,
+                    imageWidth = imageBitmap.width,
+                    imageHeight = imageBitmap.height
+                )
+            } else null
+        }
+            is Resource.Error -> null
+        }
+        file.delete()
+        return imageModel
     }
 }

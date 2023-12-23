@@ -27,12 +27,4 @@ class HomeScreenViewModel @Inject constructor(
         isApiKeyEmpty = localSettingsRepositoryImpl.getSavedApiKey().isBlank()
     }
 
-    //TODO:Make a picture selection window, get selected image path, upload file with that path
-    fun testUploadFile() {
-        viewModelScope.launch {
-            val result = utilsUseCase.uploadFiles("")
-            Log.i("TAG", "testUploadFile: $result")
-        }
-    }
-
 }
