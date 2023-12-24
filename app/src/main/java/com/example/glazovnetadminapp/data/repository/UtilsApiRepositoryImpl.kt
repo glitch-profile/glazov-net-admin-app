@@ -28,10 +28,10 @@ class UtilsApiRepositoryImpl @Inject constructor(
     override suspend fun uploadImage(file: File, apiKey: String): Resource<List<String>> {
         return try {
             val response: ApiResponseDto<List<String>> = client.submitFormWithBinaryData(
-                url = "$PATH/upload-image",
+                url = "$PATH/upload-files",
                 formData = formData {
                     append("image", file.readBytes(), Headers.build {
-                        append(HttpHeaders.ContentType, "image/png")
+                        append(HttpHeaders.ContentType, "image/jpg")
                         append(HttpHeaders.ContentDisposition, "filename=${file.name}")
                     })
                 }

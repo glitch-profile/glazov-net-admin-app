@@ -92,7 +92,6 @@ fun EditPostScreen(
         mutableStateOf(Size.Zero)
     }
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-        println("original uri - $it")
         imageUri = it?.toString() ?: imageUri
     }
 
