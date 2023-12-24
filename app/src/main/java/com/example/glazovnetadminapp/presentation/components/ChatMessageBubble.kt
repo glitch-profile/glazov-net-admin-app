@@ -31,13 +31,15 @@ fun ChatMessageBubble(
     timestamp: OffsetDateTime,
     isOwnMessage: Boolean,
     maxBubbleWidth: Dp = 250.dp,
-    backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    //backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start
     ) {
+        val backgroundColor = if (isOwnMessage) MaterialTheme.colorScheme.secondaryContainer
+        else MaterialTheme.colorScheme.primaryContainer
         Column(
             modifier = Modifier
                 .clip(MaterialTheme.shapes.medium)
