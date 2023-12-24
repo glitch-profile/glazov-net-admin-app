@@ -38,8 +38,8 @@ fun ChatMessageBubble(
         modifier = modifier,
         horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start
     ) {
-        val backgroundColor = if (isOwnMessage) MaterialTheme.colorScheme.secondaryContainer
-        else MaterialTheme.colorScheme.primaryContainer
+        val backgroundColor = if (isOwnMessage) MaterialTheme.colorScheme.primaryContainer
+        else MaterialTheme.colorScheme.secondaryContainer
         Column(
             modifier = Modifier
                 .clip(MaterialTheme.shapes.medium)
