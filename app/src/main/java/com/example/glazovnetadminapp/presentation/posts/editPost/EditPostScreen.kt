@@ -258,6 +258,7 @@ fun EditPostScreen(
                     "No image attached"
                 },
                 maxLines = 2,
+                softWrap = true,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer

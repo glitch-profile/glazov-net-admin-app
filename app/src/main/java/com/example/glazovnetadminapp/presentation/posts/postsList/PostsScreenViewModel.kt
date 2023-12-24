@@ -262,7 +262,11 @@ class PostsScreenViewModel @Inject constructor(
         val fileBites = context.contentResolver.openInputStream(Uri.parse(imageUriString))?.use {
             it.readBytes()
         }
-        val fileName = imageUriString.takeLast(imageUriString.reversed().indexOf("%"))
+        val fileNameTrimCount = if (imageUriString.contains('%')) imageUriString.reversed().indexOf("%")
+        else imageUriString.reversed().indexOf("/")
+        var fileName = imageUriString.takeLast(fileNameTrimCount)
+        val fileExtension = File(fileName).extension
+        if (fileExtension.isBlank()) fileName += ".jpg"
         val file = File(context.cacheDir, fileName)
         withContext(Dispatchers.IO) {
             FileOutputStream(file).use {
