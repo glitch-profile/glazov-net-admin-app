@@ -2,7 +2,11 @@ package com.example.glazovnetadminapp.presentation.posts.postsList
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.util.Log
+import android.util.Size
+import androidx.core.graphics.decodeBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.ImageModel
@@ -277,11 +281,15 @@ class PostsScreenViewModel @Inject constructor(
             is Resource.Success -> {
             val imageUrl = uploadResult.data!!.singleOrNull()
             if (imageUrl != null) {
-                val imageBitmap = BitmapFactory.decodeFile(file.absolutePath)
+                val image = ImageDecoder.createSource(file)
+                var imageSize = Size(1280, 1280)
+                image.decodeBitmap { info, _ ->
+                    imageSize = info.size
+                }
                 ImageModel(
                     imageUrl = imageUrl,
-                    imageWidth = imageBitmap.width,
-                    imageHeight = imageBitmap.height
+                    imageWidth = imageSize.width,
+                    imageHeight = imageSize.height
                 )
             } else null
         }
