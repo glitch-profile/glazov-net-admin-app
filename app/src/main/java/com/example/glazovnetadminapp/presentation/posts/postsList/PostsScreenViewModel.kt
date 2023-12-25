@@ -1,10 +1,8 @@
 package com.example.glazovnetadminapp.presentation.posts.postsList
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
-import android.util.Log
 import android.util.Size
 import androidx.core.graphics.decodeBitmap
 import androidx.lifecycle.ViewModel

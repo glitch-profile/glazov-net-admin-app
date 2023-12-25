@@ -5,8 +5,6 @@ import com.example.glazovnetadminapp.domain.models.support.SupportRequestModel
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.repository.RequestsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 

@@ -1,10 +1,8 @@
 package com.example.glazovnetadminapp.data.repository
 
-import android.content.Context
 import com.example.glazovnetadminapp.domain.repository.UtilsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.entity.ApiResponseDto
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.ConnectTimeoutException

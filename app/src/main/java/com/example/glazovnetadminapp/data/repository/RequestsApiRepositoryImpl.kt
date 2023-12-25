@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.data.repository
 
-import android.util.Log
 import com.example.glazovnetadminapp.data.mappers.toSupportRequest
 import com.example.glazovnetadminapp.domain.models.support.MessageModel
 import com.example.glazovnetadminapp.domain.models.support.SupportRequestModel
@@ -32,7 +31,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.isActive
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Named
