@@ -300,7 +300,10 @@ private fun ChatScreen(
                             imeAction = ImeAction.Send
                         ),
                         keyboardActions = KeyboardActions(
-                            onSend = { onMessageSend.invoke(messageText) }
+                            onSend = {
+                                onMessageSend.invoke(messageText)
+                                messageText = ""
+                            }
                         )
                     )
                     Spacer(modifier = Modifier.width(12.dp))
