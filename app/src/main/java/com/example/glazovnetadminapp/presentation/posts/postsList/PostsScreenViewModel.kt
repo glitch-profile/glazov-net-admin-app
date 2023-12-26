@@ -1,10 +1,12 @@
 package com.example.glazovnetadminapp.presentation.posts.postsList
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.util.Size
 import androidx.core.graphics.decodeBitmap
+import androidx.core.graphics.scale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.ImageModel
@@ -26,6 +28,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.time.OffsetDateTime
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class PostsScreenViewModel @Inject constructor(
@@ -264,36 +267,56 @@ class PostsScreenViewModel @Inject constructor(
         val fileBites = context.contentResolver.openInputStream(Uri.parse(imageUriString))?.use {
             it.readBytes()
         }
-        val fileNameTrimCount = if (imageUriString.contains('%')) imageUriString.reversed().indexOf("%")
-        else imageUriString.reversed().indexOf("/")
-        var fileName = imageUriString.takeLast(fileNameTrimCount)
-        val fileExtension = File(fileName).extension
-        if (fileExtension.isBlank()) fileName += ".jpg"
+        val fileName = getImageName(imageUriString)
         val file = File(context.cacheDir, fileName)
         withContext(Dispatchers.IO) {
             FileOutputStream(file).use {
                 it.write(fileBites)
             }
         }
+        val image = getCompressedImage(file)
         val imageModel = when (val uploadResult = utilsUseCase.uploadFile(file)) {
             is Resource.Success -> {
-            val imageUrl = uploadResult.data!!.singleOrNull()
-            if (imageUrl != null) {
-                val image = ImageDecoder.createSource(file)
-                var imageSize = Size(1280, 1280)
-                image.decodeBitmap { info, _ ->
-                    imageSize = info.size
-                }
-                ImageModel(
-                    imageUrl = imageUrl,
-                    imageWidth = imageSize.width,
-                    imageHeight = imageSize.height
-                )
-            } else null
-        }
+                val imageUrl = uploadResult.data!!.singleOrNull()
+                if (imageUrl != null) {
+                    ImageModel(
+                        imageUrl = imageUrl,
+                        imageWidth = image.width,
+                        imageHeight = image.height
+                    )
+                } else null
+            }
             is Resource.Error -> null
         }
+        image.recycle()
         file.delete()
         return imageModel
+    }
+
+    private fun getImageName(filePath: String): String {
+        val fileNameTrimCount = if (filePath.contains('%')) filePath.reversed().indexOf("%")
+        else filePath.reversed().indexOf("/")
+        var fileName = filePath.takeLast(fileNameTrimCount)
+        val fileExtension = File(fileName).extension
+        if (fileExtension.isBlank()) fileName += ".jpg"
+        return fileName
+    }
+
+    private fun getCompressedImage(
+        file: File,
+        maxDimensionSize: Float = 1920f,
+    ): Bitmap {
+        var image = ImageDecoder.createSource(file).decodeBitmap { _, _ ->  }
+        val maxDimension = maxOf(image.height, image.width)
+        if (maxDimension > maxDimensionSize) {
+            val scaleFactor = maxDimensionSize / maxDimension
+            val newImageWidth = (image.width * scaleFactor).roundToInt()
+            val newImageHeight = (image.height * scaleFactor).roundToInt()
+            image = image.scale(newImageWidth, newImageHeight)
+        }
+        file.outputStream().use {
+            image.compress(Bitmap.CompressFormat.JPEG, 80, it)
+        } //writing new image to file
+        return image
     }
 }
