@@ -7,6 +7,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.header
@@ -23,7 +24,7 @@ class UtilsApiRepositoryImpl @Inject constructor(
 
 ): UtilsApiRepository {
 
-    override suspend fun uploadImage(file: File, apiKey: String): Resource<List<String>> {
+    override suspend fun uploadImage(file: File, token: String): Resource<List<String>> {
         return try {
             val response: ApiResponseDto<List<String>> = client.submitFormWithBinaryData(
                 url = "$PATH/upload-files",
@@ -34,7 +35,7 @@ class UtilsApiRepositoryImpl @Inject constructor(
                     })
                 }
             ) {
-                header("api_key", apiKey)
+                bearerAuth(token)
             }.body()
             if (response.status) {
                 Resource.Success(

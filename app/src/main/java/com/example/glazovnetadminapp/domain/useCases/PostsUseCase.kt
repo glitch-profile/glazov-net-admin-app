@@ -9,37 +9,42 @@ import javax.inject.Inject
 
 class PostsUseCase @Inject constructor(
     private val postsApiRepository: PostsApiRepository,
-    private val localSettingsRepositoryImpl: LocalSettingsRepository
+    private val localSettingsRepository: LocalSettingsRepository
 ) {
 
     suspend fun getAllPosts(): Resource<List<PostModel>> {
-        return postsApiRepository.getAllPosts()
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return postsApiRepository.getAllPosts(token)
     }
 
     suspend fun addPost(postModel: PostModel): Resource<PostModel?> {
         val postModelDto = postModel.toPostModelDto()
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return postsApiRepository.addPost(
-            apiKey = localSettingsRepositoryImpl.getSavedApiKey(),
+            token = token,
             postModel = postModelDto
         )
     }
 
     suspend fun getPostById(postId: String): Resource<PostModel?> {
-        return postsApiRepository.getPostById(postId)
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return postsApiRepository.getPostById(postId, token)
     }
 
     suspend fun deletePostById(postId: String): Resource<Boolean> {
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return postsApiRepository.deletePostById(
-            localSettingsRepositoryImpl.getSavedApiKey(),
+            token = token,
             postId = postId
         )
     }
 
     suspend fun updatePost(postModel: PostModel): Resource<Boolean> {
+        val token = localSettingsRepository.getLoginToken() ?: ""
         val postModelDto = postModel.toPostModelDto()
         return postsApiRepository.editPost(
-            localSettingsRepositoryImpl.getSavedApiKey(),
-            postModelDto
+            token = token,
+            postModel = postModelDto
         )
     }
 }

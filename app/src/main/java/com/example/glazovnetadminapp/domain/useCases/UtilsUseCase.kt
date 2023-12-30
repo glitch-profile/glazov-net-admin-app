@@ -12,10 +12,10 @@ class UtilsUseCase @Inject constructor(
 ) {
 
     suspend fun uploadFile(file: File): Resource<List<String>> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return utilsApiRepository.uploadImage(
             file = file,
-            apiKey = apiKey
+            token = token
         )
     }
 

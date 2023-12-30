@@ -13,31 +13,26 @@ class RequestChatUseCase @Inject constructor(
     private val requestsApiRepository: RequestsApiRepository
 ) {
 
-    //TODO: Add auth security
     suspend fun getRequestById(requestId: String): Resource<SupportRequestModel?> {
-        val memberId = localSettingsRepository.getMemberId()
-        return requestsApiRepository.getRequestById(requestId, memberId)
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return requestsApiRepository.getRequestById(requestId, token)
     }
 
-    //TODO(Add memberId from user auth data)
     suspend fun getMessagesForRequest(requestId: String): Resource<List<MessageModel>> {
-        val memberId = localSettingsRepository.getMemberId()
-        return requestsApiRepository.getMessagesForRequest(requestId, memberId)
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return requestsApiRepository.getMessagesForRequest(requestId, token)
     }
 
-    //TODO(Add memberId from user auth data)
     suspend fun initChatSocket(requestId: String): Resource<Unit> {
-        val memberId = localSettingsRepository.getMemberId()
-        return requestsApiRepository.initChatSocket(requestId, memberId)
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return requestsApiRepository.initChatSocket(requestId, token)
     }
 
     suspend fun sendMessage(messageText: String): Resource<Unit> {
         return requestsApiRepository.sendMessage(messageText)
     }
 
-    fun observeMessages() = requestsApiRepository.observeMessages().onEach {
-        println(it)
-    }
+    fun observeMessages() = requestsApiRepository.observeMessages()
 
     suspend fun disconnect() = requestsApiRepository.closeChatConnection()
 

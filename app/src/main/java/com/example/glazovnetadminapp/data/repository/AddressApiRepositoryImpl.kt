@@ -10,6 +10,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
@@ -24,11 +25,11 @@ class AddressApiRepositoryImpl @Inject constructor(
     override suspend fun getStreetsWithName(
         cityName: String,
         streetName: String,
-        apiKey: String
+        token: String
     ): Resource<List<String>> {
         return try {
             val response: ApiResponseDto<List<String>> = client.get("$PATH/streets-list") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 parameter("city", cityName)
                 parameter("street", streetName)
             }.body()
@@ -53,11 +54,11 @@ class AddressApiRepositoryImpl @Inject constructor(
 
     override suspend fun getCitiesWithName(
         cityName: String,
-        apiKey: String
+        token: String
     ): Resource<List<String>> {
         return try {
             val response: ApiResponseDto<List<String>> = client.get("$PATH/cities-list") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 parameter("city", cityName)
             }.body()
             if (response.status) {
@@ -83,7 +84,7 @@ class AddressApiRepositoryImpl @Inject constructor(
         cityName: String,
         streetName: String,
         houseNumber: String,
-        apiKey: String
+        token: String
     ): Resource<Boolean> {
         TODO("Not yet implemented")
     }
@@ -91,11 +92,11 @@ class AddressApiRepositoryImpl @Inject constructor(
     override suspend fun getAddresses(
         cityName: String,
         streetName: String,
-        apiKey: String
+        token: String
     ): Resource<List<AddressFilterElement>> {
         return try {
             val response: ApiResponseDto<List<AddressModelDto>> = client.get("$PATH/addresses") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 parameter("city", cityName)
                 parameter("street", streetName)
             }.body()

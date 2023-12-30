@@ -14,6 +14,7 @@ import io.ktor.client.call.body
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.websocket.webSocketSession
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -46,10 +47,10 @@ class RequestsApiRepositoryImpl @Inject constructor(
     private var requestsSocket: WebSocketSession? = null
     private var chatSocket: WebSocketSession? = null
 
-    override suspend fun getAllRequests(apiKey: String): Resource<List<SupportRequestModel>> {
+    override suspend fun getAllRequests(token: String): Resource<List<SupportRequestModel>> {
         return try {
             val response: ApiResponseDto<List<SupportRequestDto>> = client.get("$PATH/requests") {
-                header("api_key", apiKey)
+                bearerAuth(token)
             }.body()
             if (response.status) {
                 Resource.Success(
@@ -69,11 +70,11 @@ class RequestsApiRepositoryImpl @Inject constructor(
 
     override suspend fun getRequestById(
         requestId: String,
-        memberId: String
+        token: String
     ): Resource<SupportRequestModel?> {
         return try {
             val response: ApiResponseDto<SupportRequestDto> = client.get("$PATH/requests/$requestId") {
-                header("member_id", memberId)
+                bearerAuth(token)
             }.body()
             if (response.status) {
                 Resource.Success(
@@ -94,17 +95,17 @@ class RequestsApiRepositoryImpl @Inject constructor(
     //TODO(Rework the definition of users own message)
     override suspend fun getMessagesForRequest(
         requestId: String,
-        memberId: String
+        token: String
     ): Resource<List<MessageModel>> {
         return try {
             val response: ApiResponseDto<List<MessageModelDto>> = client.get("$PATH/requests/$requestId/messages") {
-                header("member_id", memberId)
+                bearerAuth(token)
             }.body()
             if (response.status) {
                 val messagesList = response.data.map { it.toMessageModel() }
                 Resource.Success(
                     data = messagesList.map { message ->
-                        message.copy(isOwnMessage = message.senderName == localSettingsRepository.getMemberId())
+                        message.copy(isOwnMessage = message.senderName == localSettingsRepository.getLoginToken())
                     }
                 )
             } else {
@@ -119,9 +120,10 @@ class RequestsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addRequest(newRequest: SupportRequestDto): Resource<SupportRequestModel?> {
+    override suspend fun addRequest(newRequest: SupportRequestDto, token: String): Resource<SupportRequestModel?> {
         return try {
             val response: ApiResponseDto<SupportRequestDto> = client.post("$PATH/create-request") {
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(newRequest)
             }.body()
@@ -139,11 +141,11 @@ class RequestsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun initRequestsSocket(memberId: String): Resource<Unit> {
+    override suspend fun initRequestsSocket(token: String): Resource<Unit> {
         return try {
             requestsSocket = wsClient.webSocketSession {
                 url(port = 8080, path = "$PATH/requests-socket")
-                header("member_id", memberId)
+                bearerAuth(token)
             }
             if (requestsSocket?.isActive == true) {
                 Resource.Success(data = Unit)
@@ -159,11 +161,11 @@ class RequestsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun initChatSocket(requestId: String, memberId: String): Resource<Unit> {
+    override suspend fun initChatSocket(requestId: String, token: String): Resource<Unit> {
         return try {
             chatSocket = wsClient.webSocketSession {
                 url(port = 8080, path = "$PATH/requests/$requestId/chat-socket")
-                header("member_id", memberId)
+                bearerAuth(token)
             }
             if (chatSocket?.isActive == true) {
                 Resource.Success(Unit)
@@ -179,9 +181,9 @@ class RequestsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun sendMessage(messageText: String): Resource<Unit> {
+    override suspend fun sendMessage(message: String): Resource<Unit> {
         return try {
-            chatSocket?.send(Frame.Text(messageText))
+            chatSocket?.send(Frame.Text(message))
             Resource.Success(Unit)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -200,7 +202,7 @@ class RequestsApiRepositoryImpl @Inject constructor(
                     val json = Json { ignoreUnknownKeys = true }
                     val messageDto = json.decodeFromString<MessageModelDto>(encodedMessage)
                     val message = messageDto.toMessageModel()
-                    message.copy(isOwnMessage = message.senderName == localSettingsRepository.getMemberId())
+                    message.copy(isOwnMessage = message.senderName == localSettingsRepository.getLoginToken())
                 } ?: flow{}
         } catch (e: Exception) {
             e.printStackTrace()

@@ -10,6 +10,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -26,12 +27,12 @@ class ClientsApiRepositoryImpl @Inject constructor(
 ): ClientsApiRepository {
 
     override suspend fun createClient(
-        apiKey: String,
+        token: String,
         newClient: ClientModelDto
     ): Resource<ClientModel?> {
         return try {
             val response: ApiResponseDto<ClientModelDto?> = client.post("$PATH/create") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(newClient)
             }.body()
@@ -54,10 +55,10 @@ class ClientsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getClients(apiKey: String): Resource<List<ClientModel>> {
+    override suspend fun getClients(token: String): Resource<List<ClientModel>> {
         return try {
             val response: ApiResponseDto<List<ClientModelDto>> = client.get("$PATH/") {
-                header("api_key", apiKey)
+                bearerAuth(token)
             }.body()
             if (response.status) {
                 Resource.Success(

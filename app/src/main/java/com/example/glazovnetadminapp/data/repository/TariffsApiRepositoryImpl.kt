@@ -10,6 +10,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -27,9 +28,13 @@ private const val PATH = "api/tariffs"
 class TariffsApiRepositoryImpl @Inject constructor(
     @Named("RestClient") private val client: HttpClient
 ): TariffsApiRepository {
-    override suspend fun getAllTariffs(): Resource<List<TariffModel>> {
+    override suspend fun getAllTariffs(
+        token: String
+    ): Resource<List<TariffModel>> {
         return try {
-            val response: ApiResponseDto<List<TariffModelDto>> = client.get("$PATH/").body()
+            val response: ApiResponseDto<List<TariffModelDto>> = client.get("$PATH/"){
+                bearerAuth(token)
+            }.body()
             if (response.status) {
                 Resource.Success(
                     data = response.data.map{ it.toTariffModel() },
@@ -49,10 +54,10 @@ class TariffsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addTariff(apiKey: String, tariff: TariffModelDto): Resource<TariffModel?> {
+    override suspend fun addTariff(tariff: TariffModelDto, token: String): Resource<TariffModel?> {
         return try {
             val response: ApiResponseDto<List<TariffModelDto>> = client.post("$PATH/add") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(tariff)
             }.body()
@@ -75,10 +80,10 @@ class TariffsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteTariff(apiKey: String, tariffId: String): Resource<Boolean> {
+    override suspend fun deleteTariff(tariffId: String, token: String): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<TariffModelDto>> = client.delete("$PATH/remove") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 parameter("tariff_id", tariffId)
             }.body()
             if (response.status) {
@@ -100,10 +105,10 @@ class TariffsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateTariff(apiKey: String, tariff: TariffModelDto): Resource<Boolean> {
+    override suspend fun updateTariff(tariff: TariffModelDto, token: String): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<TariffModelDto>> = client.put("$PATH/edit") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(tariff)
             }.body()

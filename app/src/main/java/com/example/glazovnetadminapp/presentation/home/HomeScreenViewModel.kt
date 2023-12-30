@@ -20,7 +20,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun checkIfApiKeyEmpty() {
-        isApiKeyEmpty = localSettingsRepositoryImpl.getSavedApiKey().isBlank()
+        isApiKeyEmpty = localSettingsRepositoryImpl.getSavedApiKey()?.isBlank() ?: true
     }
 
 }

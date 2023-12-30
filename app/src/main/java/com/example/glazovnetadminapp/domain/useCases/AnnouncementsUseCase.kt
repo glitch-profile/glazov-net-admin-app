@@ -13,9 +13,9 @@ class AnnouncementsUseCase @Inject constructor(
 ) {
 
     suspend fun getAnnouncements(): Resource<List<AnnouncementModel>> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return announcementsApiRepository.getAnnouncements(
-            apiKey = apiKey
+            token = token
         )
     }
 
@@ -23,9 +23,9 @@ class AnnouncementsUseCase @Inject constructor(
         announcement: AnnouncementModel
     ): Resource<AnnouncementModel?> {
         val announcementDto = announcement.toAnnouncementModelDto()
-        val apiKey = localSettingsRepository.getSavedApiKey()
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return announcementsApiRepository.createAnnouncement(
-            apiKey = apiKey,
+            token = token,
             newAnnouncement = announcementDto
         )
     }
@@ -33,9 +33,9 @@ class AnnouncementsUseCase @Inject constructor(
     suspend fun deleteAnnouncement(
         announcementId: String
     ): Resource<Boolean> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return announcementsApiRepository.deleteAnnouncement(
-            apiKey = apiKey,
+            token = token,
             announcementId = announcementId
         )
     }
@@ -43,10 +43,10 @@ class AnnouncementsUseCase @Inject constructor(
     suspend fun updateAnnouncement(
         newAnnouncement: AnnouncementModel
     ): Resource<Boolean> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
+        val token = localSettingsRepository.getLoginToken() ?: ""
         val announcementDto = newAnnouncement.toAnnouncementModelDto()
         return announcementsApiRepository.updateRepository(
-            apiKey = apiKey,
+            token = token,
             newAnnouncement = announcementDto
         )
     }

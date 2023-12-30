@@ -5,6 +5,6 @@ import java.io.File
 
 interface UtilsApiRepository {
 
-    suspend fun uploadImage(file: File, apiKey: String): Resource<List<String>>
+    suspend fun uploadImage(file: File, token: String): Resource<List<String>>
 
 }

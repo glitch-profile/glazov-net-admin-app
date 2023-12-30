@@ -10,6 +10,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -28,9 +29,13 @@ class PostsApiRepositoryImpl @Inject constructor(
     @Named("RestClient") private val client: HttpClient
 ): PostsApiRepository {
 
-    override suspend fun getAllPosts(): Resource<List<PostModel>> {
+    override suspend fun getAllPosts(
+        token: String
+    ): Resource<List<PostModel>> {
         return try {
-            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/").body()
+            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/") {
+                bearerAuth(token)
+            }.body()
             if (response.status) {
                 Resource.Success(
                     data = response.data.map { it.toPostModel() },
@@ -50,9 +55,10 @@ class PostsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPostsList(limit: Int?, startIndex: Int?): Resource<List<PostModel>> {
+    override suspend fun getPostsList(limit: Int?, startIndex: Int?, token: String): Resource<List<PostModel>> {
         return try {
             val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/list") {
+                bearerAuth(token)
                 parameter("limit", limit)
                 parameter("start_index", startIndex)
             }.body()
@@ -75,9 +81,11 @@ class PostsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPostById(postId: String): Resource<PostModel?> {
+    override suspend fun getPostById(postId: String, token: String): Resource<PostModel?> {
         return try {
-            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/$postId").body()
+            val response: ApiResponseDto<List<PostModelDto>> = client.get("$PATH/$postId"){
+                bearerAuth(token)
+            }.body()
             if (response.status) {
                 Resource.Success(
                     data = response.data.firstOrNull()?.toPostModel(),
@@ -97,10 +105,10 @@ class PostsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addPost(apiKey: String, postModel: PostModelDto): Resource<PostModel?> {
+    override suspend fun addPost(postModel: PostModelDto, token: String): Resource<PostModel?> {
         return try {
             val response: ApiResponseDto<List<PostModelDto>> = client.post("$PATH/add") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(postModel)
             }.body()
@@ -123,10 +131,10 @@ class PostsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun editPost(apiKey: String, postModel: PostModelDto): Resource<Boolean> {
+    override suspend fun editPost(postModel: PostModelDto, token: String): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<PostModelDto>> = client.put("$PATH/edit") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(postModel)
             }.body()
@@ -149,10 +157,10 @@ class PostsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deletePostById(apiKey: String, postId: String): Resource<Boolean> {
+    override suspend fun deletePostById(postId: String, token: String): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<PostModelDto>> = client.delete("$PATH/delete") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 parameter("post_id", postId)
             }.body()
             if (response.status) {

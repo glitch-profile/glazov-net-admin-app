@@ -29,8 +29,8 @@ class SettingsViewModel @Inject constructor(
     }
     fun loadDataFromPreferences() {
         with(localSettingsRepository) {
-            _apiKey.update { getSavedApiKey() }
-            _memberId.update { getMemberId() }
+            _apiKey.update { getSavedApiKey() ?: "" }
+            _memberId.update { getLoginToken() ?: "" }
         }
     }
     fun updateApiKeyString(newApiKey: String) {
@@ -44,7 +44,7 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             with(localSettingsRepository) {
                 setSavedApiKey(apiKey.value)
-                setMemberId(memberId.value)
+                setLoginToken(memberId.value, isNeedToSave = false)
             }
         }
     }

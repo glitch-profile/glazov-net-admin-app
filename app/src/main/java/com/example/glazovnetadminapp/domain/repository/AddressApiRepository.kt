@@ -8,25 +8,25 @@ interface AddressApiRepository {
     suspend fun getStreetsWithName(
         cityName: String,
         streetName: String,
-        apiKey: String
+        token: String
     ): Resource<List<String>>
 
     suspend fun getCitiesWithName(
         cityName: String,
-        apiKey: String
+        token: String
     ): Resource<List<String>>
 
     suspend fun isAddressExist(
         cityName: String,
         streetName: String,
         houseNumber: String,
-        apiKey: String
+        token: String
     ): Resource<Boolean>
 
     suspend fun getAddresses(
         cityName: String,
         streetName: String,
-        apiKey: String
+        token: String
     ): Resource<List<AddressFilterElement>>
 
 }

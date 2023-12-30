@@ -7,12 +7,12 @@ import com.example.glazovnetadminapp.entity.clientsDto.ClientModelDto
 interface ClientsApiRepository {
 
     suspend fun createClient(
-        apiKey: String,
+        token: String,
         newClient: ClientModelDto
     ): Resource<ClientModel?>
 
     suspend fun getClients(
-        apiKey: String
+        token: String
     ): Resource<List<ClientModel>>
 
 }

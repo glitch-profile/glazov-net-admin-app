@@ -13,21 +13,21 @@ class RequestsUseCase @Inject constructor(
 ) {
 
     suspend fun getAllRequests(): Resource<List<SupportRequestModel>> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
-        return requestsApiRepository.getAllRequests(apiKey)
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return requestsApiRepository.getAllRequests(token)
     }
 
-    //TODO(Add memberId from user auth data)
     suspend fun initRequestsSocket(): Resource<Unit> {
-        val memberId = localSettingsRepository.getMemberId()
-        return requestsApiRepository.initRequestsSocket(memberId)
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return requestsApiRepository.initRequestsSocket(token)
     }
 
     fun observeRequests() = requestsApiRepository.observeRequests()
 
     suspend fun addRequest(newRequestModel: SupportRequestModel): Resource<SupportRequestModel?> {
         val requestDto = newRequestModel.toSupportRequestDto()
-        return requestsApiRepository.addRequest(requestDto)
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return requestsApiRepository.addRequest(requestDto, token)
     }
 
     suspend fun disconnect() {

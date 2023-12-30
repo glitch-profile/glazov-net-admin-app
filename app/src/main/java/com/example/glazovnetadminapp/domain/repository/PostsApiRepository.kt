@@ -6,29 +6,33 @@ import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
 
 interface PostsApiRepository {
 
-    suspend fun getAllPosts(): Resource<List<PostModel>>
+    suspend fun getAllPosts(
+        token: String
+    ): Resource<List<PostModel>>
 
     suspend fun getPostsList (
         limit: Int? = null,
-        startIndex: Int? = null
+        startIndex: Int? = null,
+        token: String
     ): Resource<List<PostModel>>
 
     suspend fun getPostById (
-        postId: String
+        postId: String,
+        token: String
     ): Resource<PostModel?>
 
     suspend fun addPost(
-        apiKey: String,
-        postModel: PostModelDto
+        postModel: PostModelDto,
+        token: String
     ): Resource<PostModel?>
 
     suspend fun editPost(
-        apiKey: String,
-        postModel: PostModelDto
+        postModel: PostModelDto,
+        token: String
     ): Resource<Boolean>
 
     suspend fun deletePostById(
-        apiKey: String,
-        postId: String
+        postId: String,
+        token: String
     ): Resource<Boolean>
 }

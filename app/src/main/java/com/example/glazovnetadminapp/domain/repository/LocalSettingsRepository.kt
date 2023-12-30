@@ -6,9 +6,12 @@ interface LocalSettingsRepository {
 
     val preferences: SharedPreferences
 
-    fun getSavedApiKey(): String
+    fun getSavedApiKey(): String?
     fun setSavedApiKey(apiKey: String?)
 
-    fun getMemberId(): String
-    fun setMemberId(memberId: String)
+    fun getLoginToken(): String?
+    fun setLoginToken(loginToken: String?, isNeedToSave: Boolean)
+
+    fun getAssociatedUserId(): String?
+    fun setAssociatedUserId(userId: String?, isNeedToSave: Boolean)
 }

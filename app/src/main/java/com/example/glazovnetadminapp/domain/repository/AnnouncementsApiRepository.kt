@@ -7,21 +7,21 @@ import com.example.glazovnetadminapp.entity.announcementsDto.AnnouncementModelDt
 interface AnnouncementsApiRepository {
 
     suspend fun getAnnouncements(
-        apiKey: String
+        token: String
     ): Resource<List<AnnouncementModel>>
 
     suspend fun createAnnouncement(
-        apiKey: String,
+        token: String,
         newAnnouncement: AnnouncementModelDto
     ): Resource<AnnouncementModel?>
 
     suspend fun deleteAnnouncement(
-        apiKey: String,
+        token: String,
         announcementId: String
     ): Resource<Boolean>
 
     suspend fun updateRepository(
-        apiKey: String,
+        token: String,
         newAnnouncement: AnnouncementModelDto
     ): Resource<Boolean>
 

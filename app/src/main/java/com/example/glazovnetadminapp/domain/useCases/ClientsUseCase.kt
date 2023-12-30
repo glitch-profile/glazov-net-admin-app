@@ -13,16 +13,16 @@ class ClientsUseCase @Inject constructor(
 ) {
 
     suspend fun getAllClients(): Resource<List<ClientModel>> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
-        return clientsApiRepository.getClients(apiKey)
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return clientsApiRepository.getClients(token)
     }
 
     suspend fun addNewClient(
         clientModel: ClientModel
     ): Resource<ClientModel?> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return clientsApiRepository.createClient(
-            apiKey = apiKey,
+            token = token,
             newClient = clientModel.toClientModelDto()
         )
     }

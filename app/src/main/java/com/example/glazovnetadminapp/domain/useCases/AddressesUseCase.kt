@@ -13,10 +13,10 @@ class AddressesUseCase(
     suspend fun getCitiesList(
         cityName: String
     ): Resource<List<String>> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return addressApiRepository.getCitiesWithName(
             cityName = cityName,
-            apiKey = apiKey
+            token = token
         )
     }
 
@@ -25,11 +25,11 @@ class AddressesUseCase(
         streetName: String
     ): Resource<List<String>> {
         return if (cityName.isNotBlank() && streetName.isNotBlank()) {
-            val apiKey = localSettingsRepository.getSavedApiKey()
+            val token = localSettingsRepository.getLoginToken() ?: ""
             addressApiRepository.getStreetsWithName(
                 cityName = cityName,
                 streetName = streetName,
-                apiKey = apiKey
+                token = token
             )
         } else {
             Resource.Success(
@@ -43,8 +43,8 @@ class AddressesUseCase(
         cityName: String,
         streetName: String
     ): Resource<List<AddressFilterElement>> {
-        val apiKey = localSettingsRepository.getSavedApiKey()
-        return addressApiRepository.getAddresses(cityName, streetName, apiKey)
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return addressApiRepository.getAddresses(cityName, streetName, token)
     }
 
 }

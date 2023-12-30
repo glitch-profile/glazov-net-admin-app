@@ -10,6 +10,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -27,10 +28,10 @@ private const val PATH = "api/announcements"
 class AnnouncementsApiRepositoryImpl @Inject constructor(
     @Named("RestClient") private val client: HttpClient
 ): AnnouncementsApiRepository {
-    override suspend fun getAnnouncements(apiKey: String): Resource<List<AnnouncementModel>> {
+    override suspend fun getAnnouncements(token: String): Resource<List<AnnouncementModel>> {
         return try {
             val response: ApiResponseDto<List<AnnouncementModelDto>> = client.get("$PATH/") {
-                header("api_key", apiKey)
+                bearerAuth(token)
             }.body()
             Resource.Success(
                 data = response.data.map { it.toAnnouncementModel() },
@@ -46,12 +47,12 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createAnnouncement(
-        apiKey: String,
+        token: String,
         newAnnouncement: AnnouncementModelDto
     ): Resource<AnnouncementModel?> {
         return try {
             val response: ApiResponseDto<List<AnnouncementModelDto>> = client.post("$PATH/create") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(newAnnouncement)
             }.body()
@@ -75,12 +76,12 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAnnouncement(
-        apiKey: String,
+        token: String,
         announcementId: String
     ): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<List<AnnouncementModelDto>> = client.delete("$PATH/delete") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 parameter("id", announcementId)
             }.body()
             if (response.status) {
@@ -103,12 +104,12 @@ class AnnouncementsApiRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateRepository(
-        apiKey: String,
+        token: String,
         newAnnouncement: AnnouncementModelDto
     ): Resource<Boolean> {
         return try {
             val response: ApiResponseDto<Boolean> = client.put("$PATH/edit") {
-                header("api_key", apiKey)
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(newAnnouncement)
             }.body()

@@ -11,26 +11,29 @@ private const val API_KEY = "test_api_key_123"
 
 class TariffsUseCase @Inject constructor(
     private val tariffsApiRepository: TariffsApiRepository,
-    private val localSettingsRepositoryImpl: LocalSettingsRepository
+    private val localSettingsRepository: LocalSettingsRepository
 ) {
     suspend fun getTariffs(): Resource<List<TariffModel>> {
-        return tariffsApiRepository.getAllTariffs()
+        val token = localSettingsRepository.getLoginToken() ?: ""
+        return tariffsApiRepository.getAllTariffs(token)
     }
 
     suspend fun updateTariff(
         tariff: TariffModel
     ): Resource<Boolean> {
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return tariffsApiRepository.updateTariff(
-            apiKey = localSettingsRepositoryImpl.getSavedApiKey(),
-            tariff.ToTariffModelDto()
+            token = token,
+            tariff = tariff.ToTariffModelDto()
         )
     }
 
     suspend fun addTariff(
         tariff: TariffModel
     ): Resource<TariffModel?> {
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return tariffsApiRepository.addTariff(
-            apiKey = localSettingsRepositoryImpl.getSavedApiKey(),
+            token = token,
             tariff = tariff.ToTariffModelDto()
         )
     }
@@ -38,8 +41,9 @@ class TariffsUseCase @Inject constructor(
     suspend fun deleteTariff(
         tariffId: String
     ): Resource<Boolean> {
+        val token = localSettingsRepository.getLoginToken() ?: ""
         return tariffsApiRepository.deleteTariff(
-            apiKey = localSettingsRepositoryImpl.getSavedApiKey(),
+            token = token,
             tariffId = tariffId
         )
     }
