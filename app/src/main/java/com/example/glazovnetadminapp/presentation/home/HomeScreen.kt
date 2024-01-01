@@ -78,7 +78,7 @@ fun HomeScreen(
                     orientation = Orientation.Vertical
                 )
         ) {
-            if (viewModel.isApiKeyEmpty) {
+            if (viewModel.isLoggedIn) {
                 WarningCard(
                     navController = navController,
                     title = stringResource(id = R.string.settings_user_auth_not_found_text),
@@ -162,7 +162,6 @@ fun HomeScreen(
                     .padding(start = 16.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
-            val context = LocalContext.current
             MenuButton(
                 text = "Sandbox",
                 onClick = {

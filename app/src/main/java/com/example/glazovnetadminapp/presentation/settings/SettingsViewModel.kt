@@ -1,9 +1,11 @@
 package com.example.glazovnetadminapp.presentation.settings
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
 import com.example.glazovnetadminapp.domain.useCases.UtilsUseCase
+import com.example.glazovnetadminapp.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +22,8 @@ class SettingsViewModel @Inject constructor(
     private var _state = MutableStateFlow(SettingsState())
     val state = _state.asStateFlow()
 
+    private val _loginToken = MutableStateFlow("")
+    val loginToken = _loginToken.asStateFlow()
     private val _userLogin = MutableStateFlow("")
     val userLogin = _userLogin.asStateFlow()
     private val _userPassword = MutableStateFlow("")
@@ -32,7 +36,8 @@ class SettingsViewModel @Inject constructor(
     }
     fun loadDataFromPreferences() {
         with(localSettingsRepository) {
-
+            _loginToken.update { getLoginToken() ?: "" }
+            _userLogin.update { getSavedUserLogin() ?: "" }
         }
     }
     fun updateUserLoginString(login: String) {
@@ -40,6 +45,9 @@ class SettingsViewModel @Inject constructor(
     }
     fun updateUserPasswordString(password: String) {
         _userPassword.update { password }
+    }
+    fun checkShouldRememberAuth() {
+        _isRememberToken.update { !isRememberToken.value }
     }
 
     fun login(
@@ -58,6 +66,10 @@ class SettingsViewModel @Inject constructor(
                 asAdmin = isAdmin,
                 isRememberToken = isRememberToken.value
             )
+            if (result is Resource.Success) {
+                _loginToken.update { result.data!! }
+            }
+            Log.i("AUTH", "login result - ${result.message}")
             _state.update {
                 it.copy(
                     isLoading = false,

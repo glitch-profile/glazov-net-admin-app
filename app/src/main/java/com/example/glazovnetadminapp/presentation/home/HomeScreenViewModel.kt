@@ -12,15 +12,15 @@ class HomeScreenViewModel @Inject constructor(
     private val utilsUseCase: UtilsUseCase
 ): ViewModel() {
 
-    var isApiKeyEmpty: Boolean = true
+    var isLoggedIn: Boolean = true
         private set
 
     init {
-        checkIfApiKeyEmpty()
+        checkIfNotLoggedIn()
     }
 
-    fun checkIfApiKeyEmpty() {
-        isApiKeyEmpty = localSettingsRepositoryImpl.getSavedApiKey()?.isBlank() ?: true
+    private fun checkIfNotLoggedIn() {
+        isLoggedIn = localSettingsRepositoryImpl.getLoginToken()?.isBlank() ?: true
     }
 
 }

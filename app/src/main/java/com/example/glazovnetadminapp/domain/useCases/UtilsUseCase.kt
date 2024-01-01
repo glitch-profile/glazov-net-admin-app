@@ -19,7 +19,7 @@ class UtilsUseCase @Inject constructor(
         isRememberToken: Boolean
     ): Resource<String> {
         val authData = AuthDataDto(
-            login = login,
+            username = login,
             password = password,
             asAdmin = asAdmin
         )
@@ -29,6 +29,7 @@ class UtilsUseCase @Inject constructor(
                 loginToken = loginResult.data,
                 isNeedToSave = isRememberToken
             )
+            localSettingsRepository.setSavedUserLogin(login)
         }
         return loginResult
     }

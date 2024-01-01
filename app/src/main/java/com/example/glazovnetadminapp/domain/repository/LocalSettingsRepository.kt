@@ -6,8 +6,8 @@ interface LocalSettingsRepository {
 
     val preferences: SharedPreferences
 
-    fun getSavedApiKey(): String?
-    fun setSavedApiKey(apiKey: String?)
+    fun getSavedUserLogin(): String?
+    fun setSavedUserLogin(login: String?)
 
     fun getLoginToken(): String?
     fun setLoginToken(loginToken: String?, isNeedToSave: Boolean)

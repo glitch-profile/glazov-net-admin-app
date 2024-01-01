@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,8 +42,12 @@ fun SettingsScreen(
 ) {
     val nestedScroll = TopAppBarDefaults.pinnedScrollBehavior()
 
+    val authState = viewModel.state.collectAsState()
+
+    val loginToken = viewModel.loginToken.collectAsState()
     val userLoginState = viewModel.userLogin.collectAsState()
     val userPasswordState = viewModel.userPassword.collectAsState()
+    val isRememberAuthData = viewModel.isRememberToken.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -112,6 +118,21 @@ fun SettingsScreen(
                 },
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = isRememberAuthData.value,
+                    onCheckedChange = { viewModel.checkShouldRememberAuth() }
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Remember me"
+                )
+            }
             Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier
@@ -119,28 +140,33 @@ fun SettingsScreen(
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
+                OutlinedButton(
+                    onClick = { viewModel.login(isAdmin = true) },
+                    enabled = !authState.value.isLoading
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.settings_authorization_login_as_admin_button)
+                    )
+                }
+                Button(
+                    onClick = { viewModel.login(isAdmin = false) },
+                    enabled = !authState.value.isLoading
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.settings_authorization_login_as_user_button)
+                    )
+                }
             }
-            OutlinedButton(
-                onClick = { viewModel.login(isAdmin = false) },
+            Text(
                 modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(horizontal = 16.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.settings_authorization_login_as_admin_button)
-                )
-            }
-            Button(
-                onClick = { viewModel.login(isAdmin = true) },
+                    .padding(horizontal = 16.dp),
+                text = "Your auth token:"
+            )
+            Text(
                 modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(horizontal = 16.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.settings_authorization_login_as_user_button)
-                )
-            }
+                    .padding(horizontal = 16.dp),
+                text = loginToken.value.ifBlank { "Not authorized" }
+            )
         }
     }
 }

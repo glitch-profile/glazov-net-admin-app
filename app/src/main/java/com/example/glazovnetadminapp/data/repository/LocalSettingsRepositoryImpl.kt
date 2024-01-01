@@ -7,7 +7,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 private const val PREFERENCE_NAME = "GlazovNetPreferences"
-private const val API_KEY_NAME = "ApiKey"
+private const val USER_LOGIN = "userLogin"
 private const val LOGIN_TOKEN_NAME = "LoginToken"
 private const val USER_ID_NAME = "UserId"
 
@@ -17,12 +17,11 @@ class LocalSettingsRepositoryImpl @Inject constructor(
 
     override val preferences: SharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
 
-    override fun getSavedApiKey(): String? {
-        return preferences.getString(API_KEY_NAME, null)
+    override fun getSavedUserLogin(): String? {
+        return preferences.getString(USER_LOGIN, null)
     }
-    override fun setSavedApiKey(apiKey: String?) {
-        val apiKeyToSave = apiKey?.take(64)
-        preferences.edit().putString(API_KEY_NAME, apiKeyToSave).apply()
+    override fun setSavedUserLogin(login: String?){
+        preferences.edit().putString(USER_LOGIN, login).apply()
     }
 
     private var savedLoginToken: String? = null

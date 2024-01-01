@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AuthDataDto(
-    val login: String,
+    val username: String,
     val password: String,
     val asAdmin: Boolean
 )
