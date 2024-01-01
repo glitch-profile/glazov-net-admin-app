@@ -81,8 +81,8 @@ fun HomeScreen(
             if (viewModel.isApiKeyEmpty) {
                 WarningCard(
                     navController = navController,
-                    title = stringResource(id = R.string.settings_api_key_not_found_text),
-                    description = stringResource(id = R.string.settings_api_key_description),
+                    title = stringResource(id = R.string.settings_user_auth_not_found_text),
+                    description = stringResource(id = R.string.settings_user_auth_description),
                     screenRouteToOpen = "settings"
                 )
             }

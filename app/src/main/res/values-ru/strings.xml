@@ -73,10 +73,9 @@
     <string name="add_client_street_placeholder">Улица</string>
     <string name="add_client_house_number_placeholder">Номер дома</string>
     <string name="add_client_room_number_placeholder">Номер квартиры</string>
-    <string name="settings_api_key_text">API ключ</string>
-    <string name="settings_api_key_not_found_text">API ключ не найден</string>
-    <string name="settings_api_key_description">АPI ключ нужен для того, что бы увеличить безопасность. Без него вы не сможете вносить изменения в базу данных.</string>
-    <string name="settings_security_title">Безопасность</string>
+    <string name="settings_user_auth_not_found_text">Не авторизован</string>
+    <string name="settings_user_auth_description">Необходимо зайти, как пользователь или админ. Иначе вы не получите доступ к серверу.</string>
+    <string name="settings_authorization_title">Авторизация</string>
     <string name="edit_tariff_name_text">Наименование тарифа</string>
     <string name="edit_tariff_description_text">Описание тарифа</string>
     <string name="edit_tariff_category_text">Категория</string>
@@ -95,4 +94,8 @@
     <string name="app_chat_request_screen_name">Запросы в поддержку</string>
     <string name="app_edit_announcement_screen_name">Редактировать обьявление</string>
     <string name="app_chat_senderName_self">Вы</string>
+    <string name="settings_authorization_login_text">Логин</string>
+    <string name="settings_authorization_password_text">Пароль</string>
+    <string name="settings_authorization_login_as_user_button">Войти</string>
+    <string name="settings_authorization_login_as_admin_button">Войти как админ</string>
 </resources>

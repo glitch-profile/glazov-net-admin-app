@@ -1,6 +1,8 @@
 package com.example.glazovnetadminapp.presentation.settings
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,8 +40,8 @@ fun SettingsScreen(
 ) {
     val nestedScroll = TopAppBarDefaults.pinnedScrollBehavior()
 
-    val apiKeyState = viewModel.apiKey.collectAsState()
-    val memberIdState = viewModel.memberId.collectAsState()
+    val userLoginState = viewModel.userLogin.collectAsState()
+    val userPasswordState = viewModel.userPassword.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -72,7 +75,7 @@ fun SettingsScreen(
                 .padding(values)
         ) {
             Text(
-                text = stringResource(id = R.string.settings_security_title),
+                text = stringResource(id = R.string.settings_authorization_title),
                 modifier = Modifier
                     .padding(start = 16.dp),
                 style = MaterialTheme.typography.titleMedium
@@ -82,42 +85,60 @@ fun SettingsScreen(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
-                value = apiKeyState.value,
+                value = userLoginState.value,
                 onValueChange = {
-                    viewModel.updateApiKeyString(it)
+                    viewModel.updateUserLoginString(it)
                 },
                 label = {
                     Text(
-                        text = stringResource(id = R.string.settings_api_key_text)
+                        text = stringResource(id = R.string.settings_authorization_login_text)
                     )
                 },
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
-                value = memberIdState.value,
+                value = userPasswordState.value,
                 onValueChange = {
-                    viewModel.updateMemberIdString(it)
+                    viewModel.updateUserPasswordString(it)
                 },
                 label = {
                     Text(
-                        text = "Member ID"
+                        text = stringResource(id = R.string.settings_authorization_password_text)
                     )
                 },
                 singleLine = true
             )
             Spacer(modifier = Modifier.height(24.dp))
-            Button(
-                onClick = { viewModel.saveDataToPreferences() },
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+            }
+            OutlinedButton(
+                onClick = { viewModel.login(isAdmin = false) },
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.app_button_dialog_confirm)
+                    text = stringResource(id = R.string.settings_authorization_login_as_admin_button)
+                )
+            }
+            Button(
+                onClick = { viewModel.login(isAdmin = true) },
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.settings_authorization_login_as_user_button)
                 )
             }
         }

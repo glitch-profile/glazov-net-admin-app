@@ -84,11 +84,14 @@
     <string name="add_client_street_placeholder">Street</string>
     <string name="add_client_house_number_placeholder">House number</string>
     <string name="add_client_room_number_placeholder">Room number</string>
-    
-    <string name="settings_api_key_text">API key</string>
-    <string name="settings_api_key_not_found_text">API key not found</string>
-    <string name="settings_api_key_description">The API key is needed to increase security. Without it, you will not be able to make changes to the database.</string>
-    <string name="settings_security_title">Security</string>
+
+    <string name="settings_user_auth_not_found_text">User auth data not found</string>
+    <string name="settings_user_auth_description">You need to login as user or admin. Or you will not be able to see databases data</string>
+    <string name="settings_authorization_title">Authorization</string>
+    <string name="settings_authorization_login_text">Login</string>
+    <string name="settings_authorization_password_text">Password</string>
+    <string name="settings_authorization_login_as_user_button">Login as user</string>
+    <string name="settings_authorization_login_as_admin_button">Login as admin</string>
 
     <string name="app_datetime_today_text">Today</string>
     <string name="app_datetime_yesterday_text">Yesterday</string>
