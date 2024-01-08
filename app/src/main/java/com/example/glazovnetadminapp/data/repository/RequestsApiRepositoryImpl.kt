@@ -200,7 +200,7 @@ class RequestsApiRepositoryImpl @Inject constructor(
                     val json = Json { ignoreUnknownKeys = true }
                     val messageDto = json.decodeFromString<MessageModelDto>(encodedMessage)
                     val message = messageDto.toMessageModel()
-                    message.copy(isOwnMessage = message.senderId == localSettingsRepository.getLoginToken())
+                    message.copy(isOwnMessage = message.senderId == localSettingsRepository.getAssociatedUserId())
                 } ?: flow{}
         } catch (e: Exception) {
             e.printStackTrace()
