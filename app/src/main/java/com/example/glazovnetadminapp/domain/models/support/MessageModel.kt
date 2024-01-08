@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.domain.models.support
 
-import com.example.glazovnetadminapp.entity.supportsDto.MessageModelDto
 import java.time.OffsetDateTime
 
 data class MessageModel(

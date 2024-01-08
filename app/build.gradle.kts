@@ -14,8 +14,8 @@ android {
         applicationId = "com.example.glazovnetadminapp"
         minSdk = 29
         targetSdk = 34
-        versionCode = 7
-        versionName = "0.7.5-ws"
+        versionCode = 8
+        versionName = "0.8.1-ws"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
