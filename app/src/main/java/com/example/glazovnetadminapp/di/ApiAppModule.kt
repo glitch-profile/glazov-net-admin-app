@@ -33,6 +33,7 @@ object ApiAppModule {
                 isLenient = true
             })
         }
+        expectSuccess = true
         install(WebSockets)
         install(DefaultRequest) {
             url("http://$BASE_URL:$PORT")
@@ -49,6 +50,7 @@ object ApiAppModule {
                 isLenient = true
             })
         }
+        expectSuccess = true
         install(WebSockets)
         install(DefaultRequest) {
             url("ws://$BASE_URL:$PORT")
