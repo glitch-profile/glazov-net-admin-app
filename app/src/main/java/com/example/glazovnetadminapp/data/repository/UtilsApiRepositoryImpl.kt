@@ -3,7 +3,8 @@ package com.example.glazovnetadminapp.data.repository
 import com.example.glazovnetadminapp.domain.repository.UtilsApiRepository
 import com.example.glazovnetadminapp.domain.util.Resource
 import com.example.glazovnetadminapp.entity.ApiResponseDto
-import com.example.glazovnetadminapp.entity.AuthDataDto
+import com.example.glazovnetadminapp.entity.authDto.AuthDataDto
+import com.example.glazovnetadminapp.entity.authDto.AuthResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.ConnectTimeoutException
@@ -11,8 +12,6 @@ import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
-import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -31,9 +30,9 @@ class UtilsApiRepositoryImpl @Inject constructor(
 
 ): UtilsApiRepository {
 
-    override suspend fun login(authData: AuthDataDto): Resource<String> {
+    override suspend fun login(authData: AuthDataDto): Resource<AuthResponse> {
         return try {
-            val response: ApiResponseDto<String> = client.post(LOGIN_PATH) {
+            val response: ApiResponseDto<AuthResponse> = client.post(LOGIN_PATH) {
                 contentType(ContentType.Application.Json)
                 setBody(authData)
             }.body()

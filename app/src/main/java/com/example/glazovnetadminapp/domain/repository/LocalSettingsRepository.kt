@@ -6,6 +6,7 @@ interface LocalSettingsRepository {
 
     val preferences: SharedPreferences
 
+    //AUTH
     fun getSavedUserLogin(): String?
     fun setSavedUserLogin(login: String?)
 
@@ -14,4 +15,7 @@ interface LocalSettingsRepository {
 
     fun getAssociatedUserId(): String?
     fun setAssociatedUserId(userId: String?, isNeedToSave: Boolean)
+
+    fun getIsUserAsAdmin(): Boolean?
+    fun setIsUserAsAdmin(isAdmin: Boolean, isNeedToSave: Boolean)
 }

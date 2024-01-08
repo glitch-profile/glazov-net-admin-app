@@ -8,8 +8,9 @@ import javax.inject.Inject
 
 private const val PREFERENCE_NAME = "GlazovNetPreferences"
 private const val USER_LOGIN = "userLogin"
-private const val LOGIN_TOKEN_NAME = "LoginToken"
-private const val USER_ID_NAME = "UserId"
+private const val LOGIN_TOKEN_NAME = "loginToken"
+private const val USER_ID_NAME = "userId"
+private const val USER_AS_ADMIN = "isUserAsAdmin"
 
 class LocalSettingsRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
@@ -50,5 +51,19 @@ class LocalSettingsRepositoryImpl @Inject constructor(
     override fun setAssociatedUserId(userId: String?, isNeedToSave: Boolean) {
         associatedUserId = userId
         if (isNeedToSave) preferences.edit().putString(USER_ID_NAME, userId).apply()
+    }
+
+    private var isUserAsAdmin: Boolean? = null
+    override fun getIsUserAsAdmin(): Boolean {
+        return if (isUserAsAdmin != null) isUserAsAdmin!!
+        else {
+            val isAdmin: Boolean = preferences.getBoolean(USER_AS_ADMIN, false)
+            isUserAsAdmin = isAdmin
+            isAdmin
+        }
+    }
+    override fun setIsUserAsAdmin(isAdmin: Boolean, isNeedToSave: Boolean) {
+        isUserAsAdmin = isAdmin
+        if (isNeedToSave) preferences.edit().putBoolean(USER_AS_ADMIN, isAdmin).apply()
     }
 }

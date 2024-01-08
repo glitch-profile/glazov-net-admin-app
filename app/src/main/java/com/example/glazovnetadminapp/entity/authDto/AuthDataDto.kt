@@ -1,4 +1,4 @@
-package com.example.glazovnetadminapp.entity
+package com.example.glazovnetadminapp.entity.authDto
 
 import kotlinx.serialization.Serializable
 

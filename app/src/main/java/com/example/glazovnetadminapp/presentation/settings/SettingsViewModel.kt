@@ -67,9 +67,8 @@ class SettingsViewModel @Inject constructor(
                 isRememberToken = isRememberToken.value
             )
             if (result is Resource.Success) {
-                _loginToken.update { result.data!! }
+                _loginToken.update { result.data!!.token }
             }
-            Log.i("AUTH", "login result - ${result.message}")
             _state.update {
                 it.copy(
                     isLoading = false,
