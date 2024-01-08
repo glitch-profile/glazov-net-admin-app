@@ -167,6 +167,11 @@ fun SettingsScreen(
                     .padding(horizontal = 16.dp),
                 text = loginToken.value.ifBlank { "Not authorized" }
             )
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                text = authState.value.message ?: ""
+            )
         }
     }
 }

@@ -17,7 +17,7 @@ class UtilsUseCase @Inject constructor(
         login: String,
         password: String,
         asAdmin: Boolean,
-        isRememberToken: Boolean
+        isRememberAuthData: Boolean
     ): Resource<AuthResponse> {
         val authData = AuthDataDto(
             username = login,
@@ -27,9 +27,9 @@ class UtilsUseCase @Inject constructor(
         val loginResult = utilsApiRepository.login(authData)
         if (loginResult is Resource.Success) {
             val authResponse = loginResult.data!!
-            localSettingsRepository.setLoginToken(authResponse.token, isRememberToken)
-            localSettingsRepository.setAssociatedUserId(authResponse.userId, isRememberToken)
-            localSettingsRepository.setIsUserAsAdmin(authResponse.isAdmin, isRememberToken)
+            localSettingsRepository.setLoginToken(authResponse.token, isRememberAuthData)
+            localSettingsRepository.setAssociatedUserId(authResponse.userId, isRememberAuthData)
+            localSettingsRepository.setIsUserAsAdmin(authResponse.isAdmin, isRememberAuthData)
             localSettingsRepository.setSavedUserLogin(login)
         }
         return loginResult

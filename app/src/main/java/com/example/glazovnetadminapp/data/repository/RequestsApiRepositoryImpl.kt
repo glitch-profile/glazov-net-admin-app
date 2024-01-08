@@ -92,7 +92,6 @@ class RequestsApiRepositoryImpl @Inject constructor(
         }
     }
 
-    //TODO(Rework the definition of users own message)
     override suspend fun getMessagesForRequest(
         requestId: String,
         token: String
@@ -202,7 +201,7 @@ class RequestsApiRepositoryImpl @Inject constructor(
                     val json = Json { ignoreUnknownKeys = true }
                     val messageDto = json.decodeFromString<MessageModelDto>(encodedMessage)
                     val message = messageDto.toMessageModel()
-                    message.copy(isOwnMessage = message.senderName == localSettingsRepository.getLoginToken())
+                    message.copy(isOwnMessage = message.senderId == localSettingsRepository.getLoginToken())
                 } ?: flow{}
         } catch (e: Exception) {
             e.printStackTrace()

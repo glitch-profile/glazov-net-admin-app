@@ -1,6 +1,5 @@
 package com.example.glazovnetadminapp.presentation.settings
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.repository.LocalSettingsRepository
@@ -64,7 +63,7 @@ class SettingsViewModel @Inject constructor(
                 login = userLogin.value,
                 password =  userPassword.value,
                 asAdmin = isAdmin,
-                isRememberToken = isRememberToken.value
+                isRememberAuthData = isRememberToken.value
             )
             if (result is Resource.Success) {
                 _loginToken.update { result.data!!.token }
