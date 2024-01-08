@@ -10,6 +10,8 @@ import java.time.ZoneId
 data class MessageModelDto(
     val id: String,
     val senderId: String,
+    val isAdmin: Boolean,
+    val senderName: String,
     val text: String,
     val timestamp: Long
 ) {
@@ -20,7 +22,9 @@ data class MessageModelDto(
         )
         return MessageModel(
             id = this.id,
-            senderName = this.senderId,
+            senderId = this.senderId,
+            isAdmin = this.isAdmin,
+            senderName = this.senderName,
             text = this.text,
             timestamp = sendDateTime
         )

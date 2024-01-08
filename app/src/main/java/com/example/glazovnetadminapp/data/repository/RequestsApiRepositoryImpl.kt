@@ -105,7 +105,7 @@ class RequestsApiRepositoryImpl @Inject constructor(
                 val messagesList = response.data.map { it.toMessageModel() }
                 Resource.Success(
                     data = messagesList.map { message ->
-                        message.copy(isOwnMessage = message.senderName == localSettingsRepository.getLoginToken())
+                        message.copy(isOwnMessage = message.senderId == localSettingsRepository.getAssociatedUserId())
                     }
                 )
             } else {
