@@ -58,7 +58,7 @@ fun DesignedTextField(
             unfocusedLabelColor = unfocusedColor,
             unfocusedTextColor = unfocusedColor,
             unfocusedLeadingIconColor = unfocusedColor,
-            unfocusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.LightGray,
             unfocusedPlaceholderColor = unfocusedColor,
 
             focusedLabelColor = primaryColor,

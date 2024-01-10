@@ -3,10 +3,14 @@ package com.example.glazovnetadminapp.presentation.sandbox
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -30,14 +34,20 @@ fun SandboxScreen() {
             mutableStateOf("")
         }
         DesignedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
             text = inputText,
             placeholder = "username",
             onTextEdit = {inputText = it},
+            leadingIcon = Icons.Default.Person,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
         )
         DesignedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
             text = inputText,
             placeholder = "password",
+            leadingIcon = Icons.Default.Lock,
             onTextEdit = {inputText = it}
         )
         Spacer(modifier = Modifier.height(4.dp))
