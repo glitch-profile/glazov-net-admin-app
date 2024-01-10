@@ -164,7 +164,7 @@ fun HomeScreen(
             MenuButton(
                 text = "Sandbox",
                 onClick = {
-
+                    navController.navigate("test_area")
                 },
                 iconVector = Icons.Default.Warning
             )

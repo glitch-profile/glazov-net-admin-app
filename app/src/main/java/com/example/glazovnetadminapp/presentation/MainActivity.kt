@@ -32,6 +32,7 @@ import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreen
 import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreenViewModel
 import com.example.glazovnetadminapp.presentation.requests.RequestChatScreen
 import com.example.glazovnetadminapp.presentation.requests.RequestScreen
+import com.example.glazovnetadminapp.presentation.sandbox.SandboxScreen
 import com.example.glazovnetadminapp.presentation.settings.SettingsScreen
 import com.example.glazovnetadminapp.presentation.tariffs.editTariffs.EditTariffScreen
 import com.example.glazovnetadminapp.presentation.tariffs.tariffsList.TariffsScreen
@@ -165,6 +166,14 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     requestId = requestId
                                 )
+                            }
+                        }
+                        navigation(
+                            startDestination = "sandbox",
+                            route = "test_area"
+                        ) {
+                            composable("sandbox") {
+                                SandboxScreen()
                             }
                         }
                     }
