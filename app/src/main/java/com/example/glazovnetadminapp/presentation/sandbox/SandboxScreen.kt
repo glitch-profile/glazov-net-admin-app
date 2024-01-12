@@ -76,7 +76,7 @@ fun SandboxScreen() {
             Button(
                 onClick = {
                     innerNavController.navigate("screen_1") {
-                        launchSingleTop = true
+                        popUpTo("screen_1") {inclusive = true}
                     }
                 }
             ) {
@@ -85,9 +85,9 @@ fun SandboxScreen() {
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    innerNavController.navigate(
-                        route = "screen_2/$value"
-                    )
+                    innerNavController.navigate(route = "screen_2/$value") {
+                        popUpTo("screen_2") {inclusive = true}
+                    }
                 }
             ) {
                 Text(text = "To screen 2")
