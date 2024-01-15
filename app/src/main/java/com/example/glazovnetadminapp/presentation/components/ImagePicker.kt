@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Size
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -64,6 +65,9 @@ fun ImagePicker(
     var imageName by remember {
         mutableStateOf("")
     }
+    var isNeedToSelectImage by remember {
+        mutableStateOf(true)
+    }
 
     fun getImageName(filePath: String): String {
         val fileNameTrimCount = if (filePath.contains('%')) filePath.reversed().indexOf("%")
@@ -79,10 +83,7 @@ fun ImagePicker(
             bitmap = context.contentResolver.loadThumbnail(uri, thumbnailSize, null)
             imageName = getImageName(uri.toString())
         }
-        else {
-            bitmap = null
-            imageName = ""
-        }
+        isNeedToSelectImage = uri == null
         imageUri = uri
     }
 
@@ -97,67 +98,72 @@ fun ImagePicker(
         border = BorderStroke(1.dp, Color.LightGray),
         contentColor = contentColor
     ) {
-        if (bitmap !== null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { launcher.launch(CONTRACT) },
-                    bitmap = bitmap!!.asImageBitmap(),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    filterQuality = FilterQuality.Low
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
-                        .padding(horizontal = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
+        Crossfade(targetState = isNeedToSelectImage, label = "imagePickerStateTransition") {
+            when (it) {
+                false -> {
+                    Box(
                         modifier = Modifier
-                            .weight(1f),
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        text = imageName
-                    )
-                    TextButton(
-                        onClick = { updateImageData(context, null) }
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.TopCenter
                     ) {
-                        Text(text = "Clear")
+                        if (bitmap !== null) {
+                            Image(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { launcher.launch(CONTRACT) },
+                                bitmap = bitmap!!.asImageBitmap(),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                filterQuality = FilterQuality.Low
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
+                                .padding(horizontal = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .weight(1f),
+                                style = MaterialTheme.typography.bodyMedium,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                text = imageName
+                            )
+                            TextButton(
+                                onClick = { updateImageData(context, null) }
+                            ) {
+                                Text(text = "Clear")
+                            }
+                        }
                     }
                 }
-            }
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable { launcher.launch(CONTRACT) },
-                contentAlignment = Alignment.Center
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        style = MaterialTheme.typography.labelMedium,
-                        text = labelText
-                    )
+                true -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable { launcher.launch(CONTRACT) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                style = MaterialTheme.typography.labelMedium,
+                                text = labelText
+                            )
+                        }
+                    }
                 }
             }
         }
     }
-
-
 }
