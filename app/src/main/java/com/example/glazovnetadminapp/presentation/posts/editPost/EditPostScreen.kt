@@ -47,6 +47,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
+import com.example.glazovnetadminapp.presentation.components.ImagePicker
 import com.example.glazovnetadminapp.presentation.posts.postsList.PostsScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,10 +79,6 @@ fun EditPostScreen(
     var textFieldSize by remember {
         mutableStateOf(Size.Zero)
     }
-    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-        imageUri = it?.toString() ?: imageUri
-    }
-
     fun checkDataTheSame(): Boolean {
         return ((titleText == post?.title) && (fullDescription == post.text)
                     && (imageUri == (post.image?.imageUrl ?: "")))
@@ -159,36 +156,14 @@ fun EditPostScreen(
                     )
                 }
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(
+            ImagePicker(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TextButton(
-                    onClick = { imageUri = "" }
-                ) {
-                    Text(text = "Remove image")
+                    .fillMaxWidth()
+                    .height(160.dp),
+                labelText = "Select image",
+                onNewImageSelected = {newUri ->
+                    imageUri = newUri?.toString() ?: ""
                 }
-                Spacer(modifier = Modifier.width(4.dp))
-                Button(
-                    onClick = { launcher.launch("image/*") }
-                ) {
-                    Text(text = "Select image")
-                }
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = if (imageUri.isNotBlank()) {
-                    "Image - $imageUri"
-                } else {
-                    "No image attached"
-                },
-                maxLines = 2,
-                softWrap = true,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(
