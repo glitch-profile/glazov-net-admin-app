@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.glazovnetadminapp.domain.models.ImageModel
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
-import com.example.glazovnetadminapp.domain.models.posts.PostType
 import com.example.glazovnetadminapp.domain.useCases.PostsUseCase
 import com.example.glazovnetadminapp.domain.useCases.UtilsUseCase
 import com.example.glazovnetadminapp.domain.util.Resource
@@ -125,7 +124,6 @@ class PostsScreenViewModel @Inject constructor(
         context: Context,
         postTitle: String,
         postText: String,
-        postType: Int,
         imageUri: String,
     ) {
         val currentPost = editPostState.value.post!!
@@ -153,7 +151,6 @@ class PostsScreenViewModel @Inject constructor(
                 title = postTitle,
                 creationDate = currentPost.creationDate,
                 text = postText,
-                postType = PostType.fromPostTypeCode(postType),
                 image = imageModel
             )
             _editPostState.update {
@@ -201,7 +198,6 @@ class PostsScreenViewModel @Inject constructor(
         context: Context,
         title: String,
         text: String,
-        postType: Int,
         imageUri: String
     ) {
         viewModelScope.launch {
@@ -219,7 +215,6 @@ class PostsScreenViewModel @Inject constructor(
                 title = title,
                 creationDate = currentTime,
                 text = text,
-                postType = PostType.fromPostTypeCode(postType),
                 image = imageModel
             )
             _editPostState.update {

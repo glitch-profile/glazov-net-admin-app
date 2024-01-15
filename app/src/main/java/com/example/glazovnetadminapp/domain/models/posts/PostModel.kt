@@ -8,6 +8,5 @@ data class PostModel(
     val title: String,
     val creationDate: OffsetDateTime,
     val text: String,
-    val postType: PostType,
     val image: ImageModel? = null,
 )

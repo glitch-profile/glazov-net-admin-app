@@ -9,8 +9,7 @@ import kotlinx.serialization.Serializable
 data class PostModelDto(
     val id: String = "",
     val title: String,
-    val creationDate: String,
+    val creationDate: Long,
     val text: String,
-    val postTypeCode: Int,
     val image: ImageModelDto? = null,
 )

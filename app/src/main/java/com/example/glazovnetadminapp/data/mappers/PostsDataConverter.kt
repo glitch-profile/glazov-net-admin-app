@@ -2,16 +2,18 @@ package com.example.glazovnetadminapp.data.mappers
 
 import com.example.glazovnetadminapp.domain.models.ImageModel
 import com.example.glazovnetadminapp.domain.models.posts.PostModel
-import com.example.glazovnetadminapp.domain.models.posts.PostType
-import com.example.glazovnetadminapp.domain.models.posts.PostType.Companion.toPostTypeCode
 import com.example.glazovnetadminapp.entity.ImageModelDto
 import com.example.glazovnetadminapp.entity.postsDto.PostModelDto
+import java.time.Instant
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 fun PostModelDto.toPostModel(): PostModel {
-    val postCreationDateTime = OffsetDateTime.parse(creationDate, DateTimeFormatter.ISO_DATE_TIME)
-    val postType = PostType.fromPostTypeCode(postTypeCode)
+    val postCreationDateTime = OffsetDateTime.ofInstant(
+        Instant.ofEpochSecond(this.creationDate),
+        ZoneId.systemDefault()
+    )
     val imageModel = image?.let {
         ImageModel(
             imageUrl = it.imageUrl,
@@ -24,14 +26,12 @@ fun PostModelDto.toPostModel(): PostModel {
         title = title,
         creationDate = postCreationDateTime,
         text = text,
-        postType = postType,
         image = imageModel
     )
 }
 
 fun PostModel.toPostModelDto(): PostModelDto {
-    val postCreationDateTime = creationDate.format(DateTimeFormatter.ISO_DATE_TIME)
-    val postTypeCode = postType.toPostTypeCode()
+    val postCreationDateTime = creationDate.toEpochSecond()
     val imageModelDto = image?.let {
         ImageModelDto(
             imageUrl = it.imageUrl,
@@ -44,7 +44,6 @@ fun PostModel.toPostModelDto(): PostModelDto {
         title = title,
         creationDate = postCreationDateTime,
         text = text,
-        postTypeCode = postTypeCode,
         image = imageModelDto
     )
 }
