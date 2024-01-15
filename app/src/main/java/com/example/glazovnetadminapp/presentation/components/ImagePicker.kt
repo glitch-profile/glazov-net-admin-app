@@ -75,11 +75,15 @@ fun ImagePicker(
     }
     fun updateImageData(context: Context, uri: Uri?) {
         onNewImageSelected.invoke(uri)
-        bitmap = if (uri != null) context.contentResolver.loadThumbnail(uri, thumbnailSize, null)
-        else null
+        if (uri != null) {
+            bitmap = context.contentResolver.loadThumbnail(uri, thumbnailSize, null)
+            imageName = getImageName(uri.toString())
+        }
+        else {
+            bitmap = null
+            imageName = ""
+        }
         imageUri = uri
-        imageName = getImageName(uri.toString())
-
     }
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
