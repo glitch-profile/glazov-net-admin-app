@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.example.glazovnetadminapp.R
 import com.example.glazovnetadminapp.presentation.components.ImagePicker
@@ -67,7 +68,7 @@ fun EditPostScreen(
         mutableStateOf(post?.text ?: "")
     }
     var imageUri by remember {
-        mutableStateOf(post?.image?.imageUrl ?: "")
+        mutableStateOf(post?.image?.imageUrl)
     }
     var isDropdownExpanded by remember {
         mutableStateOf(false)
@@ -161,9 +162,10 @@ fun EditPostScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(160.dp),
+                imageUri = imageUri?.toUri(),
                 labelText = "Select image",
                 onNewImageSelected = {newUri ->
-                    imageUri = newUri?.toString() ?: ""
+                    imageUri = newUri?.toString()
                 },
                 shape = RoundedCornerShape(4.dp)
             )
@@ -197,14 +199,14 @@ fun EditPostScreen(
                                 context,
                                 titleText,
                                 fullDescription,
-                                imageUri
+                                imageUri ?: ""
                             )
                         } else {
                             viewModel.editPost(
                                 context,
                                 titleText,
                                 fullDescription,
-                                imageUri,
+                                imageUri ?: "",
                             )
                         }
                     },
