@@ -1,16 +1,14 @@
 package com.example.glazovnetadminapp.presentation.components
 
-import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Size
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,11 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import java.io.File
 
 const val CONTRACT = "image/*"
@@ -48,47 +47,37 @@ const val CONTRACT = "image/*"
 @Composable
 fun ImagePicker(
     modifier: Modifier = Modifier,
+    imageUri: Uri?,
     labelText: String,
     onNewImageSelected: (uri: Uri?) -> Unit,
     shape: Shape = MaterialTheme.shapes.medium,
     color: Color = Color.Transparent,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
-    thumbnailSize: Size = Size(512, 512)
+    contentColor: Color = MaterialTheme.colorScheme.primary,
 ) {
-    val context = LocalContext.current
-    var bitmap by remember {
-        mutableStateOf<Bitmap?>(null)
-    }
-    var imageUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
     var imageName by remember {
         mutableStateOf("")
     }
-    var isNeedToSelectImage by remember {
-        mutableStateOf(true)
+    var isImageSelected by remember {
+        mutableStateOf(false)
     }
-
-    fun getImageName(filePath: String): String {
-        val fileNameTrimCount = if (filePath.contains('%')) filePath.reversed().indexOf("%")
-        else filePath.reversed().indexOf("/")
-        var fileName = filePath.takeLast(fileNameTrimCount)
-        val fileExtension = File(fileName).extension
-        if (fileExtension.isBlank()) fileName += ".jpg"
-        return fileName
-    }
-    fun updateImageData(context: Context, uri: Uri?) {
-        onNewImageSelected.invoke(uri)
-        if (uri != null) {
-            bitmap = context.contentResolver.loadThumbnail(uri, thumbnailSize, null)
-            imageName = getImageName(uri.toString())
-        }
-        isNeedToSelectImage = uri == null
-        imageUri = uri
-    }
-
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-        updateImageData(context, it)
+        onNewImageSelected.invoke(it)
+    }
+
+    LaunchedEffect(key1 = imageUri) {
+        fun getImageName(filePath: String): String {
+            val fileNameTrimCount = if (filePath.contains('%')) filePath.reversed().indexOf("%")
+            else filePath.reversed().indexOf("/")
+            var fileName = filePath.takeLast(fileNameTrimCount)
+            val fileExtension = File(fileName).extension
+            if (fileExtension.isBlank()) fileName += ".jpg"
+            return fileName
+        }
+
+        if (imageUri !== null) {
+            imageName = getImageName(imageUri.toString())
+            isImageSelected = true
+        } else isImageSelected = false
     }
 
     Surface(
@@ -98,32 +87,30 @@ fun ImagePicker(
         border = BorderStroke(1.dp, Color.LightGray),
         contentColor = contentColor
     ) {
-        Crossfade(targetState = isNeedToSelectImage, label = "imagePickerStateTransition") {
+        Crossfade(targetState = isImageSelected, label = "imagePickerStateTransition") {
             when (it) {
-                false -> {
+                true -> {
                     Box(
                         modifier = Modifier
                             .fillMaxSize(),
                         contentAlignment = Alignment.TopCenter
                     ) {
-                        if (bitmap !== null) {
-                            Image(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { launcher.launch(CONTRACT) },
-                                bitmap = bitmap!!.asImageBitmap(),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                filterQuality = FilterQuality.Low
-                            )
-                        }
+                        AsyncImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { launcher.launch(CONTRACT) },
+                            model = imageUri,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            filterQuality = FilterQuality.Low
+                        )
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
                                 .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
                                 .padding(horizontal = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 modifier = Modifier
@@ -134,14 +121,14 @@ fun ImagePicker(
                                 text = imageName
                             )
                             TextButton(
-                                onClick = { updateImageData(context, null) }
+                                onClick = { onNewImageSelected.invoke(null) }
                             ) {
                                 Text(text = "Clear")
                             }
                         }
                     }
                 }
-                true -> {
+                false -> {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -149,7 +136,10 @@ fun ImagePicker(
                         contentAlignment = Alignment.Center
                     ) {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically
+                            modifier = Modifier
+                                .fillMaxWidth(0.8f),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
