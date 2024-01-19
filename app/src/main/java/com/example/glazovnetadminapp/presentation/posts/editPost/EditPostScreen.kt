@@ -70,17 +70,6 @@ fun EditPostScreen(
     var imageUri by remember {
         mutableStateOf(post?.image?.imageUrl)
     }
-    var isDropdownExpanded by remember {
-        mutableStateOf(false)
-    }
-    val icon = if (isDropdownExpanded) {
-        Icons.Filled.KeyboardArrowUp
-    } else {
-        Icons.Filled.KeyboardArrowDown
-    }
-    var textFieldSize by remember {
-        mutableStateOf(Size.Zero)
-    }
     fun checkDataTheSame(): Boolean {
         return ((titleText == post?.title) && (fullDescription == post.text)
                     && (imageUri == (post.image?.imageUrl ?: "")))
@@ -182,7 +171,6 @@ fun EditPostScreen(
                             titleText = post?.title ?: ""
                             fullDescription = post?.text ?: ""
                             imageUri = post?.image?.imageUrl ?: ""
-                            isDropdownExpanded = false
                         }
 
                         clearInputData()
